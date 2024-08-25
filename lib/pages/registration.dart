@@ -28,9 +28,9 @@ class _RegistrationState extends State<Registration> {
       title: widget.title,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(48.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.only(left: 48.0, right: 48.0),
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               const Text(
                 'Регистрация',

@@ -23,9 +23,10 @@ class FilesUsers extends StatefulWidget {
 }
 
 class _FilesUsersState extends State<FilesUsers> {
-  GetContentUserResponse files = GetContentUserResponse();
+  GetContentUserResponse contents = GetContentUserResponse();
 
-  void intitState() {
+  @override
+  void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,17 +35,40 @@ class _FilesUsersState extends State<FilesUsers> {
   }
 
   _asyncMethod() async {
-    files =
+    contents =
         await getContentUsers(GetContentUserRequest(id: widget.args.user.id));
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    var files = contents.data.files;
+    var folders = contents.data.folder;
+    var filesRequestAccess = contents.data.fileRequestAccess;
+    var foldersRequestAccess = contents.data.folderRequestAccess;
+
     return DefaultScaffold(
         title: "${widget.title} ${widget.args.user.name}",
-        body: Container(
-          child: FileComponent(file: files.data.files[0]),
+        body: ListView(
+          children: [
+            ...paintContent(files, (file) => FileComponent(file: file as File)),
+            ...paintContent(
+                folders, (folder) => FolderComponent(folder: folder as Folder)),
+            ...paintContent(filesRequestAccess,
+                (file) => FileComponent(file: file as File)),
+            ...paintContent(foldersRequestAccess,
+                (folder) => FolderComponent(folder: folder as Folder)),
+          ],
         ));
   }
+}
+
+List<dynamic> paintContent(
+    List<dynamic> contents, Widget Function(dynamic arguments) widget) {
+  List<dynamic> childrens = [];
+  for (var content in contents) {
+    childrens.add(widget(content));
+  }
+
+  return childrens;
 }

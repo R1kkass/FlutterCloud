@@ -9,12 +9,14 @@ class MyInput extends StatefulWidget {
     required this.icon,
     required this.error,
     this.fieldSubmit,
+    this.suffixIcon,
     obscureText,
   }) : obscureText = obscureText ?? false;
 
   final TextEditingController? controller;
   final String title;
   final IconData icon;
+  IconButton? suffixIcon;
   final String error;
   bool obscureText;
   void Function(String)? fieldSubmit;
@@ -38,6 +40,7 @@ class _MyInputState extends State<MyInput> {
               widget.icon,
               color: Colors.deepOrange,
             ),
+            suffixIcon: widget.suffixIcon,
             filled: true,
             contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             enabledBorder: const OutlineInputBorder(

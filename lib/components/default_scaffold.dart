@@ -18,13 +18,17 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Navigator.canPop(context)
+        leading: Navigator.canPop(context) ||
+                ModalRoute.of(context)!.settings.name != "/"
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.canPop(context)
                       ? Navigator.pop(context, true)
-                      : null;
+                      : ModalRoute.of(context)!.settings.name != "/"
+                          ? Navigator.pushNamedAndRemoveUntil(
+                              context, "/", (r) => false)
+                          : null;
                 })
             : null,
         iconTheme: IconThemeData(

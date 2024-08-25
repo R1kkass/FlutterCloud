@@ -67,13 +67,32 @@ class _BottomSheetExample extends State<BottomSheetExample> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     ElevatedButton(
-                        child: const Icon(Icons.create_new_folder_outlined),
+                        child: const SizedBox(
+                          height: 50,
+                          child: Column(
+                            children: [
+                              Icon(Icons.create_new_folder_outlined),
+                              Text("Добавить папку")
+                            ],
+                          ),
+                        ),
                         onPressed: () => {
                               Navigator.of(context).pop(),
                               showDialogBuilder(context),
                             }),
+                    const SizedBox(
+                      width: 25,
+                    ),
                     ElevatedButton(
-                      child: const Icon(Icons.upload_file),
+                      child: const SizedBox(
+                        height: 50,
+                        child: Column(
+                          children: [
+                            Icon(Icons.upload_file),
+                            Text("Добавить файл")
+                          ],
+                        ),
+                      ),
                       onPressed: () => {selectFile()},
                     ),
                   ],

@@ -16,7 +16,7 @@ Future<http.Response> registration(RegisterParams body) async {
   return await http.post(Uri.parse('$domain/registration'), body: {
     "email": body.email,
     "password": body.password,
-    // "name": body.name,
+    "name": body.name,
   }, headers: {
     "X-CSRF-token": csrf,
   });

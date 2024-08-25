@@ -31,8 +31,8 @@ class _AuthorizationState extends State<Authorization> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(48.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               const Text(
                 'Авторизация',

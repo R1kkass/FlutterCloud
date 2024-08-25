@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/components/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
+import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/pages/files_users.dart';
+import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:grpc/grpc.dart';
 
 class UsersList extends StatefulWidget {
   final List<Users> users;
@@ -45,12 +49,63 @@ class _UsersListState extends State<UsersList> {
                       ),
                     ],
                   ),
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                        onPressed: () {
+                          showModalUser(users[index].id);
+                        },
+                        child: const Icon(Icons.more_vert, size: 20)),
+                  ),
                 ],
               ),
               onPressed: () {
                 Navigator.pushNamed(context, FILES_USERS,
                     arguments: ArgsFilesUsers(user: users[index]));
               },
+            ),
+          );
+        });
+  }
+
+  void showModalUser(int otherId) {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (_) {
+          return SizedBox(
+            child: Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        try {
+                          await createChat(CreateRequestChat(otherId: otherId));
+                          showToast(context, "Чат создан");
+                        } on GrpcError catch (e) {
+                          showToast(context, e.message as String);
+                        } catch (e) {
+                          // any other error
+                        }
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(Icons.add_comment_outlined, size: 30),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "Начать чат",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ))
+                ],
+              ),
             ),
           );
         });

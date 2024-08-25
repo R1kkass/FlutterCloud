@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/folder.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:http/http.dart';
 
