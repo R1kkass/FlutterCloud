@@ -11,6 +11,7 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class CreateRequestChat extends $pb.GeneratedMessage {
@@ -66,10 +67,18 @@ class CreateRequestChat extends $pb.GeneratedMessage {
 class CreateResponseChat extends $pb.GeneratedMessage {
   factory CreateResponseChat({
     $core.String? message,
+    Keys? keys,
+    $core.int? chatId,
   }) {
     final $result = create();
     if (message != null) {
       $result.message = message;
+    }
+    if (keys != null) {
+      $result.keys = keys;
+    }
+    if (chatId != null) {
+      $result.chatId = chatId;
     }
     return $result;
   }
@@ -79,6 +88,8 @@ class CreateResponseChat extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateResponseChat', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..aOM<Keys>(2, _omitFieldNames ? '' : 'keys', subBuilder: Keys.create)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -111,6 +122,90 @@ class CreateResponseChat extends $pb.GeneratedMessage {
   $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(1)
   void clearMessage() => clearField(1);
+
+  @$pb.TagNumber(2)
+  Keys get keys => $_getN(1);
+  @$pb.TagNumber(2)
+  set keys(Keys v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasKeys() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearKeys() => clearField(2);
+  @$pb.TagNumber(2)
+  Keys ensureKeys() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $core.int get chatId => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set chatId($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasChatId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearChatId() => clearField(3);
+}
+
+class Keys extends $pb.GeneratedMessage {
+  factory Keys({
+    $core.String? p,
+    $fixnum.Int64? g,
+  }) {
+    final $result = create();
+    if (p != null) {
+      $result.p = p;
+    }
+    if (g != null) {
+      $result.g = g;
+    }
+    return $result;
+  }
+  Keys._() : super();
+  factory Keys.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Keys.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Keys', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'p')
+    ..aInt64(2, _omitFieldNames ? '' : 'g')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Keys clone() => Keys()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Keys copyWith(void Function(Keys) updates) => super.copyWith((message) => updates(message as Keys)) as Keys;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Keys create() => Keys._();
+  Keys createEmptyInstance() => create();
+  static $pb.PbList<Keys> createRepeated() => $pb.PbList<Keys>();
+  @$core.pragma('dart2js:noInline')
+  static Keys getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Keys>(create);
+  static Keys? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get p => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set p($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasP() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearP() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $fixnum.Int64 get g => $_getI64(1);
+  @$pb.TagNumber(2)
+  set g($fixnum.Int64 v) { $_setInt64(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasG() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearG() => clearField(2);
 }
 
 class Empty extends $pb.GeneratedMessage {
@@ -611,6 +706,348 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasEmail() => $_has(2);
   @$pb.TagNumber(3)
   void clearEmail() => clearField(3);
+}
+
+class CreateSecondaryKeyRequest extends $pb.GeneratedMessage {
+  factory CreateSecondaryKeyRequest({
+    $core.int? chatId,
+    $core.String? key,
+  }) {
+    final $result = create();
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    if (key != null) {
+      $result.key = key;
+    }
+    return $result;
+  }
+  CreateSecondaryKeyRequest._() : super();
+  factory CreateSecondaryKeyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateSecondaryKeyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateSecondaryKeyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'key')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateSecondaryKeyRequest clone() => CreateSecondaryKeyRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateSecondaryKeyRequest copyWith(void Function(CreateSecondaryKeyRequest) updates) => super.copyWith((message) => updates(message as CreateSecondaryKeyRequest)) as CreateSecondaryKeyRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateSecondaryKeyRequest create() => CreateSecondaryKeyRequest._();
+  CreateSecondaryKeyRequest createEmptyInstance() => create();
+  static $pb.PbList<CreateSecondaryKeyRequest> createRepeated() => $pb.PbList<CreateSecondaryKeyRequest>();
+  @$core.pragma('dart2js:noInline')
+  static CreateSecondaryKeyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateSecondaryKeyRequest>(create);
+  static CreateSecondaryKeyRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get key => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set key($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasKey() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearKey() => clearField(2);
+}
+
+class CreateSecondaryKeyResponse extends $pb.GeneratedMessage {
+  factory CreateSecondaryKeyResponse({
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
+  CreateSecondaryKeyResponse._() : super();
+  factory CreateSecondaryKeyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory CreateSecondaryKeyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateSecondaryKeyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  CreateSecondaryKeyResponse clone() => CreateSecondaryKeyResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  CreateSecondaryKeyResponse copyWith(void Function(CreateSecondaryKeyResponse) updates) => super.copyWith((message) => updates(message as CreateSecondaryKeyResponse)) as CreateSecondaryKeyResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static CreateSecondaryKeyResponse create() => CreateSecondaryKeyResponse._();
+  CreateSecondaryKeyResponse createEmptyInstance() => create();
+  static $pb.PbList<CreateSecondaryKeyResponse> createRepeated() => $pb.PbList<CreateSecondaryKeyResponse>();
+  @$core.pragma('dart2js:noInline')
+  static CreateSecondaryKeyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateSecondaryKeyResponse>(create);
+  static CreateSecondaryKeyResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get message => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set message($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMessage() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMessage() => clearField(1);
+}
+
+class GetSecondaryKeyRequest extends $pb.GeneratedMessage {
+  factory GetSecondaryKeyRequest({
+    $core.int? chatId,
+  }) {
+    final $result = create();
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    return $result;
+  }
+  GetSecondaryKeyRequest._() : super();
+  factory GetSecondaryKeyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSecondaryKeyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSecondaryKeyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSecondaryKeyRequest clone() => GetSecondaryKeyRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSecondaryKeyRequest copyWith(void Function(GetSecondaryKeyRequest) updates) => super.copyWith((message) => updates(message as GetSecondaryKeyRequest)) as GetSecondaryKeyRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSecondaryKeyRequest create() => GetSecondaryKeyRequest._();
+  GetSecondaryKeyRequest createEmptyInstance() => create();
+  static $pb.PbList<GetSecondaryKeyRequest> createRepeated() => $pb.PbList<GetSecondaryKeyRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetSecondaryKeyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSecondaryKeyRequest>(create);
+  static GetSecondaryKeyRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+}
+
+class GetSecondaryKeyResponse extends $pb.GeneratedMessage {
+  factory GetSecondaryKeyResponse({
+    $core.String? key,
+    $core.String? p,
+  }) {
+    final $result = create();
+    if (key != null) {
+      $result.key = key;
+    }
+    if (p != null) {
+      $result.p = p;
+    }
+    return $result;
+  }
+  GetSecondaryKeyResponse._() : super();
+  factory GetSecondaryKeyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSecondaryKeyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSecondaryKeyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'key')
+    ..aOS(2, _omitFieldNames ? '' : 'p')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSecondaryKeyResponse clone() => GetSecondaryKeyResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSecondaryKeyResponse copyWith(void Function(GetSecondaryKeyResponse) updates) => super.copyWith((message) => updates(message as GetSecondaryKeyResponse)) as GetSecondaryKeyResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSecondaryKeyResponse create() => GetSecondaryKeyResponse._();
+  GetSecondaryKeyResponse createEmptyInstance() => create();
+  static $pb.PbList<GetSecondaryKeyResponse> createRepeated() => $pb.PbList<GetSecondaryKeyResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetSecondaryKeyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSecondaryKeyResponse>(create);
+  static GetSecondaryKeyResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get key => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set key($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasKey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKey() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get p => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set p($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasP() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearP() => clearField(2);
+}
+
+class GetPublicKeyRequest extends $pb.GeneratedMessage {
+  factory GetPublicKeyRequest({
+    $core.int? chatId,
+  }) {
+    final $result = create();
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    return $result;
+  }
+  GetPublicKeyRequest._() : super();
+  factory GetPublicKeyRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPublicKeyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPublicKeyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPublicKeyRequest clone() => GetPublicKeyRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPublicKeyRequest copyWith(void Function(GetPublicKeyRequest) updates) => super.copyWith((message) => updates(message as GetPublicKeyRequest)) as GetPublicKeyRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPublicKeyRequest create() => GetPublicKeyRequest._();
+  GetPublicKeyRequest createEmptyInstance() => create();
+  static $pb.PbList<GetPublicKeyRequest> createRepeated() => $pb.PbList<GetPublicKeyRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetPublicKeyRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPublicKeyRequest>(create);
+  static GetPublicKeyRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+}
+
+class GetPublicKeyResponse extends $pb.GeneratedMessage {
+  factory GetPublicKeyResponse({
+    $fixnum.Int64? g,
+    $core.String? p,
+  }) {
+    final $result = create();
+    if (g != null) {
+      $result.g = g;
+    }
+    if (p != null) {
+      $result.p = p;
+    }
+    return $result;
+  }
+  GetPublicKeyResponse._() : super();
+  factory GetPublicKeyResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetPublicKeyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPublicKeyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aInt64(1, _omitFieldNames ? '' : 'g')
+    ..aOS(2, _omitFieldNames ? '' : 'p')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetPublicKeyResponse clone() => GetPublicKeyResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetPublicKeyResponse copyWith(void Function(GetPublicKeyResponse) updates) => super.copyWith((message) => updates(message as GetPublicKeyResponse)) as GetPublicKeyResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetPublicKeyResponse create() => GetPublicKeyResponse._();
+  GetPublicKeyResponse createEmptyInstance() => create();
+  static $pb.PbList<GetPublicKeyResponse> createRepeated() => $pb.PbList<GetPublicKeyResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetPublicKeyResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetPublicKeyResponse>(create);
+  static GetPublicKeyResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get g => $_getI64(0);
+  @$pb.TagNumber(1)
+  set g($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasG() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearG() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get p => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set p($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasP() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearP() => clearField(2);
 }
 
 

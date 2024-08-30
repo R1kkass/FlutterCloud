@@ -30,12 +30,28 @@ const CreateResponseChat$json = {
   '1': 'CreateResponseChat',
   '2': [
     {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'keys', '3': 2, '4': 1, '5': 11, '6': '.chat.Keys', '10': 'keys'},
+    {'1': 'chat_id', '3': 3, '4': 1, '5': 13, '10': 'chatId'},
   ],
 };
 
 /// Descriptor for `CreateResponseChat`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createResponseChatDescriptor = $convert.base64Decode(
-    'ChJDcmVhdGVSZXNwb25zZUNoYXQSGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+    'ChJDcmVhdGVSZXNwb25zZUNoYXQSGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZRIeCgRrZXlzGA'
+    'IgASgLMgouY2hhdC5LZXlzUgRrZXlzEhcKB2NoYXRfaWQYAyABKA1SBmNoYXRJZA==');
+
+@$core.Deprecated('Use keysDescriptor instead')
+const Keys$json = {
+  '1': 'Keys',
+  '2': [
+    {'1': 'p', '3': 1, '4': 1, '5': 9, '10': 'p'},
+    {'1': 'g', '3': 2, '4': 1, '5': 3, '10': 'g'},
+  ],
+};
+
+/// Descriptor for `Keys`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List keysDescriptor = $convert.base64Decode(
+    'CgRLZXlzEgwKAXAYASABKAlSAXASDAoBZxgCIAEoA1IBZw==');
 
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
@@ -130,4 +146,81 @@ const User$json = {
 final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'CgRVc2VyEg4KAmlkGAEgASgNUgJpZBISCgRuYW1lGAIgASgJUgRuYW1lEhQKBWVtYWlsGAMgAS'
     'gJUgVlbWFpbA==');
+
+@$core.Deprecated('Use createSecondaryKeyRequestDescriptor instead')
+const CreateSecondaryKeyRequest$json = {
+  '1': 'CreateSecondaryKeyRequest',
+  '2': [
+    {'1': 'chat_id', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
+    {'1': 'key', '3': 2, '4': 1, '5': 9, '10': 'key'},
+  ],
+};
+
+/// Descriptor for `CreateSecondaryKeyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createSecondaryKeyRequestDescriptor = $convert.base64Decode(
+    'ChlDcmVhdGVTZWNvbmRhcnlLZXlSZXF1ZXN0EhcKB2NoYXRfaWQYASABKA1SBmNoYXRJZBIQCg'
+    'NrZXkYAiABKAlSA2tleQ==');
+
+@$core.Deprecated('Use createSecondaryKeyResponseDescriptor instead')
+const CreateSecondaryKeyResponse$json = {
+  '1': 'CreateSecondaryKeyResponse',
+  '2': [
+    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `CreateSecondaryKeyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createSecondaryKeyResponseDescriptor = $convert.base64Decode(
+    'ChpDcmVhdGVTZWNvbmRhcnlLZXlSZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+
+@$core.Deprecated('Use getSecondaryKeyRequestDescriptor instead')
+const GetSecondaryKeyRequest$json = {
+  '1': 'GetSecondaryKeyRequest',
+  '2': [
+    {'1': 'chat_id', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `GetSecondaryKeyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getSecondaryKeyRequestDescriptor = $convert.base64Decode(
+    'ChZHZXRTZWNvbmRhcnlLZXlSZXF1ZXN0EhcKB2NoYXRfaWQYASABKA1SBmNoYXRJZA==');
+
+@$core.Deprecated('Use getSecondaryKeyResponseDescriptor instead')
+const GetSecondaryKeyResponse$json = {
+  '1': 'GetSecondaryKeyResponse',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'p', '3': 2, '4': 1, '5': 9, '10': 'p'},
+  ],
+};
+
+/// Descriptor for `GetSecondaryKeyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getSecondaryKeyResponseDescriptor = $convert.base64Decode(
+    'ChdHZXRTZWNvbmRhcnlLZXlSZXNwb25zZRIQCgNrZXkYASABKAlSA2tleRIMCgFwGAIgASgJUg'
+    'Fw');
+
+@$core.Deprecated('Use getPublicKeyRequestDescriptor instead')
+const GetPublicKeyRequest$json = {
+  '1': 'GetPublicKeyRequest',
+  '2': [
+    {'1': 'chat_id', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `GetPublicKeyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPublicKeyRequestDescriptor = $convert.base64Decode(
+    'ChNHZXRQdWJsaWNLZXlSZXF1ZXN0EhcKB2NoYXRfaWQYASABKA1SBmNoYXRJZA==');
+
+@$core.Deprecated('Use getPublicKeyResponseDescriptor instead')
+const GetPublicKeyResponse$json = {
+  '1': 'GetPublicKeyResponse',
+  '2': [
+    {'1': 'g', '3': 1, '4': 1, '5': 3, '10': 'g'},
+    {'1': 'p', '3': 2, '4': 1, '5': 9, '10': 'p'},
+  ],
+};
+
+/// Descriptor for `GetPublicKeyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getPublicKeyResponseDescriptor = $convert.base64Decode(
+    'ChRHZXRQdWJsaWNLZXlSZXNwb25zZRIMCgFnGAEgASgDUgFnEgwKAXAYAiABKAlSAXA=');
 

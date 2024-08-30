@@ -29,6 +29,18 @@ class ChatGreeterClient extends $grpc.Client {
       '/chat.ChatGreeter/GetChat',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetResponseChat.fromBuffer(value));
+  static final _$createSecondaryKey = $grpc.ClientMethod<$0.CreateSecondaryKeyRequest, $0.CreateSecondaryKeyResponse>(
+      '/chat.ChatGreeter/CreateSecondaryKey',
+      ($0.CreateSecondaryKeyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.CreateSecondaryKeyResponse.fromBuffer(value));
+  static final _$getSecondaryKey = $grpc.ClientMethod<$0.GetSecondaryKeyRequest, $0.GetSecondaryKeyResponse>(
+      '/chat.ChatGreeter/GetSecondaryKey',
+      ($0.GetSecondaryKeyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetSecondaryKeyResponse.fromBuffer(value));
+  static final _$getPublicKey = $grpc.ClientMethod<$0.GetPublicKeyRequest, $0.GetPublicKeyResponse>(
+      '/chat.ChatGreeter/GetPublicKey',
+      ($0.GetPublicKeyRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetPublicKeyResponse.fromBuffer(value));
 
   ChatGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +54,18 @@ class ChatGreeterClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetResponseChat> getChat($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getChat, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.CreateSecondaryKeyResponse> createSecondaryKey($0.CreateSecondaryKeyRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$createSecondaryKey, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetSecondaryKeyResponse> getSecondaryKey($0.GetSecondaryKeyRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getSecondaryKey, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetPublicKeyResponse> getPublicKey($0.GetPublicKeyRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getPublicKey, request, options: options);
   }
 }
 
@@ -64,6 +88,27 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.GetResponseChat value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.CreateSecondaryKeyRequest, $0.CreateSecondaryKeyResponse>(
+        'CreateSecondaryKey',
+        createSecondaryKey_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.CreateSecondaryKeyRequest.fromBuffer(value),
+        ($0.CreateSecondaryKeyResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetSecondaryKeyRequest, $0.GetSecondaryKeyResponse>(
+        'GetSecondaryKey',
+        getSecondaryKey_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetSecondaryKeyRequest.fromBuffer(value),
+        ($0.GetSecondaryKeyResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetPublicKeyRequest, $0.GetPublicKeyResponse>(
+        'GetPublicKey',
+        getPublicKey_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetPublicKeyRequest.fromBuffer(value),
+        ($0.GetPublicKeyResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateResponseChat> createChat_Pre($grpc.ServiceCall call, $async.Future<$0.CreateRequestChat> request) async {
@@ -74,6 +119,21 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
     return getChat(call, await request);
   }
 
+  $async.Future<$0.CreateSecondaryKeyResponse> createSecondaryKey_Pre($grpc.ServiceCall call, $async.Future<$0.CreateSecondaryKeyRequest> request) async {
+    return createSecondaryKey(call, await request);
+  }
+
+  $async.Future<$0.GetSecondaryKeyResponse> getSecondaryKey_Pre($grpc.ServiceCall call, $async.Future<$0.GetSecondaryKeyRequest> request) async {
+    return getSecondaryKey(call, await request);
+  }
+
+  $async.Future<$0.GetPublicKeyResponse> getPublicKey_Pre($grpc.ServiceCall call, $async.Future<$0.GetPublicKeyRequest> request) async {
+    return getPublicKey(call, await request);
+  }
+
   $async.Future<$0.CreateResponseChat> createChat($grpc.ServiceCall call, $0.CreateRequestChat request);
   $async.Future<$0.GetResponseChat> getChat($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.CreateSecondaryKeyResponse> createSecondaryKey($grpc.ServiceCall call, $0.CreateSecondaryKeyRequest request);
+  $async.Future<$0.GetSecondaryKeyResponse> getSecondaryKey($grpc.ServiceCall call, $0.GetSecondaryKeyRequest request);
+  $async.Future<$0.GetPublicKeyResponse> getPublicKey($grpc.ServiceCall call, $0.GetPublicKeyRequest request);
 }

@@ -30,6 +30,8 @@ void main() async {
       );
   await Hive.initFlutter();
   await Hive.openBox('token');
+  await Hive.openBox('pubkey');
+  await Hive.openBox('secretkey');
   Bloc.observer = const MyBlocObserver();
   runApp(MultiBlocProvider(providers: [
     BlocProvider(

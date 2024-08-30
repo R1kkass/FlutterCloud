@@ -5,6 +5,7 @@ import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
 import 'package:flutter_application_2/services/file_size.dart';
+import 'package:flutter_application_2/services/token_clear.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -109,9 +110,7 @@ class _MyDrawerState extends State<MyDrawer> {
             const Spacer(),
             TextButton(
                 onPressed: () {
-                  var box = Hive.box("token");
-                  box.delete("access_token");
-                  context.read<TokenCubit>().updateToken("");
+                  tokenClear(context);
                   Navigator.pushNamed(context, AUTH);
                 },
                 child: const Row(

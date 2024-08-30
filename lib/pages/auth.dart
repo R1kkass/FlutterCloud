@@ -6,6 +6,7 @@ import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/components/my_input.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:flutter_application_2/services/token_clear.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -81,6 +82,7 @@ class _AuthorizationState extends State<Authorization> {
                             login(AuthParams(sigUpController["email"]?.text,
                                     sigUpController["password"]?.text))
                                 .then((e) => {
+                                      // tokenClear(context),
                                       box.put('access_token',
                                           json.decode(e.body)["access_token"]),
                                       context.read<TokenCubit>().updateToken(

@@ -55,6 +55,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
                   chat.chat.message.text,
                   style: const TextStyle(fontSize: 18),
                 ),
+                Text(chat.chat.id.toString())
               ],
             )
           ],

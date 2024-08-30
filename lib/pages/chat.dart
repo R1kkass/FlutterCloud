@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _ChatPageState extends State<ChatPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _socket();
+      _getKey();
     });
   }
 
@@ -75,6 +77,13 @@ class _ChatPageState extends State<ChatPage> {
 
   _addMessage() {
     socket?.add(text.text);
+  }
+
+  _getKey() async {
+    var box = await Hive.openBox("secretkey");
+    box = await Hive.openBox('secretkey');
+    // var pbox = await Hive.openBox("pubkey");
+    log("${box.get(widget.args.chatId.toString() + jwtDecode["email"])}");
   }
 
   @override
