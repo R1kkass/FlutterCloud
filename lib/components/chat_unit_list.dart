@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/pages/chat.dart';
@@ -24,21 +22,23 @@ class _ChatUnitListState extends State<ChatUnitList> {
   @override
   void initState() {
     super.initState();
+
+    decryptMessageFn(widget.chat);
   }
 
-  Future<String> decryptMessageFn(ChatUsers chat) async{
-        token = Hive.box('token').get('access_token');
-        jwt = jwtDecode();
-        var box = await Hive.openBox('secretkey');
-        var hash = box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
-        return decrypt(chat.chat.message.text, hash);
+  void decryptMessageFn(ChatUsers chat) async {
+    token = Hive.box('token').get('access_token');
+    jwt = jwtDecode();
+    var box = await Hive.openBox('secretkey');
+    var hash = await box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
+    decryptMessage = decrypt(chat.chat.message.text, hash);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     ChatUsers chat = widget.chat;
-    decryptMessageFn(chat);
-    
+
     return Material(
       elevation: 5.0,
       child: TextButton(
@@ -52,28 +52,35 @@ class _ChatUnitListState extends State<ChatUnitList> {
           Navigator.pushNamed(context, CHAT,
               arguments: ChatArgument(chatId: widget.chat.chatId));
         },
-        child: Column(
-          children: [
-            Row(children: [
-              Text(
+        child: SizedBox(
+          child: Column(
+            children: [
+              Row(children: [
+                Text(
                   chat.chat.nameChat == ""
                       ? jwt?.email != chat.chat.chatUsers[0].user.email
                           ? chat.chat.chatUsers[0].user.name
                           : chat.chat.chatUsers[1].user.name
                       : chat.chat.nameChat,
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w700)),
-            ]),
-            Row(
-              children: [
-                Text(
-                  decryptMessage,
-                  style: const TextStyle(fontSize: 18),
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
-                Text(chat.chat.id.toString())
-              ],
-            )
-          ],
+              ]),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 100,
+                    child: Text(
+                      decryptMessage,
+                      style: const TextStyle(fontSize: 14),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
