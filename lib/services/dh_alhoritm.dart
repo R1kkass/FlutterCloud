@@ -32,7 +32,7 @@ Future<BigInt> generatePubKey(String p, int g, int chatId) async {
 
   BigInt key = BigInt.parse(p);
 
-  var pp = 10;
+  var pp = 18;
   BigInt max = BigInt.two.pow(pp) - BigInt.one;
   BigInt min = BigInt.two.pow(pp - 1) - BigInt.one;
   Random random = Random();
@@ -66,7 +66,7 @@ Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
 
-  box.put(chatId.toString() + jwtDecode().email, secretKey);
+  box.put(chatId.toString() + jwtDecode().email, hash);
 
   return secretKey;
 }

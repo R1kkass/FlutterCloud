@@ -1,8 +1,10 @@
-import 'dart:math';
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart';
 
 void main() {
-  int a = 8;
-  BigInt A = BigInt.from(2);
-  A = A.pow(a.toInt()) % BigInt.from(199);
-  print("$A");
+ DateTime dateTime = DateTime.now();
+ print(dateTime.timeZoneName);
+ print(dateTime.timeZoneOffset);
 }
