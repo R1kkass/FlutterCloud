@@ -4,29 +4,6 @@ import 'package:hive/hive.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-bool conditions(int p, int g) {
-  if (p % 8 == 7 && g == 2) {
-    return true;
-  }
-  if (p % 3 == 2 && g == 3) {
-    return true;
-  }
-  if (g == 4) {
-    return true;
-  }
-  if ((p % 5 == 1 || p % 5 == 4) && g == 5) {
-    return true;
-  }
-  if ((p % 24 == 19 || p % 24 == 23) && g == 6) {
-    return true;
-  }
-  if ((p % 7 == 3 || p % 7 == 5 || p % 7 == 6) && g == 7) {
-    return true;
-  }
-
-  return false;
-}
-
 Future<BigInt> generatePubKey(String p, int g, int chatId) async {
   var box = await Hive.openBox('pubkey');
 
@@ -44,15 +21,6 @@ Future<BigInt> generatePubKey(String p, int g, int chatId) async {
   A = A.pow(a.toInt()) % key;
 
   return A;
-}
-
-bool natural(int n) {
-  for (int i = 2; i <= sqrt(n); i++) {
-    if (n % i == 0) {
-      return false;
-    }
-  }
-  return true;
 }
 
 Future<BigInt> generateSecretKey(String B, String p, int chatId) async {

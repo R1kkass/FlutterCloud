@@ -28,7 +28,3 @@ String decrypt(String hashText, String hash) {
     return "Ошибка: Невозможно прочесть сообщение";
   }
 }
-
-void main() {
-   print(encrypt("Hello Encrypt", "1f1d607f100c8b3accd8feb5257d4b6b1e85dba1bec1f1c90cb68dd151f381f6").base16);
-}

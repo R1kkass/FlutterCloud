@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/auth_api.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
+import 'package:flutter_application_2/components/dialog_loading.dart';
 import 'package:flutter_application_2/components/my_input.dart';
+import 'package:flutter_application_2/components/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
-import 'package:flutter_application_2/services/token_clear.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_application_2/grpc/auth_grpc.dart';
+import 'package:flutter_application_2/proto/auth/auth.pb.dart';
+import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Authorization extends StatefulWidget {
   final String title;
@@ -16,6 +20,13 @@ class Authorization extends StatefulWidget {
 
   @override
   State<Authorization> createState() => _AuthorizationState();
+}
+
+class LoginFields {
+  final String email;
+  final String password;
+
+  const LoginFields({required this.email, required this.password});
 }
 
 class _AuthorizationState extends State<Authorization> {
@@ -77,19 +88,30 @@ class _AuthorizationState extends State<Authorization> {
                             ))),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            var box = await Hive.openBox('token');
+                            _login(
+                                    LoginFields(
+                                      email: sigUpController["email"]?.text
+                                          as String,
+                                      password: sigUpController["password"]
+                                          ?.text as String,
+                                    ),
+                                    context)
+                                .then((e) async {
+                              if (e != null) {
+                                var box = await Hive.openBox('token');
 
-                            login(AuthParams(sigUpController["email"]?.text,
-                                    sigUpController["password"]?.text))
-                                .then((e) => {
-                                      // tokenClear(context),
-                                      box.put('access_token',
-                                          json.decode(e.body)["access_token"]),
-                                      context.read<TokenCubit>().updateToken(
-                                          json.decode(e.body)["access_token"]),
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/', (r) => false)
-                                    });
+                                box.put('access_token', e.accessToken);
+                                List<int> bytes = utf8.encode(
+                                    sigUpController["password"].toString());
+                                String hash = sha256.convert(bytes).toString();
+                                box.put('password', hash.substring(0, 32));
+                                context
+                                    .read<TokenCubit>()
+                                    .updateToken(e.accessToken);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/', (r) => false);
+                              }
+                            });
                             return;
                           }
                         },
@@ -111,5 +133,29 @@ class _AuthorizationState extends State<Authorization> {
         ),
       ),
     );
+  }
+}
+
+Future<LoginResponse?> _login(LoginFields request, BuildContext context) async {
+  try {
+    showLoaderDialog(context);
+    DHConnectResponse keys = await dHConnect(DHConnectRequest());
+
+    var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
+    var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
+    await dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
+    secretKey = secretKey.substring(0, 32);
+    String password = encrypt(request.password, secretKey);
+    String email = encrypt(request.email, secretKey);
+
+    var loginResp = await login(LoginRequest(email: email, password: password));
+    var token = decrypt(loginResp.accessToken, secretKey);
+
+    return LoginResponse(accessToken: token);
+  } catch (e) {
+    showToast(context, "Неверный логин или пароль");
+    return null;
+  } finally {
+    Navigator.pop(context);
   }
 }
