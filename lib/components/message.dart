@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/consts/month.dart';
 
 class MessageComponent extends StatefulWidget {
   const MessageComponent(
@@ -8,9 +9,11 @@ class MessageComponent extends StatefulWidget {
       required this.status,
       required this.text,
       required this.createdAt,
-      required this.name});
+      required this.name,
+      required this.dateChange});
 
   final bool status;
+  final DateTime? dateChange;
   final String text;
   final String createdAt;
   final String name;
@@ -22,58 +25,85 @@ class MessageComponent extends StatefulWidget {
 class _MessageComponentState extends State<MessageComponent> {
   @override
   Widget build(BuildContext context) {
-    DateTime time = DateTime.parse(widget.createdAt);
-
-    return Container(
-        alignment: widget.status ? Alignment.topRight : Alignment.topLeft,
-        child: ClipPath(
-          clipper: widget.status ? MyCustomClipper() : OtherCustomClipper(),
-          child: IntrinsicWidth(
-            child: Container(
-              constraints: BoxConstraints(
-                  maxWidth: MediaQuery.sizeOf(context).width / 1.5,
-                  minWidth: 170),
-              padding: const EdgeInsets.only(
-                  left: 20, right: 20, top: 20, bottom: 10),
-              color:
-                  widget.status ? Colors.black38 : Colors.deepOrange.shade400,
-              child: Column(
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          widget.name,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ]),
-                  Container(
-                    alignment: Alignment.topLeft,
+    DateTime? dateChange = widget.dateChange;
+    DateTime time = DateTime.parse(widget.createdAt).toLocal();
+    return Column(
+      children: [
+        dateChange != null
+            ? SizedBox(
+                height: 30,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                        top: 0.5, bottom: 0.5, left: 5, right: 5),
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(66, 41, 41, 41),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     child: Text(
-                      widget.text,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700),
+                      "${dateChange.day} ${month[dateChange.month]}",
+                      style: const TextStyle(color: Colors.white, fontSize: 11),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w700),
-                    ),
-                  )
-                ],
+                ),
+              )
+            : const SizedBox(
+                height: 0,
               ),
-            ),
-          ),
-        ));
+        Container(
+            alignment: widget.status ? Alignment.topRight : Alignment.topLeft,
+            child: ClipPath(
+              clipper: widget.status ? MyCustomClipper() : OtherCustomClipper(),
+              child: IntrinsicWidth(
+                child: Container(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.sizeOf(context).width / 1.5,
+                      minWidth: 170),
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, top: 15, bottom: 10),
+                  color: widget.status
+                      ? Colors.blueAccent
+                      : Colors.deepOrange.shade400,
+                  child: Column(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              widget.name,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ]),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          widget.text,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topRight,
+                        child: Text(
+                          "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
+                          style: const TextStyle(
+                              color: Colors.white60,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 10),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )),
+      ],
+    );
   }
 }
 

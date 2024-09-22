@@ -58,7 +58,7 @@ class _FileComponentState extends State<FileComponent> {
               alignment: Alignment.centerRight,
               child: TextButton(
                   onPressed: () {
-                    showModalFolder();
+                    showModalFolder(context);
                   },
                   child: const Icon(Icons.more_vert, size: 20)),
             )
@@ -68,7 +68,7 @@ class _FileComponentState extends State<FileComponent> {
     );
   }
 
-  Null showModalFolder() {
+  Null showModalFolder(context) {
     TextEditingController nameFolder = TextEditingController();
     final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
 
@@ -89,9 +89,8 @@ class _FileComponentState extends State<FileComponent> {
                           ? showToast(context, "Файл удалён")
                           : showToast(context, "Ошибка при удалении файла");
 
-                      context
-                          .read<FolderCubit>()
-                          .updateDataFetch(widget.file.folderId.toString(), context);
+                      context.read<FolderCubit>().updateDataFetch(
+                          widget.file.folderId.toString(), context);
                       Navigator.of(context).pop();
                     }).catchError((e) {
                       showToast(context, "Ошибка при удалении файла");
@@ -112,17 +111,21 @@ class _FileComponentState extends State<FileComponent> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    Navigator.pop(context);
                     showLoaderDialog(context);
-                    await downloadFile(widget.file.id.toString(),
-                            widget.file.fileName, context)
-                        .then((e) {
+
+                    await downloadFile(
+                      widget.file.id.toString(),
+                      widget.file.fileName,
+                      context,
+                    ).then((e) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                       showToast(context, "Файл успешно скачен");
                     }).catchError((e) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                       showToast(context, "Файл не был скачен");
                     });
-
-                    Navigator.pop(context);
                   },
                   child: const Row(
                     children: [
@@ -162,8 +165,7 @@ class _FileComponentState extends State<FileComponent> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    showDialogAccess(
-                      changeAccessFile,
+                    showDialogAccess(changeAccessFile,
                         widget.file.id.toString(), args?.id, context);
                   },
                   child: const Row(

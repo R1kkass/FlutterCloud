@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_2/components/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/message.dart';
 import 'package:flutter_application_2/components/my_input.dart';
 import 'package:flutter_application_2/consts/domen.dart';
+import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:hive/hive.dart';
-import 'package:jwt_decode/jwt_decode.dart';
 
 class ChatArgument {
   final int chatId;
@@ -31,20 +31,17 @@ class _ChatPageState extends State<ChatPage> {
   WebSocket? socket;
   List<dynamic> data = [];
   bool init = false;
-  Map<String, dynamic> jwtDecode = {};
+  String key = "";
 
   final GlobalKey<AnimatedListState> _key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    var token = Hive.box('token').get('access_token');
-
-    jwtDecode = Jwt.parseJwt(token);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _socket();
-      _getKey();
+      _getBox();
     });
   }
 
@@ -76,14 +73,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _addMessage() {
-    socket?.add(text.text);
+    var hashText = encrypt(text.text, key);
+    socket?.add(hashText.base64);
   }
 
-  _getKey() async {
-    var box = await Hive.openBox("secretkey");
-    box = await Hive.openBox('secretkey');
-    // var pbox = await Hive.openBox("pubkey");
-    log("${box.get(widget.args.chatId.toString() + jwtDecode["email"])}");
+  _getBox() async {
+    var box = await Hive.openBox('secretkey');
+    key = box.get(widget.args.chatId.toString() + jwtDecode().email);
+    setState(() {});
   }
 
   @override
@@ -94,29 +91,12 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Expanded(
-              flex: 2,
-              child: AnimatedList(
-                  key: _key,
-                  initialItemCount: data.length,
-                  reverse: true,
-                  padding: const EdgeInsets.all(10),
-                  itemBuilder: (context, index, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                        key: UniqueKey(),
-                        sizeFactor: animation,
-                        child: MessageComponent(
-                          createdAt: data[index]["created_at"],
-                          name: data[index]["user"]["name"],
-                          status: jwtDecode["email"] ==
-                              data[index]["user"]?["email"],
-                          text: data[index]["text"],
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+                flex: 2,
+                child: AnimatedChatList(
+                  data: data,
+                  keyChat: key,
+                  globalKey: _key,
+                )),
             MyInput(
               controller: text,
               title: "Сообщение",

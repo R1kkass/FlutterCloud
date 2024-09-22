@@ -5,6 +5,9 @@ import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/services/encode_file.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +41,20 @@ class _BottomSheetExample extends State<BottomSheetExample> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
+      var box = await Hive.openBox('token');
+      var password = box.get("password");
+
+      final directory = await getApplicationDocumentsDirectory();
+      var currentFileName = result.files.single.path!.split("/").last;
+      // encrypt(result.files.single.path!.split("/").last, password);
+
+      var fileExitPath = "${directory.path}/$currentFileName";
+
+      EncodeFile.encrypt(result.files.single.path!, fileExitPath, password);
+      var fileExit = File(fileExitPath);
+
       createFile(
-          FileParams(id, file.readAsBytesSync(), file.path.split("/").last),
+          FileParams(id, fileExit.readAsBytesSync(), file.path.split("/").last),
           context, (e) {
         e.statusCode == 201
             ? showToast(context, "Файл создан")

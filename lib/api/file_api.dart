@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
+import 'package:flutter_application_2/services/encode_file.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -45,7 +44,7 @@ Future createFile(
   ));
 
   request.send().then((e) {
-    callback();
+    callback(e);
     context.read<FolderCubit>().updateDataFetch(body.folder_id, context);
   });
 }
@@ -67,16 +66,20 @@ Future<http.Response> getFile(String? id, BuildContext context) async {
   });
 }
 
-Future downloadFile(String? id, String file_name, BuildContext context) async {
-  String path = "/storage/emulated/0/Download/$file_name";
-  File file = File(path);
+Future<http.Response> downloadFile(
+    String? id, String fileName, BuildContext context) async {
+  String path = "/storage/emulated/0/Download/$fileName";
+  var box = await Hive.openBox('token');
+  var key = box.get("password");
 
   var res =
       await my_http.get(Uri.parse('$domain/get/open/$id'), context, headers: {
     "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
-  file.writeAsBytes(res.bodyBytes);
+  EncodeFile.decryptByte(res.bodyBytes, path, key);
+
+  return res;
 }
 
 Future getSpace(BuildContext context) async {
@@ -98,32 +101,31 @@ Future<http.Response> updateFile(
 }
 
 Future<http.Response> moveFile(
-    String file_id, String folder_id, BuildContext context) async {
+    String fileId, String folderId, BuildContext context) async {
   return await my_http.patch(Uri.parse("$domain/file/move"), context, body: {
-    "file_id": file_id,
-    "folder_id": folder_id
+    "file_id": fileId,
+    "folder_id": folderId
   }, headers: {
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
 
-Future<http.Response> changeAccessFile2(int? access_id, String? folder_id,
-    String? file_id, BuildContext context) async {
+Future<http.Response> changeAccessFile2(int? accessId, String? folderId,
+    String? fileId, BuildContext context) async {
   return await my_http
       .patch(Uri.parse("$domain/file/changeaccess"), context, body: {
-    "file_id": file_id,
-    "folder_id": folder_id.toString(),
-    "access_id": access_id
+    "file_id": fileId,
+    "folder_id": folderId.toString(),
+    "access_id": accessId
   }, headers: {
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
 
-
-class ChangeAccessListArgs{
+class ChangeAccessListArgs {
   final ChangeAccessRequest args;
-  final BuildContext context; 
-  
+  final BuildContext context;
+
   ChangeAccessListArgs({required this.args, required this.context});
 }
 

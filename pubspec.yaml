@@ -49,6 +49,7 @@ dependencies:
   jwt_decode: ^0.3.1
   ninja_prime: ^2.0.0
   pointycastle: ^3.9.1
+  encrypt: ^5.0.3
 
 dev_dependencies:
   flutter_test:
