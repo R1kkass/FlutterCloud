@@ -6,7 +6,6 @@ import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_application_2/components/toast.dart';
 import 'package:flutter_application_2/services/encode_file.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -46,8 +45,8 @@ class _BottomSheetExample extends State<BottomSheetExample> {
       var password = box.get("password");
 
       final directory = await getApplicationDocumentsDirectory();
-      var currentFileName =
-          encrypt(result.files.single.path!.split("/").last, password);
+      var currentFileName = result.files.single.path!.split("/").last;
+      // encrypt(result.files.single.path!.split("/").last, password);
 
       var fileExitPath = "${directory.path}/$currentFileName";
 
