@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: chat.proto
+//  source: chat/chat.proto
 //
 // @dart = 2.12
 
@@ -13,6 +13,206 @@ import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
+
+class AcceptChatRequest extends $pb.GeneratedMessage {
+  factory AcceptChatRequest({
+    $core.int? chatId,
+  }) {
+    final $result = create();
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    return $result;
+  }
+  AcceptChatRequest._() : super();
+  factory AcceptChatRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AcceptChatRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AcceptChatRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AcceptChatRequest clone() => AcceptChatRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AcceptChatRequest copyWith(void Function(AcceptChatRequest) updates) => super.copyWith((message) => updates(message as AcceptChatRequest)) as AcceptChatRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AcceptChatRequest create() => AcceptChatRequest._();
+  AcceptChatRequest createEmptyInstance() => create();
+  static $pb.PbList<AcceptChatRequest> createRepeated() => $pb.PbList<AcceptChatRequest>();
+  @$core.pragma('dart2js:noInline')
+  static AcceptChatRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AcceptChatRequest>(create);
+  static AcceptChatRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+}
+
+class AcceptChatResponse extends $pb.GeneratedMessage {
+  factory AcceptChatResponse({
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
+  AcceptChatResponse._() : super();
+  factory AcceptChatResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AcceptChatResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AcceptChatResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AcceptChatResponse clone() => AcceptChatResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AcceptChatResponse copyWith(void Function(AcceptChatResponse) updates) => super.copyWith((message) => updates(message as AcceptChatResponse)) as AcceptChatResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AcceptChatResponse create() => AcceptChatResponse._();
+  AcceptChatResponse createEmptyInstance() => create();
+  static $pb.PbList<AcceptChatResponse> createRepeated() => $pb.PbList<AcceptChatResponse>();
+  @$core.pragma('dart2js:noInline')
+  static AcceptChatResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AcceptChatResponse>(create);
+  static AcceptChatResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get message => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set message($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMessage() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMessage() => clearField(1);
+}
+
+class DissalowChatRequest extends $pb.GeneratedMessage {
+  factory DissalowChatRequest({
+    $core.int? chatId,
+  }) {
+    final $result = create();
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    return $result;
+  }
+  DissalowChatRequest._() : super();
+  factory DissalowChatRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DissalowChatRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DissalowChatRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DissalowChatRequest clone() => DissalowChatRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DissalowChatRequest copyWith(void Function(DissalowChatRequest) updates) => super.copyWith((message) => updates(message as DissalowChatRequest)) as DissalowChatRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DissalowChatRequest create() => DissalowChatRequest._();
+  DissalowChatRequest createEmptyInstance() => create();
+  static $pb.PbList<DissalowChatRequest> createRepeated() => $pb.PbList<DissalowChatRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DissalowChatRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DissalowChatRequest>(create);
+  static DissalowChatRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatId() => clearField(1);
+}
+
+class DissalowChatResponse extends $pb.GeneratedMessage {
+  factory DissalowChatResponse({
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
+  DissalowChatResponse._() : super();
+  factory DissalowChatResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DissalowChatResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DissalowChatResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DissalowChatResponse clone() => DissalowChatResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DissalowChatResponse copyWith(void Function(DissalowChatResponse) updates) => super.copyWith((message) => updates(message as DissalowChatResponse)) as DissalowChatResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DissalowChatResponse create() => DissalowChatResponse._();
+  DissalowChatResponse createEmptyInstance() => create();
+  static $pb.PbList<DissalowChatResponse> createRepeated() => $pb.PbList<DissalowChatResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DissalowChatResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DissalowChatResponse>(create);
+  static DissalowChatResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get message => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set message($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasMessage() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearMessage() => clearField(1);
+}
 
 class CreateRequestChat extends $pb.GeneratedMessage {
   factory CreateRequestChat({
@@ -208,13 +408,22 @@ class Keys extends $pb.GeneratedMessage {
   void clearG() => clearField(2);
 }
 
-class Empty extends $pb.GeneratedMessage {
-  factory Empty() => create();
-  Empty._() : super();
-  factory Empty.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Empty.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+class GetRequestChat extends $pb.GeneratedMessage {
+  factory GetRequestChat({
+    $core.bool? submitCreate,
+  }) {
+    final $result = create();
+    if (submitCreate != null) {
+      $result.submitCreate = submitCreate;
+    }
+    return $result;
+  }
+  GetRequestChat._() : super();
+  factory GetRequestChat.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetRequestChat.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Empty', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetRequestChat', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'submitCreate')
     ..hasRequiredFields = false
   ;
 
@@ -222,22 +431,31 @@ class Empty extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  Empty clone() => Empty()..mergeFromMessage(this);
+  GetRequestChat clone() => GetRequestChat()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Empty copyWith(void Function(Empty) updates) => super.copyWith((message) => updates(message as Empty)) as Empty;
+  GetRequestChat copyWith(void Function(GetRequestChat) updates) => super.copyWith((message) => updates(message as GetRequestChat)) as GetRequestChat;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static Empty create() => Empty._();
-  Empty createEmptyInstance() => create();
-  static $pb.PbList<Empty> createRepeated() => $pb.PbList<Empty>();
+  static GetRequestChat create() => GetRequestChat._();
+  GetRequestChat createEmptyInstance() => create();
+  static $pb.PbList<GetRequestChat> createRepeated() => $pb.PbList<GetRequestChat>();
   @$core.pragma('dart2js:noInline')
-  static Empty getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Empty>(create);
-  static Empty? _defaultInstance;
+  static GetRequestChat getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetRequestChat>(create);
+  static GetRequestChat? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get submitCreate => $_getBF(0);
+  @$pb.TagNumber(1)
+  set submitCreate($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSubmitCreate() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSubmitCreate() => clearField(1);
 }
 
 class GetResponseChat extends $pb.GeneratedMessage {

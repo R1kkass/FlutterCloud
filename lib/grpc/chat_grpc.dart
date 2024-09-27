@@ -20,11 +20,11 @@ Future<CreateResponseChat> createChat(CreateRequestChat request) async {
   var A = await generatePubKey(p, g.toInt(), chatId);
   String key = A.toString();
 
-  createSecondaryKey(CreateSecondaryKeyRequest(chatId: chatId, key: key));
+  await createSecondaryKey(CreateSecondaryKeyRequest(chatId: chatId, key: key));
   return response;
 }
 
-Future<GetResponseChat> getChat(Empty request) async {
+Future<GetResponseChat> getChat(GetRequestChat request) async {
   GetResponseChat response = await stub.getChat(request, options: options());
   return response;
 }
@@ -46,5 +46,17 @@ Future<GetSecondaryKeyResponse> getSecondaryKey(
     GetSecondaryKeyRequest request) async {
   GetSecondaryKeyResponse response =
       await stub.getSecondaryKey(request, options: options());
+  return response;
+}
+
+Future<AcceptChatResponse> acceptChat(AcceptChatRequest request) async {
+  AcceptChatResponse response =
+      await stub.acceptChat(request, options: options());
+  return response;
+}
+
+Future<DissalowChatResponse> dissalowChat(DissalowChatRequest request) async {
+  DissalowChatResponse response =
+      await stub.dissalowChat(request, options: options());
   return response;
 }

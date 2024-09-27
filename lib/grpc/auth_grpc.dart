@@ -1,5 +1,6 @@
 import 'package:flutter_application_2/proto/auth/auth.pbgrpc.dart';
 import 'package:flutter_application_2/main.dart';
+
 final stub = AuthGreetClient(channel);
 
 Future<RegistrationResponse> registration(RegistrationRequest request) {

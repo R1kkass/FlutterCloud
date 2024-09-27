@@ -19,12 +19,12 @@ class AnimatedChatList extends StatefulWidget {
 }
 
 class _AnimatedChatListState extends State<AnimatedChatList> {
-  DateTime? time;
 
   @override
   Widget build(BuildContext context) {
     List<dynamic> data = widget.data;
     Map<int, DateTime> dataWithDate = {};
+    DateTime? time;
 
     for (var item in data.reversed) {
       var timeParse = DateTime.parse(item["created_at"]);

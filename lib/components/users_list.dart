@@ -85,11 +85,11 @@ class _UsersListState extends State<UsersList> {
                         Navigator.pop(context);
                         try {
                           await createChat(CreateRequestChat(otherId: otherId));
-                          showToast(context, "Чат создан");
+                          showToast(context, "Запрос отправлен");
                         } on GrpcError catch (e) {
                           showToast(context, e.message as String);
                         } catch (e) {
-                          // any other error
+                          showToast(context, "Запрос не отправлен");
                         }
                       },
                       child: const Row(
@@ -99,7 +99,7 @@ class _UsersListState extends State<UsersList> {
                             width: 15,
                           ),
                           Text(
-                            "Начать чат",
+                            "Запросить разрешение на сообщение",
                             style: TextStyle(fontSize: 16),
                           )
                         ],

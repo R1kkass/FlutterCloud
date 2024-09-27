@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/chat_unit_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
+import 'package:flutter_application_2/entities/chat/chat_accept.dart';
+import 'package:flutter_application_2/features/chat/chat_list_general.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
@@ -17,50 +19,79 @@ class ChatLists extends StatefulWidget {
   State<ChatLists> createState() => _ChatListsState();
 }
 
-class _ChatListsState extends State<ChatLists> {
+Map<int, String> titleTab = {
+  0: "Чаты",
+  1: "Подтверждение",
+};
+
+class _ChatListsState extends State<ChatLists>
+    with SingleTickerProviderStateMixin {
   List<ChatUsers>? chats = [];
+  TabController? controller;
+  String? title;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TabController(length: 2, initialIndex: 0, vsync: this);
+    controller?.addListener(() {
+      // setState(() {
+      title = titleTab[controller?.index];
+      // });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
-      title: widget.title,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {});
-        },
-        child: FutureBuilder<GetResponseChat>(
-          future: getChat(Empty()),
-          builder:
-              (BuildContext context, AsyncSnapshot<GetResponseChat> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(
-                child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: SizedBox(
-                        height: MediaQuery.sizeOf(context).height - 70 - 100,
-                        child: const Center(
-                            child: Icon(Icons.error,
-                                color: Colors.red, size: 70)))),
-              );
-            } else {
-              chats = snapshot.data?.chats;
-              _checkPubKey(chats);
-              return ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: chats?.length,
-                  itemBuilder: (context, index) {
-                    return ChatUnitList(
-                      chat: chats![index],
-                    );
-                  });
-            }
-          },
+      title: title ?? widget.title,
+      bottom: PreferredSize(
+        preferredSize: const Size(0, 0),
+        child: TabBar(
+          controller: controller,
+          labelColor: Colors.white,
+          dividerColor: Colors.transparent,
+          tabs: <Widget>[
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+              child: const Tab(
+                height: 2,
+                text: "",
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+              child: const Tab(
+                height: 2,
+                text: "",
+              ),
+            ),
+          ],
         ),
+      ),
+      body: TabBarView(
+        controller: controller,
+        children: [
+          ChatListGeneral(
+              callback: getChat,
+              chatUnit: paintChat,
+              args: GetRequestChat(submitCreate: true)),
+          ChatListGeneral(
+              callback: getChat,
+              chatUnit: paintChatAccept,
+              args: GetRequestChat(submitCreate: false))
+        ],
       ),
     );
   }
+}
+
+Widget paintChat({required ChatUsers chat}) {
+  return ChatUnitList(chat: chat);
+}
+
+Widget paintChatAccept({required ChatUsers chat}) {
+  return ChatAccept(chat: chat);
 }
 
 Future _checkPubKey(List<ChatUsers>? chats) async {
@@ -77,7 +108,6 @@ Future _checkPubKey(List<ChatUsers>? chats) async {
       await createSecondaryKey(
           CreateSecondaryKeyRequest(chatId: chat.chat.id, key: key.toString()));
     }
-    secretBox.delete(key);
     if (secretBox.get(key) == null) {
       getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
           .then((keys) async {

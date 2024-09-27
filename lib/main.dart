@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/consts/links.dart';
@@ -6,6 +10,7 @@ import 'package:flutter_application_2/cubit/space_cubit.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
 import 'package:flutter_application_2/observers/observer.dart';
 import 'package:flutter_application_2/pages/auth.dart';
+import 'package:flutter_application_2/pages/change_user.dart';
 import 'package:flutter_application_2/pages/chat.dart';
 import 'package:flutter_application_2/pages/chats_list.dart';
 import 'package:flutter_application_2/pages/files_users.dart';
@@ -17,9 +22,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+ClientChannel channel = ClientChannel(
+  ipServer,
+  port: 50051,
+  options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // channel = await chan();
 
   // Plugin must be initialized before using
   await FlutterDownloader.initialize(
@@ -30,6 +43,7 @@ void main() async {
       );
   await Hive.initFlutter();
   await Hive.openBox('token');
+  await Hive.openBox('list_token');
   await Hive.openBox('pubkey');
   await Hive.openBox('secretkey');
   Bloc.observer = const MyBlocObserver();
@@ -116,14 +130,29 @@ class _MyAppState extends State<MyApp> {
               title: "Чат",
               args: ModalRoute.of(context)!.settings.arguments as ChatArgument,
             ),
-        CHAT_LIST: (context) => const ChatLists(title: "Чаты")
+        CHAT_LIST: (context) => const ChatLists(title: "Чаты"),
+        CHANGE_ACCOUNT: (context) =>
+            const ChangeUser(title: "Сменить пользователя"),
       },
     );
   }
 }
 
-final channel = ClientChannel(
-  ipServer,
-  port: 50051,
-  options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
-);
+Future<ByteData> loadAsset(String path) async {
+  return await rootBundle.load(path);
+}
+
+Future<ClientChannel> chan() async {
+  final trustedRoots = await loadAsset("assets/cert/ca.crt");
+  final trustedRootsbuffer = trustedRoots.buffer;
+
+  return ClientChannel(
+    ipServer,
+    port: 50051,
+    options: ChannelOptions(
+        credentials: ChannelCredentials.secure(
+      certificates: trustedRootsbuffer.asUint8List(
+          trustedRoots.offsetInBytes, trustedRoots.lengthInBytes),
+    )),
+  );
+}

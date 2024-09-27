@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/consts/links.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
 import 'package:flutter_application_2/services/file_size.dart';
 import 'package:flutter_application_2/services/token_clear.dart';
-import 'package:hive/hive.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -103,6 +100,44 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                     Text(
                       "Чаты",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                )),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, CHANGE_ACCOUNT, (r) => false);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.swap_horiz),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Сменить пользователя",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                )),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, AUTH, (r) => false);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.redo),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Войти в другой аккаунт",
                       style: TextStyle(fontSize: 16),
                     ),
                   ],

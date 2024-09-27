@@ -99,8 +99,11 @@ class _AuthorizationState extends State<Authorization> {
                                 .then((e) async {
                               if (e != null) {
                                 var box = await Hive.openBox('token');
+                                var boxTokens = await Hive.openBox('list_token');
 
                                 box.put('access_token', e.accessToken);
+                                boxTokens.put(sigUpController["email"]?.text, e.accessToken);
+
                                 List<int> bytes = utf8.encode(
                                     sigUpController["password"].toString());
                                 String hash = sha256.convert(bytes).toString();

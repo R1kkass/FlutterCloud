@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: chat.proto
+//  source: chat/chat.proto
 //
 // @dart = 2.12
 
@@ -12,6 +12,54 @@
 import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
+
+@$core.Deprecated('Use acceptChatRequestDescriptor instead')
+const AcceptChatRequest$json = {
+  '1': 'AcceptChatRequest',
+  '2': [
+    {'1': 'chat_id', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `AcceptChatRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List acceptChatRequestDescriptor = $convert.base64Decode(
+    'ChFBY2NlcHRDaGF0UmVxdWVzdBIXCgdjaGF0X2lkGAEgASgNUgZjaGF0SWQ=');
+
+@$core.Deprecated('Use acceptChatResponseDescriptor instead')
+const AcceptChatResponse$json = {
+  '1': 'AcceptChatResponse',
+  '2': [
+    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `AcceptChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List acceptChatResponseDescriptor = $convert.base64Decode(
+    'ChJBY2NlcHRDaGF0UmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+
+@$core.Deprecated('Use dissalowChatRequestDescriptor instead')
+const DissalowChatRequest$json = {
+  '1': 'DissalowChatRequest',
+  '2': [
+    {'1': 'chat_id', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `DissalowChatRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List dissalowChatRequestDescriptor = $convert.base64Decode(
+    'ChNEaXNzYWxvd0NoYXRSZXF1ZXN0EhcKB2NoYXRfaWQYASABKA1SBmNoYXRJZA==');
+
+@$core.Deprecated('Use dissalowChatResponseDescriptor instead')
+const DissalowChatResponse$json = {
+  '1': 'DissalowChatResponse',
+  '2': [
+    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `DissalowChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List dissalowChatResponseDescriptor = $convert.base64Decode(
+    'ChREaXNzYWxvd0NoYXRSZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
 
 @$core.Deprecated('Use createRequestChatDescriptor instead')
 const CreateRequestChat$json = {
@@ -53,14 +101,17 @@ const Keys$json = {
 final $typed_data.Uint8List keysDescriptor = $convert.base64Decode(
     'CgRLZXlzEgwKAXAYASABKAlSAXASDAoBZxgCIAEoA1IBZw==');
 
-@$core.Deprecated('Use emptyDescriptor instead')
-const Empty$json = {
-  '1': 'Empty',
+@$core.Deprecated('Use getRequestChatDescriptor instead')
+const GetRequestChat$json = {
+  '1': 'GetRequestChat',
+  '2': [
+    {'1': 'submit_create', '3': 1, '4': 1, '5': 8, '10': 'submitCreate'},
+  ],
 };
 
-/// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
-    'CgVFbXB0eQ==');
+/// Descriptor for `GetRequestChat`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getRequestChatDescriptor = $convert.base64Decode(
+    'Cg5HZXRSZXF1ZXN0Q2hhdBIjCg1zdWJtaXRfY3JlYXRlGAEgASgIUgxzdWJtaXRDcmVhdGU=');
 
 @$core.Deprecated('Use getResponseChatDescriptor instead')
 const GetResponseChat$json = {

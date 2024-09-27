@@ -5,9 +5,10 @@ class DefaultScaffold extends StatefulWidget {
   final String title;
   final Widget body;
   final Widget? floatButton;
+  final PreferredSizeWidget? bottom;
 
   const DefaultScaffold(
-      {super.key, this.floatButton, required this.title, required this.body});
+      {super.key, this.floatButton, required this.title, required this.body, this.bottom});
 
   @override
   State<DefaultScaffold> createState() => _DefaultScaffoldState();
@@ -18,6 +19,7 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        bottom: widget.bottom,
         leading: Navigator.canPop(context) ||
                 ModalRoute.of(context)!.settings.name != "/"
             ? IconButton(

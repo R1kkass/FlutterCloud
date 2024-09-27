@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application_2/components/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/my_input.dart';
+import 'package:flutter_application_2/entities/chat/chat_input.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
@@ -75,6 +75,7 @@ class _ChatPageState extends State<ChatPage> {
   _addMessage() {
     var hashText = encrypt(text.text, key);
     socket?.add(hashText.base64);
+    text.text = "";
   }
 
   _getBox() async {
@@ -97,7 +98,7 @@ class _ChatPageState extends State<ChatPage> {
                   keyChat: key,
                   globalKey: _key,
                 )),
-            MyInput(
+            ChatInput(
               controller: text,
               title: "Сообщение",
               error: "Введите сообщение",
