@@ -8,7 +8,9 @@ import 'package:flutter_application_2/components/my_input.dart';
 import 'package:flutter_application_2/components/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/grpc/auth_grpc.dart';
+import 'package:flutter_application_2/grpc/keys_grpc.dart';
 import 'package:flutter_application_2/proto/auth/auth.pb.dart';
+import 'package:flutter_application_2/proto/keys/keys.pb.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
@@ -153,6 +155,7 @@ Future<LoginResponse?> _login(LoginFields request, BuildContext context) async {
 
     var loginResp = await login(LoginRequest(email: email, password: password));
     var token = decrypt(loginResp.accessToken, secretKey);
+    KeysGrpc().uploadFile(FileUploadRequest());
 
     return LoginResponse(accessToken: token);
   } catch (e) {

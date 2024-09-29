@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
 interface class OpenFileArgs {
@@ -21,7 +24,7 @@ class Openfile extends StatefulWidget {
 
 class _OpenfileState extends State<Openfile> {
   String title = "";
-
+  String key = "";
   @override
   void initState() {
     super.initState();
@@ -35,6 +38,9 @@ class _OpenfileState extends State<Openfile> {
 
   _asyncMethod() async {
     final args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
+    var box = await Hive.openBox('token');
+    key = box.get("password");
+
     setState(() {
       title = args?.file.fileName ?? widget.title;
     });
@@ -64,9 +70,9 @@ class _OpenfileState extends State<Openfile> {
                     snapshot.data?.statusCode == 200) {
                   if (expText.hasMatch(type)) {
                     children = Text(snapshot.data?.body as String);
-                  } else if (expImage.hasMatch(type)) {
-                    children =
-                        Image.memory(snapshot.data?.bodyBytes as Uint8List);
+                  } else if (expImage.hasMatch(type) && key != "") {
+                    children = Image.memory(
+                        crypt(false, snapshot.data!.bodyBytes, key));
                   }
                 } else {
                   children = const Column(
