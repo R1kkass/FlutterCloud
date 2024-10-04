@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/chat_unit_list.dart';
+import 'package:flutter_application_2/features/chat/chat_unit_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/entities/chat/chat_accept.dart';
 import 'package:flutter_application_2/features/chat/chat_list_general.dart';
@@ -67,32 +67,26 @@ class _ChatListsState extends State<ChatLists>
       body: TabBarView(
         controller: controller,
         children: [
-          
           ChatListGeneral(
-              callback: getChat,
-              chatUnit: paintChat,
-              args: GetRequestChat(submitCreate: true), 
-              generateKey:false
-              ),
+              callback: ChatGrpc().getChat,
+              chatUnit: _paintChat,
+              args: GetRequestChat(submitCreate: true),
+              generateKey: true),
           ChatListGeneral(
-              callback: getChat,
-              chatUnit: paintChatAccept,
+              callback: ChatGrpc().getChat,
+              chatUnit: _paintChatAccept,
               args: GetRequestChat(submitCreate: false),
-              generateKey:false
-              
-              )
+              generateKey: false)
         ],
       ),
     );
   }
+
+  Widget _paintChat({required ChatUsers chat}) {
+    return ChatUnitList(chat: chat);
+  }
+
+  Widget _paintChatAccept({required ChatUsers chat}) {
+    return ChatAccept(chat: chat);
+  }
 }
-
-Widget paintChat({required ChatUsers chat}) {
-  return ChatUnitList(chat: chat);
-}
-
-Widget paintChatAccept({required ChatUsers chat}) {
-  return ChatAccept(chat: chat);
-}
-
-

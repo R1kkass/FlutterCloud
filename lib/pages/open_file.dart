@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
@@ -24,7 +23,7 @@ class Openfile extends StatefulWidget {
 
 class _OpenfileState extends State<Openfile> {
   String title = "";
-  String key = "";
+  String key = Hive.box('token').get("password");
   @override
   void initState() {
     super.initState();
@@ -38,8 +37,6 @@ class _OpenfileState extends State<Openfile> {
 
   _asyncMethod() async {
     final args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
-    var box = await Hive.openBox('token');
-    key = box.get("password");
 
     setState(() {
       title = args?.file.fileName ?? widget.title;
@@ -60,7 +57,7 @@ class _OpenfileState extends State<Openfile> {
                   (BuildContext context, AsyncSnapshot<Response> snapshot) {
                 Widget children = const CircularProgressIndicator();
 
-                String? type = args?.file.fileNameHash.split(".")[1];
+                String? type = args?.file.fileName.split(".").last;
                 var exp = RegExp("txt|jpg");
                 var expText = RegExp("txt|js|ts");
                 var expImage = RegExp("png|jpg|jpeg");
@@ -69,7 +66,8 @@ class _OpenfileState extends State<Openfile> {
                     exp.hasMatch(type as String) &&
                     snapshot.data?.statusCode == 200) {
                   if (expText.hasMatch(type)) {
-                    children = Text(snapshot.data?.body as String);
+                    children = Text(utf8
+                        .decode(crypt(false, snapshot.data!.bodyBytes, key)));
                   } else if (expImage.hasMatch(type) && key != "") {
                     children = Image.memory(
                         crypt(false, snapshot.data!.bodyBytes, key));

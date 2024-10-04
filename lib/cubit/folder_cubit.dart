@@ -7,7 +7,7 @@ class FolderCubit extends Cubit<GetData> {
   FolderCubit() : super(GetData(null, 0));
 
   void updateData(GetData data) => emit(data);
-  Future<GetData> updateDataFetch(String? id, BuildContext context) async {
+  Future<GetData> updateDataFetch(int? id, BuildContext context) async {
     var data = await getFolder(id, context);
     emit(data);
     return data;

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_application_2/api/my_http.dart' as my_http;
 
 class FileParams {
-  String folder_id;
+  int folder_id;
   List<int> file;
   String file_name;
   FileParams(this.folder_id, this.file, this.file_name);
@@ -31,7 +31,7 @@ Future createFile(
     Uri.parse('$domain/file/create'),
   );
   request.fields['file_name'] = "body.folder_id";
-  request.fields['folder_id'] = body.folder_id;
+  request.fields['folder_id'] = body.folder_id.toString();
   request.headers["X-CSRF-token"] = csrf;
   Map<String, String> headers = {
     "Access-Token": Hive.box('token').get('access_token').toString()
@@ -69,7 +69,7 @@ Future<http.Response> getFile(String? id, BuildContext context) async {
 Future<http.Response> downloadFile(
     String? id, String fileName, BuildContext context) async {
   String path = "/storage/emulated/0/Download/$fileName";
-  var box = await Hive.openBox('token');
+  var box = Hive.box('token');
   var key = box.get("password");
 
   var res =

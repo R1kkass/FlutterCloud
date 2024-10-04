@@ -72,22 +72,22 @@ Future _accept(ChatUsers chat) async {
   var key = chat.chatId.toString() + email;
   if (box.get(key) == null) {
     GetPublicKeyResponse keys =
-        await getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
+        await ChatGrpc().getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
     var key = await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
-    await createSecondaryKey(
+    await ChatGrpc().createSecondaryKey(
         CreateSecondaryKeyRequest(chatId: chat.chat.id, key: key.toString()));
   }
   secretBox.delete(key);
   if (secretBox.get(key) == null) {
-    getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
+    ChatGrpc().getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
         .then((keys) async {
       await generateSecretKey(keys.key, keys.p, chat.chat.id);
     });
   }
 
-  await acceptChat(AcceptChatRequest(chatId: chat.id));
+  await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.id));
 }
 
 Future _dissalow(ChatUsers chat) async {
-  await dissalowChat(DissalowChatRequest(chatId: chat.id));
+  await ChatGrpc().dissalowChat(DissalowChatRequest(chatId: chat.id));
 }

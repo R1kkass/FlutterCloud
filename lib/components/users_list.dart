@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/pages/files_users.dart';
@@ -84,7 +84,7 @@ class _UsersListState extends State<UsersList> {
                       onPressed: () async {
                         Navigator.pop(context);
                         try {
-                          await createChat(CreateRequestChat(otherId: otherId));
+                          await ChatGrpc().createChat(CreateRequestChat(otherId: otherId));
                           showToast(context, "Запрос отправлен");
                         } on GrpcError catch (e) {
                           showToast(context, e.message as String);

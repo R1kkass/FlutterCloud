@@ -29,8 +29,8 @@ class _ChatUnitListState extends State<ChatUnitList> {
   void decryptMessageFn(ChatUsers chat) async {
     token = Hive.box('token').get('access_token');
     jwt = jwtDecode();
-    var box = await Hive.openBox('secretkey');
-    var hash = await box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
+    var box = Hive.box('secretkey');
+    var hash = box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
     decryptMessage = decrypt(chat.chat.message.text, hash);
     setState(() {});
   }

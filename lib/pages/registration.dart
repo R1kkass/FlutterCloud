@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/auth_api.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/components/my_input.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
 
 class Registration extends StatefulWidget {

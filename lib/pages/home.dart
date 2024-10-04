@@ -7,7 +7,7 @@ import 'package:flutter_application_2/main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeArgs {
-  String? id = "";
+  int? id = 0;
   String? title;
   HomeArgs(this.id, this.title);
 }
@@ -39,7 +39,7 @@ class _HomeState extends State<Home> with RouteAware {
   void didPopNext() {
     if (ModalRoute.of(context)!.settings.name == "/") {
       final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
-      context.read<FolderCubit>().updateDataFetch(args?.id.toString(), context);
+      context.read<FolderCubit>().updateDataFetch(args?.id, context);
     }
   }
 
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with RouteAware {
   void didPush() {
     if (ModalRoute.of(context)!.settings.name == "/") {
       final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
-      context.read<FolderCubit>().updateDataFetch(args?.id.toString(), context);
+      context.read<FolderCubit>().updateDataFetch(args?.id, context);
     }
   }
 
@@ -60,7 +60,6 @@ class _HomeState extends State<Home> with RouteAware {
             ? (args as HomeArgs).title.toString()
             : widget.title,
         body: const FolderBuilder(),
-        floatButton: BottomSheetExample(
-            id: (ModalRoute.of(context)!.settings.arguments as HomeArgs?)?.id));
+        floatButton: BottomSheetExample(id: args?.id));
   }
 }

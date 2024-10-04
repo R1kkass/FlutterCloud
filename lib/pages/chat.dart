@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_2/components/animated_chat_list.dart';
+import 'package:flutter_application_2/entities/chat/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/entities/chat/chat_input.dart';
 import 'package:flutter_application_2/consts/domen.dart';

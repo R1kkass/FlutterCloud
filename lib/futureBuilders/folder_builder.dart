@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
-import 'package:flutter_application_2/components/file.dart';
-import 'package:flutter_application_2/components/folder.dart';
+import 'package:flutter_application_2/features/file/file.dart';
+import 'package:flutter_application_2/features/folder/folder.dart';
 import 'package:flutter_application_2/components/move_to_main.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/pages/home.dart';
@@ -66,8 +66,8 @@ class _FolderBuilderState extends State<FolderBuilder> {
             onRefresh: () async {
               context.read<FolderCubit>().updateDataFetch(
                   (args.runtimeType == HomeArgs)
-                      ? (args as HomeArgs).id.toString()
-                      : "",
+                      ? (args as HomeArgs).id
+                      : 0,
                   context);
             },
             child: ListView(

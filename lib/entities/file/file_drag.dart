@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/folder.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 
 class FileDrag extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_application_2/grpc/keys_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/proto/keys/keys.pb.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
+import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -61,7 +63,9 @@ class _ChatListGeneralState extends State<ChatListGeneral> {
                           child: Icon(Icons.search_rounded, size: 70)))),
             );
           } else {
-            _checkPubKey(chats);
+            if (widget.generateKey) {
+              _checkPubKey(chats);
+            }
             chats = snapshot.data?.chats;
             return ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -81,29 +85,44 @@ class _ChatListGeneralState extends State<ChatListGeneral> {
 Future _checkPubKey(List<ChatUsers>? chats) async {
   var secretBox = await Hive.openBox("secretkey");
   var box = await Hive.openBox("pubkey");
+  var token = await Hive.openBox("token");
   var email = jwtDecode().email;
   var keyChanged = false;
+  var keyGeted = false;
+  var chatGrpc = ChatGrpc();
 
   chats?.forEach((chat) async {
     var key = chat.chatId.toString() + email;
-    if (box.get(key) == null) {
-      GetPublicKeyResponse keys =
-          await getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
+
+    if (secretBox.get(key) == null && !keyGeted) {
+      var y = await KeysGrpc().downloadKeys;
+      Map<String, dynamic> data = jsonDecode(y);
+      for (var item in data.keys) {
+        secretBox.put(item, data[item]);
+      }
+      keyGeted = true;
+    }
+
+    if (box.get(key) == null && secretBox.get(key) == null) {
+      GetPublicKeyResponse keys = await chatGrpc
+          .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
       var key = await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
-      await createSecondaryKey(
+      await chatGrpc.createSecondaryKey(
           CreateSecondaryKeyRequest(chatId: chat.chat.id, key: key.toString()));
     }
     if (secretBox.get(key) == null) {
       keyChanged = true;
 
-      getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
+      chatGrpc
+          .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
           .then((keys) async {
         await generateSecretKey(keys.key, keys.p, chat.chat.id);
       });
     }
   });
+  var pass = token.get("password");
 
-  if (true) {
+  if (keyChanged) {
     var values = secretBox.values.toList();
     var keys = secretBox.keys.toList();
     var resultObj = {};
@@ -111,8 +130,9 @@ Future _checkPubKey(List<ChatUsers>? chats) async {
     for (var i = 0; i < keys.length; i++) {
       resultObj[keys[i]] = values[i];
     }
+    dynamic json = jsonEncode(resultObj).toString();
+    json = crypt(true, utf8.encode(json), pass);
 
-    await KeysGrpc().uploadFile(FileUploadRequest(
-        chunk: utf8.encode(jsonEncode(resultObj).toString())));
+    await KeysGrpc().uploadFile(FileUploadRequest(chunk: json));
   }
 }

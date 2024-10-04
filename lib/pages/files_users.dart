@@ -3,8 +3,8 @@ import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/grpc/user_grpc.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:flutter_application_2/proto/users/users.pbgrpc.dart';
-import 'package:flutter_application_2/components/file.dart';
-import 'package:flutter_application_2/components/folder.dart';
+import 'package:flutter_application_2/features/file/file.dart';
+import 'package:flutter_application_2/features/folder/folder.dart';
 
 class ArgsFilesUsers {
   final Users user;
@@ -36,7 +36,7 @@ class _FilesUsersState extends State<FilesUsers> {
 
   _asyncMethod() async {
     contents =
-        await getContentUsers(GetContentUserRequest(id: widget.args.user.id));
+        await UserGrpc().getContentUsers(GetContentUserRequest(id: widget.args.user.id));
     setState(() {});
   }
 

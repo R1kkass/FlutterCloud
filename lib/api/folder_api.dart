@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/components/folder.dart';
+import 'package:flutter_application_2/features/folder/folder.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -44,7 +43,8 @@ Future<http.Response> createFolder(
       });
 }
 
-Future<GetData> getFolder(String? id, BuildContext context) async {
+Future<GetData> getFolder(id, BuildContext context) async {
+  if (id == 0) id = "";
   var response = await my_http
       .get(Uri.parse('$domain/get/${id ?? ""}'), context, headers: {
     "X-CSRF-token": csrf,

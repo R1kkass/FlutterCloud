@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:flutter_application_2/components/dialog_access.dart';
-import 'package:flutter_application_2/components/dialog_create_folder.dart';
+import 'package:flutter_application_2/entities/folder/dialog_create_folder.dart';
 import 'package:flutter_application_2/components/text_content.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/futureBuilders/folder_builder.dart';
 import 'package:flutter_application_2/pages/home.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,7 +43,7 @@ class _FolderState extends State<FolderComponent> {
             onPressed: () {
               Navigator.pushNamed(context, '/',
                   arguments: HomeArgs(
-                      widget.folder.id.toString(), widget.folder.nameFolder));
+                      widget.folder.id, widget.folder.nameFolder));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,14 +79,14 @@ class _FolderState extends State<FolderComponent> {
                 .then((e) {
               context
                   .read<FolderCubit>()
-                  .updateDataFetch(widget.folder.folderId.toString(), context);
+                  .updateDataFetch(widget.folder.folderId, context);
             });
           } else {
             moveFolder(details.data.id, widget.folder.id.toString(), context)
                 .then((e) {
               context
                   .read<FolderCubit>()
-                  .updateDataFetch(widget.folder.folderId.toString(), context);
+                  .updateDataFetch(widget.folder.folderId, context);
               e.statusCode == 200
                   ? showToast(context, "Папка перемещена")
                   : showToast(context, "Папка не перемещена");
@@ -122,7 +122,7 @@ class _FolderState extends State<FolderComponent> {
                         }
                         context
                             .read<FolderCubit>()
-                            .updateDataFetch(widget.folder.folderId.toString(), context);
+                            .updateDataFetch(widget.folder.folderId, context);
                         Navigator.of(context).pop();
                       }).catchError((e) {
                         showToast(context, "Ошибка при удалении папки");

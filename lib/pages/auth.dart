@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/components/dialog_loading.dart';
 import 'package:flutter_application_2/components/my_input.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/grpc/auth_grpc.dart';
 import 'package:flutter_application_2/grpc/keys_grpc.dart';
@@ -100,16 +100,6 @@ class _AuthorizationState extends State<Authorization> {
                                     context)
                                 .then((e) async {
                               if (e != null) {
-                                var box = await Hive.openBox('token');
-                                var boxTokens = await Hive.openBox('list_token');
-
-                                box.put('access_token', e.accessToken);
-                                boxTokens.put(sigUpController["email"]?.text, e.accessToken);
-
-                                List<int> bytes = utf8.encode(
-                                    sigUpController["password"].toString());
-                                String hash = sha256.convert(bytes).toString();
-                                box.put('password', hash.substring(0, 32));
                                 context
                                     .read<TokenCubit>()
                                     .updateToken(e.accessToken);
@@ -144,19 +134,31 @@ class _AuthorizationState extends State<Authorization> {
 Future<LoginResponse?> _login(LoginFields request, BuildContext context) async {
   try {
     showLoaderDialog(context);
-    DHConnectResponse keys = await dHConnect(DHConnectRequest());
+    var authGprc = AuthGrpc();
+
+    DHConnectResponse keys = await authGprc.dHConnect(DHConnectRequest());
 
     var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
     var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
-    await dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
+    await authGprc.dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
     secretKey = secretKey.substring(0, 32);
     String password = encrypt(request.password, secretKey);
     String email = encrypt(request.email, secretKey);
 
-    var loginResp = await login(LoginRequest(email: email, password: password));
+    var loginResp =
+        await authGprc.login(LoginRequest(email: email, password: password));
     var token = decrypt(loginResp.accessToken, secretKey);
     KeysGrpc().uploadFile(FileUploadRequest());
 
+    var box = Hive.box('token');
+    var boxTokens = Hive.box('list_token');
+
+    box.put('access_token', token);
+    boxTokens.put(request.email, token);
+
+    List<int> bytes = utf8.encode(request.password);
+    String hash = sha256.convert(bytes).toString();
+    box.put('password', hash.substring(0, 32));
     return LoginResponse(accessToken: token);
   } catch (e) {
     showToast(context, "Неверный логин или пароль");

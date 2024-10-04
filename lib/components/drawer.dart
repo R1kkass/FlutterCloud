@@ -31,7 +31,7 @@ class _MyDrawerState extends State<MyDrawer> {
       e.statusCode == 200
           ? setState(() {
               space = json.decode(e.body)["space"];
-              text = "Занято ${fileSize(space)} из 1 Гб";
+              text = "Занято: ${fileSize(space)} из 1 Гб";
             })
           : setState(() {
               text = "Ошибка";
@@ -66,6 +66,9 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                   Text(text),
                 ])),
+            Divider(
+              color: Colors.deepOrange.shade100,
+            ),
             TextButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -73,7 +76,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       context, SEARCH_USERS, (r) => false);
                 },
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.search),
                     SizedBox(
@@ -92,14 +95,14 @@ class _MyDrawerState extends State<MyDrawer> {
                       context, CHAT_LIST, (r) => false);
                 },
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.chat_outlined),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
-                      "Чаты",
+                      "Сообщения",
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -111,7 +114,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       context, CHANGE_ACCOUNT, (r) => false);
                 },
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.swap_horiz),
                     SizedBox(
@@ -130,7 +133,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       context, AUTH, (r) => false);
                 },
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.redo),
                     SizedBox(
@@ -149,7 +152,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   Navigator.pushNamed(context, AUTH);
                 },
                 child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.exit_to_app_outlined),
                     SizedBox(

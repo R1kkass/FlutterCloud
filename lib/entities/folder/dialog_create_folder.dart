@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,8 +50,8 @@ void showDialogRename(
               callback(id, nameFolder.text, context).then((e) {
                 context.read<FolderCubit>().updateDataFetch(
                     (args.runtimeType == HomeArgs)
-                        ? (args as HomeArgs).id.toString()
-                        : "",
+                        ? (args as HomeArgs).id
+                        : 0,
                     context);
 
                 e.statusCode == 200

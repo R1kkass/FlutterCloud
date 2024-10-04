@@ -20,7 +20,7 @@ class _SearchUsersState extends State<SearchUsers> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   getUserFetch(text) async {
-    var response = await getUsers(GetUsersRequest(userName: text));
+    var response = await UserGrpc().getUsers(GetUsersRequest(userName: text));
     users = response.data;
     setState(() {});
   }

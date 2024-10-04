@@ -1,20 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
+import 'package:flutter_application_2/grpc/files_grpc.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/services/encode_file.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 
 class BottomSheetExample extends StatefulWidget {
-  final String? id;
+  final int? id;
   const BottomSheetExample({super.key, required this.id});
 
   @override
@@ -23,11 +21,12 @@ class BottomSheetExample extends StatefulWidget {
 
 class _BottomSheetExample extends State<BottomSheetExample> {
   TextEditingController nameFolder = TextEditingController();
+  double value = 0;
 
   Future<Response> createFolderApi(context) {
     var id = widget.id;
 
-    id ??= "";
+    id ??= 0;
 
     return createFolder(FolderParams(nameFolder.text, id), context);
   }
@@ -35,34 +34,31 @@ class _BottomSheetExample extends State<BottomSheetExample> {
   void selectFile() async {
     var id = widget.id;
 
-    id ??= "";
+    id ??= 0;
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     Navigator.of(context).pop();
 
     if (result != null) {
-      File file = File(result.files.single.path!);
-      var box = await Hive.openBox('token');
+      var box = Hive.box('token');
       var password = box.get("password");
 
-      final directory = await getApplicationDocumentsDirectory();
       var currentFileName = result.files.single.path!.split("/").last;
-      // encrypt(result.files.single.path!.split("/").last, password);
 
-      var fileExitPath = "${directory.path}/$currentFileName";
+      var filePath = result.files.single.path!;
 
-      EncodeFile.encrypt(result.files.single.path!, fileExitPath, password);
-      var fileExit = File(fileExitPath);
-
-      createFile(
-          FileParams(id, fileExit.readAsBytesSync(), file.path.split("/").last),
-          context, (e) {
-        e.statusCode == 201
-            ? showToast(context, "Файл создан")
-            : showToast(context, "Файл не был создан");
-      });
+      FilesGrpc().uploadFile(
+          FileUploadRequest(fileName: currentFileName, folderId: widget.id),
+          EncodeFile.encrypByte(filePath, password),
+          setValue);
     } else {
       showToast(context, "Файл не выбран");
     }
+  }
+
+  void setValue(double e) {
+    setState(() {
+      value = e;
+    });
   }
 
   @override
@@ -99,12 +95,12 @@ class _BottomSheetExample extends State<BottomSheetExample> {
                       width: 25,
                     ),
                     ElevatedButton(
-                      child: const SizedBox(
+                      child: SizedBox(
                         height: 50,
                         child: Column(
                           children: [
-                            Icon(Icons.upload_file),
-                            Text("Добавить файл")
+                            const Icon(Icons.upload_file),
+                            Text("Добавить файл $value")
                           ],
                         ),
                       ),

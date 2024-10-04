@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/components/dialog_loading.dart';
-import 'package:flutter_application_2/components/toast.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:http/http.dart';
 
 const List<String> accesses = ["Закрытый", "Открытый", "По запросу"];

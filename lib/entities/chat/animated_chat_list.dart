@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/message.dart';
+import 'package:flutter_application_2/entities/chat/message.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 
