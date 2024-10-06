@@ -12,13 +12,6 @@ import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class GeneralFields {
-  final List<Folder?> folders;
-  final List<File?> files;
-
-  GeneralFields(this.folders, this.files);
-}
-
 class FolderComponent extends StatefulWidget {
   final Folder folder;
   const FolderComponent({super.key, required this.folder});
@@ -42,8 +35,8 @@ class _FolderState extends State<FolderComponent> {
                         : Colors.white)),
             onPressed: () {
               Navigator.pushNamed(context, '/',
-                  arguments: HomeArgs(
-                      widget.folder.id, widget.folder.nameFolder));
+                  arguments:
+                      HomeArgs(widget.folder.id, widget.folder.nameFolder));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

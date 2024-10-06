@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
+import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/features/folder/folder.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
@@ -20,20 +21,13 @@ class FolderParamsPatch {
   FolderParamsPatch(this.name_folder);
 }
 
-class GetData {
-  GeneralFields? body;
-  int status_code;
-
-  GetData(this.body, this.status_code);
-}
-
 Future<http.Response> createFolder(
     FolderParams body, BuildContext context) async {
-  var editedBody = {
-    "name_folder": body.name_folder,
+  Map<String, String> editedBody = {
+    "name_folder": body.name_folder.toString(),
   };
   if (body.folder_id != null) {
-    editedBody["folder_id"] = body.folder_id;
+    editedBody["folder_id"] = body.folder_id.toString();
   }
   return await my_http.post(Uri.parse('$domain/folder/create'), context,
       body: editedBody,
@@ -43,7 +37,7 @@ Future<http.Response> createFolder(
       });
 }
 
-Future<GetData> getFolder(id, BuildContext context) async {
+Future<GetData> getFolder(id, GetData state, BuildContext context) async {
   if (id == 0) id = "";
   var response = await my_http
       .get(Uri.parse('$domain/get/${id ?? ""}'), context, headers: {
@@ -64,7 +58,11 @@ Future<GetData> getFolder(id, BuildContext context) async {
     files.add(File.fromJsonCustom(data[i]));
   }
 
-  return GetData(GeneralFields(folders, files), response.statusCode);
+  return GetData(
+      folders: folders,
+      files: files,
+      uploadFile: state.uploadFile,
+      status_code: response.statusCode);
 }
 
 Future<http.Response> deleteFolder(int id, BuildContext context) async {

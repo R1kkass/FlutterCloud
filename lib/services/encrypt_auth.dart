@@ -60,6 +60,23 @@ Uint8List crypt(bool isEncrypt, Uint8List data, String secretKey) {
   return paddingCipher.process(data);
 }
 
+Future<Uint8List> cryptFuture(bool isEncrypt, Uint8List data, String secretKey) async{
+  var iv = generateIV(secretKey);
+  final ivbytes = base64Decode(iv);
+  final key = utf8.encode(secretKey);
+  final aes = AESEngine();
+  final params = ParametersWithIV<KeyParameter>(KeyParameter(key), ivbytes);
+  final paddingParams =
+      PaddedBlockCipherParameters<ParametersWithIV<KeyParameter>, Null>(
+          params, null);
+  final cipher = CBCBlockCipher(aes);
+
+  final paddingCipher = PaddedBlockCipherImpl(PKCS7Padding(), cipher)
+    ..init(isEncrypt, paddingParams);
+  return paddingCipher.process(data);
+}
+
+
 String encrypt(String data, String secretKey) {
   final plaintext = utf8.encode(data);
   var ciphertext = crypt(true, plaintext, secretKey);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 
 class OpenFileButton extends StatefulWidget {
   final String path;
@@ -36,7 +36,7 @@ class _OpenFileState extends State<OpenFileButton> {
           SizedBox(
               child: TextButton(
                   onPressed: () async {
-                    await OpenFile.open(widget.path, type: "public.plain-text");
+                    await OpenFile.open(widget.path);
                   },
                   child: const Text("Открыть")))
         ],

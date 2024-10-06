@@ -11,7 +11,7 @@ class EncodeFile {
     fileExist.writeAsBytesSync(crypt(true, file.readAsBytesSync(), key));
   }
 
-  static Uint8List encrypByte(path, key) {
+  static Uint8List encrypByte(String path, String key) {
     var file = File(path);
     return crypt(true, file.readAsBytesSync(), key);
   }

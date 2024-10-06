@@ -95,12 +95,14 @@ Future _checkPubKey(List<ChatUsers>? chats) async {
     var key = chat.chatId.toString() + email;
 
     if (secretBox.get(key) == null && !keyGeted) {
-      var y = await KeysGrpc().downloadKeys;
-      Map<String, dynamic> data = jsonDecode(y);
-      for (var item in data.keys) {
-        secretBox.put(item, data[item]);
-      }
-      keyGeted = true;
+      try {
+        var y = await KeysGrpc().downloadKeys;
+        Map<String, dynamic> data = jsonDecode(y);
+        for (var item in data.keys) {
+          secretBox.put(item, data[item]);
+        }
+        keyGeted = true;
+      } catch (e) {}
     }
 
     if (box.get(key) == null && secretBox.get(key) == null) {

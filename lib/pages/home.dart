@@ -59,7 +59,9 @@ class _HomeState extends State<Home> with RouteAware {
         title: (args?.title.runtimeType == String)
             ? (args as HomeArgs).title.toString()
             : widget.title,
-        body: const FolderBuilder(),
+        body: FolderBuilder(
+          folderId: args?.id,
+        ),
         floatButton: BottomSheetExample(id: args?.id));
   }
 }

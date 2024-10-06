@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
+import 'package:flutter_application_2/grpc/keys_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:flutter_application_2/proto/keys/keys.pb.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
+import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:hive/hive.dart';
 
@@ -71,20 +76,31 @@ Future _accept(ChatUsers chat) async {
 
   var key = chat.chatId.toString() + email;
   if (box.get(key) == null) {
-    GetPublicKeyResponse keys =
-        await ChatGrpc().getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
+    GetPublicKeyResponse keys = await ChatGrpc()
+        .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
     var key = await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
     await ChatGrpc().createSecondaryKey(
         CreateSecondaryKeyRequest(chatId: chat.chat.id, key: key.toString()));
   }
-  secretBox.delete(key);
   if (secretBox.get(key) == null) {
-    ChatGrpc().getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
+    ChatGrpc()
+        .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
         .then((keys) async {
       await generateSecretKey(keys.key, keys.p, chat.chat.id);
     });
   }
+  var values = secretBox.values.toList();
+  var keys = secretBox.keys.toList();
+  var resultObj = {};
 
+  for (var i = 0; i < keys.length; i++) {
+    resultObj[keys[i]] = values[i];
+  }
+  var pass = (await Hive.openBox("token")).get("password");
+  dynamic json = jsonEncode(resultObj).toString();
+  json = crypt(true, utf8.encode(json), pass);
+
+  await KeysGrpc().uploadFile(FileUploadRequest(chunk: json));
   await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.id));
 }
 

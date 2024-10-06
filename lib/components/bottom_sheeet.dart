@@ -1,10 +1,12 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/grpc/files_grpc.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/services/encode_file.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
@@ -21,8 +23,8 @@ class BottomSheetExample extends StatefulWidget {
 
 class _BottomSheetExample extends State<BottomSheetExample> {
   TextEditingController nameFolder = TextEditingController();
-  double value = 0;
-
+  bool status = false;
+  var idFileUpload;
   Future<Response> createFolderApi(context) {
     var id = widget.id;
 
@@ -31,34 +33,31 @@ class _BottomSheetExample extends State<BottomSheetExample> {
     return createFolder(FolderParams(nameFolder.text, id), context);
   }
 
-  void selectFile() async {
-    var id = widget.id;
-
-    id ??= 0;
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    Navigator.of(context).pop();
-
-    if (result != null) {
-      var box = Hive.box('token');
-      var password = box.get("password");
-
-      var currentFileName = result.files.single.path!.split("/").last;
-
-      var filePath = result.files.single.path!;
-
-      FilesGrpc().uploadFile(
-          FileUploadRequest(fileName: currentFileName, folderId: widget.id),
-          EncodeFile.encrypByte(filePath, password),
-          setValue);
-    } else {
-      showToast(context, "Файл не выбран");
-    }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
-  void setValue(double e) {
-    setState(() {
-      value = e;
-    });
+  void selectFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      Navigator.of(context).pop();
+
+      if (result != null) {
+        idFileUpload = DateTime.now().microsecond;
+        context.read<FolderCubit>().setUploadFile(
+            widget.id,
+            FileUpload(
+                id: idFileUpload,
+                fileName: result.files.single.path!.split("/").last));
+
+        _functionCreate(result);
+      } else {
+        showToast(context, "Файл не выбран");
+      }
+    } catch (e) {
+      showToast(context, "Файл не выбран");
+    }
   }
 
   @override
@@ -70,46 +69,53 @@ class _BottomSheetExample extends State<BottomSheetExample> {
         showModalBottomSheet<void>(
           context: context,
           builder: (BuildContext context) {
-            return SizedBox(
-              height: 200,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ElevatedButton(
-                        child: const SizedBox(
-                          height: 50,
-                          child: Column(
-                            children: [
-                              Icon(Icons.create_new_folder_outlined),
-                              Text("Добавить папку")
-                            ],
-                          ),
-                        ),
-                        onPressed: () => {
-                              Navigator.of(context).pop(),
-                              showDialogBuilder(context),
-                            }),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    ElevatedButton(
-                      child: SizedBox(
-                        height: 50,
-                        child: Column(
-                          children: [
-                            const Icon(Icons.upload_file),
-                            Text("Добавить файл $value")
+            return BottomSheet(
+                onClosing: () {},
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                      builder: (BuildContext cotnext, setState) {
+                    return SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ElevatedButton(
+                                child: const SizedBox(
+                                  height: 50,
+                                  child: Column(
+                                    children: [
+                                      Icon(Icons.create_new_folder_outlined),
+                                      Text("Добавить папку")
+                                    ],
+                                  ),
+                                ),
+                                onPressed: () => {
+                                      Navigator.of(context).pop(),
+                                      showDialogBuilder(context),
+                                    }),
+                            const SizedBox(
+                              width: 25,
+                            ),
+                            ElevatedButton(
+                              child: const SizedBox(
+                                height: 50,
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.upload_file),
+                                    Text("Добавить файл")
+                                  ],
+                                ),
+                              ),
+                              onPressed: () => {selectFile()},
+                            ),
                           ],
                         ),
                       ),
-                      onPressed: () => {selectFile()},
-                    ),
-                  ],
-                ),
-              ),
-            );
+                    );
+                  });
+                });
           },
         );
       },
@@ -162,5 +168,30 @@ class _BottomSheetExample extends State<BottomSheetExample> {
         );
       },
     );
+  }
+
+  _functionCreate(result) async {
+    var box = Hive.box('token');
+    var password = box.get("password");
+    var folderId = widget.id ?? 0;
+    var fileName = result.files.single.path!.split("/").last;
+
+    var filePath = result.files.single.path!;
+    if (context.read<FolderCubit>().state.uploadFile[folderId]?[idFileUpload] !=
+        null) {
+      var argsStream = await Isolate.run(() => FilesGrpc().createStreamArg(
+          ArgsForStream(
+              file: filePath,
+              key: password,
+              request:
+                  FileUploadRequest(fileName: fileName, folderId: folderId))));
+      var callback = FilesGrpc().uploadFile(argsStream);
+      context
+          .read<FolderCubit>()
+          .setCallbackUploadFile(folderId, idFileUpload, callback);
+      await callback;
+      context.read<FolderCubit>().removeUploadFile(folderId, idFileUpload);
+      showToast(context, 'Файл "$fileName" загружен');
+    }
   }
 }
