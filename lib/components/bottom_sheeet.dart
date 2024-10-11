@@ -3,7 +3,8 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/main.dart';
 import 'package:flutter_application_2/shared/toast.dart';
 import 'package:flutter_application_2/grpc/files_grpc.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
@@ -15,7 +16,14 @@ import 'package:http/http.dart';
 
 class BottomSheetExample extends StatefulWidget {
   final int? id;
-  const BottomSheetExample({super.key, required this.id});
+  final ContentState state;
+  final BuildContext context;
+
+  const BottomSheetExample(
+      {super.key,
+      required this.id,
+      required this.state,
+      required this.context});
 
   @override
   State<BottomSheetExample> createState() => _BottomSheetExample();
@@ -24,7 +32,7 @@ class BottomSheetExample extends StatefulWidget {
 class _BottomSheetExample extends State<BottomSheetExample> {
   TextEditingController nameFolder = TextEditingController();
   bool status = false;
-  var idFileUpload;
+
   Future<Response> createFolderApi(context) {
     var id = widget.id;
 
@@ -44,19 +52,20 @@ class _BottomSheetExample extends State<BottomSheetExample> {
       Navigator.of(context).pop();
 
       if (result != null) {
-        idFileUpload = DateTime.now().microsecond;
-        context.read<FolderCubit>().setUploadFile(
-            widget.id,
-            FileUpload(
+        var idFileUpload = DateTime.now().microsecond;
+        context.read<ContentBloc>().add(UploadFileSet(
+            id: widget.id,
+            data: FileUpload(
+                size: 0,
                 id: idFileUpload,
-                fileName: result.files.single.path!.split("/").last));
+                fileName: result.files.single.path!.split("/").last)));
 
-        _functionCreate(result);
+        _functionCreate(result, idFileUpload, widget.context);
       } else {
-        showToast(context, "Файл не выбран");
+        showToast(widget.context, "Файл не выбран");
       }
     } catch (e) {
-      showToast(context, "Файл не выбран");
+      showToast(widget.context, "Файл не выбран");
     }
   }
 
@@ -123,6 +132,8 @@ class _BottomSheetExample extends State<BottomSheetExample> {
   }
 
   Null showDialogBuilder(context) {
+    var mainContext =
+        NavigationService.navigatorKey.currentContext as BuildContext;
     showDialog<void>(
       context: context,
       builder: (context) {
@@ -156,12 +167,12 @@ class _BottomSheetExample extends State<BottomSheetExample> {
 
                 await createFolderApi(context).then((e) {
                   e.statusCode == 201
-                      ? showToast(context, "Папка создана")
-                      : showToast(context, "Папка не была создана");
+                      ? showToast(widget.context, "Папка создана")
+                      : showToast(widget.context, "Папка не была создана");
                 }).catchError((e) {
-                  showToast(context, "Папка не была создана");
+                  showToast(widget.context, "Папка не была создана");
                 });
-                context.read<FolderCubit>().updateDataFetch(widget.id, context);
+                ContentBloc.defaultRequestFile(widget.id, mainContext);
               },
             ),
           ],
@@ -170,28 +181,33 @@ class _BottomSheetExample extends State<BottomSheetExample> {
     );
   }
 
-  _functionCreate(result) async {
+  _functionCreate(result, int id, BuildContext myContext) async {
+    var mainContext =
+        NavigationService.navigatorKey.currentContext as BuildContext;
+
     var box = Hive.box('token');
     var password = box.get("password");
     var folderId = widget.id ?? 0;
     var fileName = result.files.single.path!.split("/").last;
 
     var filePath = result.files.single.path!;
-    if (context.read<FolderCubit>().state.uploadFile[folderId]?[idFileUpload] !=
+    var argsStream = await Isolate.run(() => FilesGrpc().createStreamArg(
+        ArgsForStream(
+            file: filePath,
+            key: password,
+            request:
+                FileUploadRequest(fileName: fileName, folderId: folderId))));
+    if (mainContext.read<ContentBloc>().state.uploadFile[folderId]?[id] !=
         null) {
-      var argsStream = await Isolate.run(() => FilesGrpc().createStreamArg(
-          ArgsForStream(
-              file: filePath,
-              key: password,
-              request:
-                  FileUploadRequest(fileName: fileName, folderId: folderId))));
       var callback = FilesGrpc().uploadFile(argsStream);
-      context
-          .read<FolderCubit>()
-          .setCallbackUploadFile(folderId, idFileUpload, callback);
+
+      mainContext.read<ContentBloc>().add(
+          UploadSetCallback(id: id, folderId: folderId, callback: callback));
       await callback;
-      context.read<FolderCubit>().removeUploadFile(folderId, idFileUpload);
-      showToast(context, 'Файл "$fileName" загружен');
+      mainContext
+          .read<ContentBloc>()
+          .add(UploadFileRemove(folderId: folderId, id: id));
+      ContentBloc.defaultRequestFile(folderId, mainContext);
     }
   }
 }

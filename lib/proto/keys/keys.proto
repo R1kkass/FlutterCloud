@@ -5,20 +5,20 @@ option go_package = "./keys";
 package keys;
 
 service KeysGreeter {
-    rpc UploadKeys(FileUploadRequest) returns (FileUploadResponse);
-    rpc DownloadKeys(Empty) returns (stream FileDownloadResponse);
+    rpc UploadKeys(KeysUploadRequest) returns (KeysUploadResponse);
+    rpc DownloadKeys(Empty) returns (stream KeyDownloadResponse);
 }
 
-message FileUploadRequest {
+message KeysUploadRequest {
     bytes chunk = 2;
 }
 
-message FileUploadResponse {
+message KeysUploadResponse {
     string message = 1;
 }
 
 message Empty {}
 
-message FileDownloadResponse {
+message KeyDownloadResponse {
     bytes chunk = 1;
 }

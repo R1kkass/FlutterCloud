@@ -9,13 +9,17 @@ class MyInput extends StatefulWidget {
     required this.icon,
     required this.error,
     this.fieldSubmit,
+    this.elevation,
     this.suffixIcon,
+    this.autoFocus = false,
     obscureText,
   }) : obscureText = obscureText ?? false;
 
   final TextEditingController? controller;
   final String title;
   final IconData icon;
+  final bool autoFocus;
+  bool? elevation;
   IconButton? suffixIcon;
   final String error;
   bool obscureText;
@@ -29,8 +33,9 @@ class _MyInputState extends State<MyInput> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 5.0,
+      elevation: widget.elevation != null ? 0 : 5.0,
       child: TextFormField(
+        autofocus: widget.autoFocus,
         onFieldSubmitted: widget.fieldSubmit,
         keyboardType: TextInputType.emailAddress,
         controller: widget.controller,

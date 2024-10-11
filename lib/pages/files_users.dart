@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
+import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/grpc/user_grpc.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:flutter_application_2/proto/users/users.pbgrpc.dart';
 import 'package:flutter_application_2/features/file/file.dart';
 import 'package:flutter_application_2/features/folder/folder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArgsFilesUsers {
   final Users user;
@@ -35,8 +38,8 @@ class _FilesUsersState extends State<FilesUsers> {
   }
 
   _asyncMethod() async {
-    contents =
-        await UserGrpc().getContentUsers(GetContentUserRequest(id: widget.args.user.id));
+    contents = await UserGrpc()
+        .getContentUsers(GetContentUserRequest(id: widget.args.user.id));
     setState(() {});
   }
 
@@ -47,19 +50,22 @@ class _FilesUsersState extends State<FilesUsers> {
     var filesRequestAccess = contents.data.fileRequestAccess;
     var foldersRequestAccess = contents.data.folderRequestAccess;
 
-    return DefaultScaffold(
-        title: "${widget.title} ${widget.args.user.name}",
-        body: ListView(
-          children: [
-            ...paintContent(files, (file) => FileComponent(file: file as File)),
-            ...paintContent(
-                folders, (folder) => FolderComponent(folder: folder as Folder)),
-            ...paintContent(filesRequestAccess,
-                (file) => FileComponent(file: file as File)),
-            ...paintContent(foldersRequestAccess,
-                (folder) => FolderComponent(folder: folder as Folder)),
-          ],
-        ));
+    return BlocBuilder<FolderCubit, GetData>(builder: (context, state) {
+      return DefaultScaffold(
+          title: "${widget.title} ${widget.args.user.name}",
+          body: ListView(
+            children: [
+              ...paintContent(
+                  files, (file) => FileComponent(file: file as FileFind)),
+              ...paintContent(folders,
+                  (folder) => FolderComponent(folder: folder as FolderFind)),
+              ...paintContent(filesRequestAccess,
+                  (file) => FileComponent(file: file as FileFind)),
+              ...paintContent(foldersRequestAccess,
+                  (folder) => FolderComponent(folder: folder as FolderFind)),
+            ],
+          ));
+    });
   }
 }
 

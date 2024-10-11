@@ -29,6 +29,10 @@ class FilesGreeterClient extends $grpc.Client {
       '/files.FilesGreeter/DownloadFile',
       ($0.FileDownloadRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.FileDownloadResponse.fromBuffer(value));
+  static final _$findFile = $grpc.ClientMethod<$0.FindFileRequest, $0.FindFileResponse>(
+      '/files.FilesGreeter/FindFile',
+      ($0.FindFileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.FindFileResponse.fromBuffer(value));
 
   FilesGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -42,6 +46,10 @@ class FilesGreeterClient extends $grpc.Client {
 
   $grpc.ResponseStream<$0.FileDownloadResponse> downloadFile($0.FileDownloadRequest request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$downloadFile, $async.Stream.fromIterable([request]), options: options);
+  }
+
+  $grpc.ResponseFuture<$0.FindFileResponse> findFile($0.FindFileRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$findFile, request, options: options);
   }
 }
 
@@ -64,12 +72,24 @@ abstract class FilesGreeterServiceBase extends $grpc.Service {
         true,
         ($core.List<$core.int> value) => $0.FileDownloadRequest.fromBuffer(value),
         ($0.FileDownloadResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.FindFileRequest, $0.FindFileResponse>(
+        'FindFile',
+        findFile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.FindFileRequest.fromBuffer(value),
+        ($0.FindFileResponse value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.FileDownloadResponse> downloadFile_Pre($grpc.ServiceCall call, $async.Future<$0.FileDownloadRequest> request) async* {
     yield* downloadFile(call, await request);
   }
 
+  $async.Future<$0.FindFileResponse> findFile_Pre($grpc.ServiceCall call, $async.Future<$0.FindFileRequest> request) async {
+    return findFile(call, await request);
+  }
+
   $async.Future<$0.FileUploadResponse> uploadFile($grpc.ServiceCall call, $async.Stream<$0.FileUploadRequest> request);
   $async.Stream<$0.FileDownloadResponse> downloadFile($grpc.ServiceCall call, $0.FileDownloadRequest request);
+  $async.Future<$0.FindFileResponse> findFile($grpc.ServiceCall call, $0.FindFileRequest request);
 }

@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: keys.proto
+//  source: keys/keys.proto
 //
 // @dart = 2.12
 
@@ -13,8 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class FileUploadRequest extends $pb.GeneratedMessage {
-  factory FileUploadRequest({
+class KeysUploadRequest extends $pb.GeneratedMessage {
+  factory KeysUploadRequest({
     $core.List<$core.int>? chunk,
   }) {
     final $result = create();
@@ -23,11 +23,11 @@ class FileUploadRequest extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  FileUploadRequest._() : super();
-  factory FileUploadRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FileUploadRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  KeysUploadRequest._() : super();
+  factory KeysUploadRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory KeysUploadRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FileUploadRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeysUploadRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -36,22 +36,22 @@ class FileUploadRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  FileUploadRequest clone() => FileUploadRequest()..mergeFromMessage(this);
+  KeysUploadRequest clone() => KeysUploadRequest()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  FileUploadRequest copyWith(void Function(FileUploadRequest) updates) => super.copyWith((message) => updates(message as FileUploadRequest)) as FileUploadRequest;
+  KeysUploadRequest copyWith(void Function(KeysUploadRequest) updates) => super.copyWith((message) => updates(message as KeysUploadRequest)) as KeysUploadRequest;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static FileUploadRequest create() => FileUploadRequest._();
-  FileUploadRequest createEmptyInstance() => create();
-  static $pb.PbList<FileUploadRequest> createRepeated() => $pb.PbList<FileUploadRequest>();
+  static KeysUploadRequest create() => KeysUploadRequest._();
+  KeysUploadRequest createEmptyInstance() => create();
+  static $pb.PbList<KeysUploadRequest> createRepeated() => $pb.PbList<KeysUploadRequest>();
   @$core.pragma('dart2js:noInline')
-  static FileUploadRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FileUploadRequest>(create);
-  static FileUploadRequest? _defaultInstance;
+  static KeysUploadRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeysUploadRequest>(create);
+  static KeysUploadRequest? _defaultInstance;
 
   @$pb.TagNumber(2)
   $core.List<$core.int> get chunk => $_getN(0);
@@ -63,8 +63,8 @@ class FileUploadRequest extends $pb.GeneratedMessage {
   void clearChunk() => clearField(2);
 }
 
-class FileUploadResponse extends $pb.GeneratedMessage {
-  factory FileUploadResponse({
+class KeysUploadResponse extends $pb.GeneratedMessage {
+  factory KeysUploadResponse({
     $core.String? message,
   }) {
     final $result = create();
@@ -73,11 +73,11 @@ class FileUploadResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  FileUploadResponse._() : super();
-  factory FileUploadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FileUploadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  KeysUploadResponse._() : super();
+  factory KeysUploadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory KeysUploadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FileUploadResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeysUploadResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'message')
     ..hasRequiredFields = false
   ;
@@ -86,22 +86,22 @@ class FileUploadResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  FileUploadResponse clone() => FileUploadResponse()..mergeFromMessage(this);
+  KeysUploadResponse clone() => KeysUploadResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  FileUploadResponse copyWith(void Function(FileUploadResponse) updates) => super.copyWith((message) => updates(message as FileUploadResponse)) as FileUploadResponse;
+  KeysUploadResponse copyWith(void Function(KeysUploadResponse) updates) => super.copyWith((message) => updates(message as KeysUploadResponse)) as KeysUploadResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static FileUploadResponse create() => FileUploadResponse._();
-  FileUploadResponse createEmptyInstance() => create();
-  static $pb.PbList<FileUploadResponse> createRepeated() => $pb.PbList<FileUploadResponse>();
+  static KeysUploadResponse create() => KeysUploadResponse._();
+  KeysUploadResponse createEmptyInstance() => create();
+  static $pb.PbList<KeysUploadResponse> createRepeated() => $pb.PbList<KeysUploadResponse>();
   @$core.pragma('dart2js:noInline')
-  static FileUploadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FileUploadResponse>(create);
-  static FileUploadResponse? _defaultInstance;
+  static KeysUploadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeysUploadResponse>(create);
+  static KeysUploadResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get message => $_getSZ(0);
@@ -145,8 +145,8 @@ class Empty extends $pb.GeneratedMessage {
   static Empty? _defaultInstance;
 }
 
-class FileDownloadResponse extends $pb.GeneratedMessage {
-  factory FileDownloadResponse({
+class KeyDownloadResponse extends $pb.GeneratedMessage {
+  factory KeyDownloadResponse({
     $core.List<$core.int>? chunk,
   }) {
     final $result = create();
@@ -155,11 +155,11 @@ class FileDownloadResponse extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  FileDownloadResponse._() : super();
-  factory FileDownloadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FileDownloadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  KeyDownloadResponse._() : super();
+  factory KeyDownloadResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory KeyDownloadResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FileDownloadResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeyDownloadResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'keys'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -168,22 +168,22 @@ class FileDownloadResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  FileDownloadResponse clone() => FileDownloadResponse()..mergeFromMessage(this);
+  KeyDownloadResponse clone() => KeyDownloadResponse()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  FileDownloadResponse copyWith(void Function(FileDownloadResponse) updates) => super.copyWith((message) => updates(message as FileDownloadResponse)) as FileDownloadResponse;
+  KeyDownloadResponse copyWith(void Function(KeyDownloadResponse) updates) => super.copyWith((message) => updates(message as KeyDownloadResponse)) as KeyDownloadResponse;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static FileDownloadResponse create() => FileDownloadResponse._();
-  FileDownloadResponse createEmptyInstance() => create();
-  static $pb.PbList<FileDownloadResponse> createRepeated() => $pb.PbList<FileDownloadResponse>();
+  static KeyDownloadResponse create() => KeyDownloadResponse._();
+  KeyDownloadResponse createEmptyInstance() => create();
+  static $pb.PbList<KeyDownloadResponse> createRepeated() => $pb.PbList<KeyDownloadResponse>();
   @$core.pragma('dart2js:noInline')
-  static FileDownloadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FileDownloadResponse>(create);
-  static FileDownloadResponse? _defaultInstance;
+  static KeyDownloadResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeyDownloadResponse>(create);
+  static KeyDownloadResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<$core.int> get chunk => $_getN(0);

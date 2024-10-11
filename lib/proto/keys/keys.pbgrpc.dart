@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: keys.proto
+//  source: keys/keys.proto
 //
 // @dart = 2.12
 
@@ -21,14 +21,14 @@ export 'keys.pb.dart';
 
 @$pb.GrpcServiceName('keys.KeysGreeter')
 class KeysGreeterClient extends $grpc.Client {
-  static final _$uploadKeys = $grpc.ClientMethod<$0.FileUploadRequest, $0.FileUploadResponse>(
+  static final _$uploadKeys = $grpc.ClientMethod<$0.KeysUploadRequest, $0.KeysUploadResponse>(
       '/keys.KeysGreeter/UploadKeys',
-      ($0.FileUploadRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.FileUploadResponse.fromBuffer(value));
-  static final _$downloadKeys = $grpc.ClientMethod<$0.Empty, $0.FileDownloadResponse>(
+      ($0.KeysUploadRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.KeysUploadResponse.fromBuffer(value));
+  static final _$downloadKeys = $grpc.ClientMethod<$0.Empty, $0.KeyDownloadResponse>(
       '/keys.KeysGreeter/DownloadKeys',
       ($0.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.FileDownloadResponse.fromBuffer(value));
+      ($core.List<$core.int> value) => $0.KeyDownloadResponse.fromBuffer(value));
 
   KeysGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -36,11 +36,11 @@ class KeysGreeterClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.FileUploadResponse> uploadKeys($0.FileUploadRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.KeysUploadResponse> uploadKeys($0.KeysUploadRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$uploadKeys, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.FileDownloadResponse> downloadKeys($0.Empty request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseStream<$0.KeyDownloadResponse> downloadKeys($0.Empty request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$downloadKeys, $async.Stream.fromIterable([request]), options: options);
   }
 }
@@ -50,30 +50,30 @@ abstract class KeysGreeterServiceBase extends $grpc.Service {
   $core.String get $name => 'keys.KeysGreeter';
 
   KeysGreeterServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.FileUploadRequest, $0.FileUploadResponse>(
+    $addMethod($grpc.ServiceMethod<$0.KeysUploadRequest, $0.KeysUploadResponse>(
         'UploadKeys',
         uploadKeys_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.FileUploadRequest.fromBuffer(value),
-        ($0.FileUploadResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.Empty, $0.FileDownloadResponse>(
+        ($core.List<$core.int> value) => $0.KeysUploadRequest.fromBuffer(value),
+        ($0.KeysUploadResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.KeyDownloadResponse>(
         'DownloadKeys',
         downloadKeys_Pre,
         false,
         true,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
-        ($0.FileDownloadResponse value) => value.writeToBuffer()));
+        ($0.KeyDownloadResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.FileUploadResponse> uploadKeys_Pre($grpc.ServiceCall call, $async.Future<$0.FileUploadRequest> request) async {
+  $async.Future<$0.KeysUploadResponse> uploadKeys_Pre($grpc.ServiceCall call, $async.Future<$0.KeysUploadRequest> request) async {
     return uploadKeys(call, await request);
   }
 
-  $async.Stream<$0.FileDownloadResponse> downloadKeys_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async* {
+  $async.Stream<$0.KeyDownloadResponse> downloadKeys_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async* {
     yield* downloadKeys(call, await request);
   }
 
-  $async.Future<$0.FileUploadResponse> uploadKeys($grpc.ServiceCall call, $0.FileUploadRequest request);
-  $async.Stream<$0.FileDownloadResponse> downloadKeys($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.KeysUploadResponse> uploadKeys($grpc.ServiceCall call, $0.KeysUploadRequest request);
+  $async.Stream<$0.KeyDownloadResponse> downloadKeys($grpc.ServiceCall call, $0.Empty request);
 }

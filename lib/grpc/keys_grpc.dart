@@ -15,7 +15,7 @@ class KeysGrpc {
     });
   }
 
-  Future<FileUploadResponse> uploadFile(FileUploadRequest request) {
+  Future<KeysUploadResponse> uploadFile(KeysUploadRequest request) {
     return _stub.uploadKeys(request, options: _options);
   }
 

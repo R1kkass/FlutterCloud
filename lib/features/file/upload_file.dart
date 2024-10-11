@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/cubit/content_bloc.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,9 +47,8 @@ class _UploadFileState extends State<UploadFile> {
             child: TextButton(
                 onPressed: () {
                   widget.file.callback?.cancel();
-                  context
-                      .read<FolderCubit>()
-                      .removeUploadFile(widget.folderId, widget.file.id);
+                  context.read<ContentBloc>().add(UploadFileRemove(
+                      folderId: widget.folderId, id: widget.file.id));
                 },
                 child: const Text("Отменить")),
           )

@@ -145,6 +145,25 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   ],
                 )),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, DOWNLOAD, (r) => false);
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.download_outlined),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "Загрузки",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                )),
             const Spacer(),
             TextButton(
                 onPressed: () {

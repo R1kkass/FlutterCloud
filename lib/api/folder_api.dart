@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/features/folder/folder.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/proto/users/users.pb.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -62,6 +61,7 @@ Future<GetData> getFolder(id, GetData state, BuildContext context) async {
       folders: folders,
       files: files,
       uploadFile: state.uploadFile,
+      downloadFile: state.downloadFile,
       status_code: response.statusCode);
 }
 

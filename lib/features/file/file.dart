@@ -3,11 +3,12 @@ import 'package:flutter_application_2/components/text_content.dart';
 import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/features/file/model_bottom_file.dart';
 import 'package:flutter_application_2/pages/open_file.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/services/file_size.dart';
 
 class FileComponent extends StatefulWidget {
-  final File file;
+  final FileFind file;
+
   const FileComponent({super.key, required this.file});
 
   @override

@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
 interface class OpenFileArgs {
-  final File file;
+  final FileFind file;
   OpenFileArgs({required this.file});
 }
 

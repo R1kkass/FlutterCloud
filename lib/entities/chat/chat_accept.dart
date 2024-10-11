@@ -100,7 +100,7 @@ Future _accept(ChatUsers chat) async {
   dynamic json = jsonEncode(resultObj).toString();
   json = crypt(true, utf8.encode(json), pass);
 
-  await KeysGrpc().uploadFile(FileUploadRequest(chunk: json));
+  await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
   await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.id));
 }
 

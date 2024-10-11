@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: keys.proto
+//  source: keys/keys.proto
 //
 // @dart = 2.12
 
@@ -13,29 +13,29 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use fileUploadRequestDescriptor instead')
-const FileUploadRequest$json = {
-  '1': 'FileUploadRequest',
+@$core.Deprecated('Use keysUploadRequestDescriptor instead')
+const KeysUploadRequest$json = {
+  '1': 'KeysUploadRequest',
   '2': [
     {'1': 'chunk', '3': 2, '4': 1, '5': 12, '10': 'chunk'},
   ],
 };
 
-/// Descriptor for `FileUploadRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List fileUploadRequestDescriptor = $convert.base64Decode(
-    'ChFGaWxlVXBsb2FkUmVxdWVzdBIUCgVjaHVuaxgCIAEoDFIFY2h1bms=');
+/// Descriptor for `KeysUploadRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List keysUploadRequestDescriptor = $convert.base64Decode(
+    'ChFLZXlzVXBsb2FkUmVxdWVzdBIUCgVjaHVuaxgCIAEoDFIFY2h1bms=');
 
-@$core.Deprecated('Use fileUploadResponseDescriptor instead')
-const FileUploadResponse$json = {
-  '1': 'FileUploadResponse',
+@$core.Deprecated('Use keysUploadResponseDescriptor instead')
+const KeysUploadResponse$json = {
+  '1': 'KeysUploadResponse',
   '2': [
     {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
   ],
 };
 
-/// Descriptor for `FileUploadResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List fileUploadResponseDescriptor = $convert.base64Decode(
-    'ChJGaWxlVXBsb2FkUmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+/// Descriptor for `KeysUploadResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List keysUploadResponseDescriptor = $convert.base64Decode(
+    'ChJLZXlzVXBsb2FkUmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
 
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
@@ -46,15 +46,15 @@ const Empty$json = {
 final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
     'CgVFbXB0eQ==');
 
-@$core.Deprecated('Use fileDownloadResponseDescriptor instead')
-const FileDownloadResponse$json = {
-  '1': 'FileDownloadResponse',
+@$core.Deprecated('Use keyDownloadResponseDescriptor instead')
+const KeyDownloadResponse$json = {
+  '1': 'KeyDownloadResponse',
   '2': [
     {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
   ],
 };
 
-/// Descriptor for `FileDownloadResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List fileDownloadResponseDescriptor = $convert.base64Decode(
-    'ChRGaWxlRG93bmxvYWRSZXNwb25zZRIUCgVjaHVuaxgBIAEoDFIFY2h1bms=');
+/// Descriptor for `KeyDownloadResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List keyDownloadResponseDescriptor = $convert.base64Decode(
+    'ChNLZXlEb3dubG9hZFJlc3BvbnNlEhQKBWNodW5rGAEgASgMUgVjaHVuaw==');
 

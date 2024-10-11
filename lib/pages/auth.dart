@@ -148,7 +148,7 @@ Future<LoginResponse?> _login(LoginFields request, BuildContext context) async {
     var loginResp =
         await authGprc.login(LoginRequest(email: email, password: password));
     var token = decrypt(loginResp.accessToken, secretKey);
-    KeysGrpc().uploadFile(FileUploadRequest());
+    KeysGrpc().uploadFile(KeysUploadRequest());
 
     var box = Hive.box('token');
     var boxTokens = Hive.box('list_token');

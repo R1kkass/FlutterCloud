@@ -4,11 +4,17 @@ import 'package:flutter_application_2/components/drawer.dart';
 class DefaultScaffold extends StatefulWidget {
   final String title;
   final Widget body;
+  final Null Function()? searchAction;
   final Widget? floatButton;
   final PreferredSizeWidget? bottom;
 
   const DefaultScaffold(
-      {super.key, this.floatButton, required this.title, required this.body, this.bottom});
+      {super.key,
+      this.floatButton,
+      required this.title,
+      required this.body,
+      this.searchAction,
+      this.bottom});
 
   @override
   State<DefaultScaffold> createState() => _DefaultScaffoldState();
@@ -26,7 +32,7 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.canPop(context)
-                      ? Navigator.pop(context, true)
+                      ? Navigator.of(context).pop()
                       : ModalRoute.of(context)!.settings.name != "/"
                           ? Navigator.pushNamedAndRemoveUntil(
                               context, "/", (r) => false)
@@ -48,11 +54,22 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
         actionsIconTheme: const IconThemeData(color: Colors.white),
         actions: [
           Builder(builder: (context) {
-            return IconButton(
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              iconSize: 40,
-              icon: const Icon(Icons.person),
-              tooltip: 'Пользователь',
+            return Row(
+              children: [
+                widget.searchAction != null
+                    ? IconButton(
+                        onPressed: widget.searchAction,
+                        iconSize: 35,
+                        icon: const Icon(Icons.search),
+                        tooltip: 'Поиск',
+                      )
+                    : const SizedBox(),
+                IconButton(
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  iconSize: 35,
+                  icon: const Icon(Icons.dehaze),
+                ),
+              ],
             );
           })
         ],

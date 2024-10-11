@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/components/dialog_access.dart';
+import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/features/access/dialog_access.dart';
 import 'package:flutter_application_2/entities/folder/dialog_create_folder.dart';
 import 'package:flutter_application_2/features/file/file.dart';
+import 'package:flutter_application_2/grpc/files_grpc.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/features/file/download_button.dart';
 import 'package:flutter_application_2/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,18 +31,25 @@ Null showModalFolder(context, FileComponent widget) {
                     children: <Widget>[
                       TextButton(
                         onPressed: () async {
-                          deleteFile(widget.file.id, context).then((e) {
+                          deleteFile(widget.file.id, context).then((e) async {
                             e.statusCode == 200
-                                ? showToast(context, "Файл удалён")
-                                : showToast(
-                                    context, "Ошибка при удалении файла");
+                                ? showToast(context,
+                                    'Файл "${widget.file.fileName}" удалён')
+                                : showToast(context,
+                                    'Ошибка при удалении файла "${widget.file.fileName}"');
+                            var response = await FilesGrpc().findFile(
+                                FindFileRequest(
+                                    search: "",
+                                    folderId: widget.file.folderId,
+                                    findEveryWhere: false));
 
-                            context
-                                .read<FolderCubit>()
-                                .updateDataFetch(widget.file.folderId, context);
+                            context.read<ContentBloc>().add(ContentInit(
+                                files: response.files,
+                                folders: response.folders));
                             Navigator.of(context).pop();
                           }).catchError((e) {
-                            showToast(context, "Ошибка при удалении файла");
+                            showToast(context,
+                                'Ошибка при удалении файла "${widget.file.fileName}"');
                           });
                         },
                         child: const Row(

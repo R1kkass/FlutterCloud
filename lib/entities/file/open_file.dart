@@ -3,8 +3,9 @@ import 'package:open_file_plus/open_file_plus.dart';
 
 class OpenFileButton extends StatefulWidget {
   final String path;
+  final String fileName;
 
-  const OpenFileButton({super.key, required this.path});
+  const OpenFileButton({super.key, required this.path, required this.fileName});
 
   @override
   State<OpenFileButton> createState() => _OpenFileState();
@@ -26,7 +27,7 @@ class _OpenFileState extends State<OpenFileButton> {
             width: 15,
           ),
           Text(
-            "Файл скачан",
+            'Файл "${widget.fileName}" скачан',
             style: TextStyle(
                 fontSize: 16,
                 color: Colors.deepOrange.shade800,

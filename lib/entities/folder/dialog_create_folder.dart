@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/grpc/files_grpc.dart';
+import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -47,13 +49,12 @@ void showDialogRename(
             ),
             child: const Text("Переименовать"),
             onPressed: () async {
-              callback(id, nameFolder.text, context).then((e) {
-                context.read<FolderCubit>().updateDataFetch(
-                    (args.runtimeType == HomeArgs)
-                        ? (args as HomeArgs).id
-                        : 0,
-                    context);
+              callback(id, nameFolder.text, context).then((e) async {
+                var response = await FilesGrpc().findFile(FindFileRequest(
+                    search: "", folderId: args?.id, findEveryWhere: false));
 
+                context.read<ContentBloc>().add(ContentInit(
+                    files: response.files, folders: response.folders));
                 e.statusCode == 200
                     ? showToast(context, successMessage)
                     : showToast(context, errorMessage);

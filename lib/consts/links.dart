@@ -6,3 +6,4 @@ const FILES_USERS = "/filesusers";
 const CHAT = "/chat";
 const CHAT_LIST = "/chatlist";
 const CHANGE_ACCOUNT = "/changeaccount";
+const DOWNLOAD = "/download";

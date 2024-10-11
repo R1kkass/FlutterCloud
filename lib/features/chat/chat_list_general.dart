@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
@@ -135,6 +134,6 @@ Future _checkPubKey(List<ChatUsers>? chats) async {
     dynamic json = jsonEncode(resultObj).toString();
     json = crypt(true, utf8.encode(json), pass);
 
-    await KeysGrpc().uploadFile(FileUploadRequest(chunk: json));
+    await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
   }
 }

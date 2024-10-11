@@ -80,4 +80,8 @@ class FilesGrpc {
 
     return arrFUR;
   }
+
+  Future<FindFileResponse> findFile(FindFileRequest request) {
+    return _stub.findFile(request, options: _options);
+  } 
 }

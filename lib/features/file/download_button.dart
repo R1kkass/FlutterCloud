@@ -1,18 +1,19 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/cubit/download_file_bloc.dart';
+import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/entities/file/downloading_button.dart';
 import 'package:flutter_application_2/entities/file/open_file.dart';
+import 'package:flutter_application_2/features/file/actions/download_action.dart';
 import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/pages/get_download_path.dart';
+import 'package:flutter_application_2/main.dart';
+import 'package:flutter_application_2/services/get_download_path.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
-import 'package:flutter_application_2/services/encode_file.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DownloadButton extends StatefulWidget {
-  final File file;
-
+  final FileFind file;
   const DownloadButton({super.key, required this.file});
 
   @override
@@ -27,61 +28,49 @@ final downloadStatus = {
 };
 
 class _DownloadButtonState extends State<DownloadButton> {
-  double value = 0.0;
-  int download = 0;
   String path = "";
   bool success = false;
   List<int> fileBytes = [];
   ResponseStream<FileDownloadResponse>? downloadFile;
+  var mainContext =
+      NavigationService.navigatorKey.currentContext as BuildContext;
 
   @override
   Widget build(BuildContext context) {
-    if (download == 1) {
-      return DownloadingButton(value: value, fn: _cancelDownload);
-    }
-    if (download == 2) {
-      return OpenFileButton(path: path);
-    }
-    if (download == 3) {
-      return Container(child: const Text("Ошибка"));
-    }
-    return TextButton(
-      onPressed: _downloadFile,
-      child: const Row(
-        children: [
-          Icon(Icons.download_outlined, size: 30),
-          SizedBox(
-            width: 15,
-          ),
-          Text(
-            "Скачать",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
+    return BlocBuilder<DownloadFileBloc, DownloadFileState>(
+        builder: (context, state) {
+      var data = state.downloadFile[widget.file.id];
+      if (data?.status == FileDownloadStatus.downloading) {
+        return DownloadingButton(value: data?.size ?? 0, fn: _cancelDownload);
+      }
+      if (data?.status == FileDownloadStatus.suceess) {
+        return OpenFileButton(
+            path: path, fileName: data?.fileName ?? widget.file.fileName);
+      }
+      if (data?.status == FileDownloadStatus.reject) {
+        return Container(child: const Text("Ошибка"));
+      }
+      return TextButton(
+        onPressed: _downloadFile,
+        child: const Row(
+          children: [
+            Icon(Icons.download_outlined, size: 30),
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              "Скачать",
+              style: TextStyle(fontSize: 16),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   void _downloadFile() async {
-    var downloadPath = await getDownloadPath();
-
-    void changeState(FileDownloadResponse e) async {
-      try {
-        setState(() {
-          value = e.progress;
-          if (value >= 100) {
-            String key = Hive.box("token").get("password");
-            path = "$downloadPath/${widget.file.fileName}";
-            EncodeFile.decryptByte(Uint8List.fromList(fileBytes), path, key);
-            download = 2;
-          }
-        });
-      } catch (e) {
-        setState(() {
-          download = 3;
-        });
-      }
-    }
+    Navigator.of(context).pop();
+    var downloadPath = await getDownloadPath() ?? "";
 
     downloadFile = FilesGrpc().downloadFile(
       FileDownloadRequest(
@@ -89,20 +78,35 @@ class _DownloadButtonState extends State<DownloadButton> {
         folderId: widget.file.folderId,
       ),
     );
+    mainContext.read<DownloadFileBloc>().add(FolderDownloadFile(
+        downloadFile: FileDownload(
+            folderId: widget.file.folderId,
+            path: path,
+            callback: downloadFile,
+            fileName: widget.file.fileName,
+            size: 0.0,
+            status: FileDownloadStatus.downloading),
+        id: widget.file.id));
+
     downloadFile!.listen((e) {
+      // if (mainContext.read<FolderCubit>().state.downloadFile[widget.file.id] !=
+      //     null) {
       fileBytes = [...fileBytes, ...e.chunk];
-      changeState(e);
-    });
-    setState(() {
-      download = 1;
+      DownloadAction().changeState(widget.file.id, e, fileBytes, path,
+          downloadPath, widget.file.fileName, mainContext);
+      // }
+    }).onError((e) {
+      mainContext.read<DownloadFileBloc>().add(FolderSetStatus(
+          id: widget.file.id, status: FileDownloadStatus.reject));
+      showToast(
+          mainContext, 'Не удалось скачать файл: ${widget.file.fileName}');
     });
   }
 
   void _cancelDownload() {
     downloadFile!.cancel();
-    setState(() {
-      download = 0;
-      value = 0.0;
-    });
+    mainContext
+        .read<DownloadFileBloc>()
+        .add(FolderRemoveDownloadFile(id: widget.file.id));
   }
 }
