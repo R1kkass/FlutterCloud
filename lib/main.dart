@@ -2,10 +2,10 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/notification_service.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/consts/domen.dart';
-import 'package:flutter_application_2/consts/routes.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/cubit/download_file_bloc.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/cubit/space_cubit.dart';
@@ -29,7 +29,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // channel = await chan();
 
-  // Plugin must be initialized before using
   await FlutterDownloader.initialize(
       debug:
           true, // optional: set to false to disable printing logs to console (default: true)
@@ -41,13 +40,7 @@ void main() async {
   await Hive.openBox('list_token');
   await Hive.openBox('pubkey');
   await Hive.openBox('secretkey');
-  token = Hive.box("token").get("access_token");
-  try {
-    await NotificationServices.initializeService();
-//keep same
-  } catch (e) {
-    // Navigator.pushNamed(context, AUTH);
-  }
+
   Bloc.observer = const MyBlocObserver();
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
@@ -65,6 +58,9 @@ void main() async {
     BlocProvider(
       create: (context) =>
           DownloadFileBloc(state: DownloadFileState(downloadFile: {})),
+    ),
+    BlocProvider(
+      create: (context) => CurrentPageBloc(state: CurrentPageState(page: 0)),
     ),
     BlocProvider(
       create: (context) => TokenCubit(),
@@ -137,7 +133,7 @@ class _MyAppState extends State<MyApp> {
         ),
         title: "MyCloud",
         navigatorObservers: [routeObserver],
-        routes: routes);
+        routes: AppRouter.routes);
   }
 }
 

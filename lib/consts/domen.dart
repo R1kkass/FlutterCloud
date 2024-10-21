@@ -1,3 +1,3 @@
-const domain = "http://10.0.2.2:8887";
-const ipServer = "10.0.2.2";
+const domain = "http://192.168.0.110:8887";
+const ipServer = "192.168.0.110";
 const csrf = "";

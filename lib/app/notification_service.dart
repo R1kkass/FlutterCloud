@@ -1,14 +1,14 @@
-
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/grpc/notification_grpc.dart';
 import 'package:flutter_application_2/proto/notification/notification.pb.dart';
+import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationServices {
@@ -19,7 +19,6 @@ class NotificationServices {
   // Initialize the background notification service.
   static Future<void> initializeService() async {
     final service = FlutterBackgroundService();
-
     AndroidNotificationChannel channel = AndroidNotificationChannel(
       notificationChannelId, // id
       notificationService,
@@ -84,6 +83,7 @@ class NotificationServices {
   // Function to execute when the service starts (in the background or foreground).
   static Future<void> onStart(ServiceInstance service) async {
     DartPluginRegistrant.ensureInitialized();
+
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
 
@@ -99,14 +99,19 @@ class NotificationServices {
     service.on("stop_service").listen((event) async {
       await service.stopSelf();
     });
-
+    await Hive.initFlutter();
+    await Hive.openBox('token');
+    await Hive.openBox('secretkey');
     if (service is AndroidServiceInstance) {
       final res = getNotification();
       res.listen((event) {
         flutterLocalNotificationsPlugin.show(
           notificationId,
           event.title,
-          event.description,
+          event.type == "New_Message"
+              ? decodeMessage(
+                  event.description, event.options["chat_id"] as String)
+              : event.description,
           NotificationDetails(
             android: AndroidNotificationDetails(
                 notificationChannelId, notificationService,
@@ -124,5 +129,10 @@ class NotificationServices {
       // Yield each received NotificationMessage.
       yield notification;
     }
+  }
+
+  static String decodeMessage(String message, String chatId) {
+    return EncryptMessage().decrypt(
+        message, Hive.box("secretkey").get(chatId + jwtDecode().email));
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/consts/links.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -13,7 +13,7 @@ Future<http.Response> get(Uri url, BuildContext context,
   if (response.statusCode == 401) {
     var box = Hive.box("token");
     box.delete("access_token");
-    Navigator.pushNamed(context, AUTH);
+    Navigator.pushNamed(context, AppRouter.AUTH);
   }
   return response;
 }
@@ -26,7 +26,7 @@ Future<http.Response> post(Uri url, BuildContext context,
     var box = Hive.box("token");
     box.delete("access_token");
     context.read<TokenCubit>().updateToken("");
-    Navigator.pushNamed(context, AUTH);
+    Navigator.pushNamed(context, AppRouter.AUTH);
   }
   return response;
 }
@@ -39,7 +39,7 @@ Future<http.Response> patch(Uri url, BuildContext context,
     var box = Hive.box("token");
     box.delete("access_token");
     context.read<TokenCubit>().updateToken("");
-    Navigator.pushNamed(context, AUTH);
+    Navigator.pushNamed(context, AppRouter.AUTH);
   }
   return response;
 }
@@ -52,7 +52,7 @@ Future<http.Response> put(Uri url, BuildContext context,
     var box = Hive.box("token");
     box.delete("access_token");
     context.read<TokenCubit>().updateToken("");
-    Navigator.pushNamed(context, AUTH);
+    Navigator.pushNamed(context, AppRouter.AUTH);
   }
   return response;
 }
@@ -65,7 +65,7 @@ Future<http.Response> delete(Uri url, BuildContext context,
     var box = Hive.box("token");
     box.delete("access_token");
     context.read<TokenCubit>().updateToken("");
-    Navigator.pushNamed(context, AUTH);
+    Navigator.pushNamed(context, AppRouter.AUTH);
   }
   return response;
 }

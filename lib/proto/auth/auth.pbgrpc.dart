@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: auth.proto
+//  source: auth/auth.proto
 //
 // @dart = 2.12
 
@@ -37,6 +37,10 @@ class AuthGreetClient extends $grpc.Client {
       '/auth.AuthGreet/DHSecondConnect',
       ($0.DHSecondConnectRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DHSecondConnectResponse.fromBuffer(value));
+  static final _$checkAuth = $grpc.ClientMethod<$0.Empty, $0.Empty>(
+      '/auth.AuthGreet/CheckAuth',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   AuthGreetClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -58,6 +62,10 @@ class AuthGreetClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.DHSecondConnectResponse> dHSecondConnect($0.DHSecondConnectRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$dHSecondConnect, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> checkAuth($0.Empty request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$checkAuth, request, options: options);
   }
 }
 
@@ -94,6 +102,13 @@ abstract class AuthGreetServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.DHSecondConnectRequest.fromBuffer(value),
         ($0.DHSecondConnectResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Empty>(
+        'CheckAuth',
+        checkAuth_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall call, $async.Future<$0.LoginRequest> request) async {
@@ -112,8 +127,13 @@ abstract class AuthGreetServiceBase extends $grpc.Service {
     return dHSecondConnect(call, await request);
   }
 
+  $async.Future<$0.Empty> checkAuth_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return checkAuth(call, await request);
+  }
+
   $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
   $async.Future<$0.RegistrationResponse> registration($grpc.ServiceCall call, $0.RegistrationRequest request);
   $async.Future<$0.DHConnectResponse> dHConnect($grpc.ServiceCall call, $0.DHConnectRequest request);
   $async.Future<$0.DHSecondConnectResponse> dHSecondConnect($grpc.ServiceCall call, $0.DHSecondConnectRequest request);
+  $async.Future<$0.Empty> checkAuth($grpc.ServiceCall call, $0.Empty request);
 }

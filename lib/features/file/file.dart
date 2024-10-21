@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/components/text_content.dart';
-import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/features/file/model_bottom_file.dart';
 import 'package:flutter_application_2/pages/open_file.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
@@ -25,7 +25,7 @@ class _FileComponentState extends State<FileComponent>
       height: 70,
       child: TextButton(
         onPressed: () {
-          Navigator.pushNamed(context, FILE,
+          Navigator.pushNamed(context, AppRouter.FILE,
               arguments: OpenFileArgs(file: widget.file));
         },
         style:

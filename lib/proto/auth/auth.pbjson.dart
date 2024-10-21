@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: auth.proto
+//  source: auth/auth.proto
 //
 // @dart = 2.12
 
@@ -75,6 +75,15 @@ const DHConnectRequest$json = {
 /// Descriptor for `DHConnectRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List dHConnectRequestDescriptor = $convert.base64Decode(
     'ChBESENvbm5lY3RSZXF1ZXN0');
+
+@$core.Deprecated('Use emptyDescriptor instead')
+const Empty$json = {
+  '1': 'Empty',
+};
+
+/// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
+    'CgVFbXB0eQ==');
 
 @$core.Deprecated('Use dHConnectResponseDescriptor instead')
 const DHConnectResponse$json = {

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/components/drawer.dart';
+import 'package:flutter_application_2/shared/bottom_navigation.dart';
 
 class DefaultScaffold extends StatefulWidget {
   final String title;
   final Widget body;
   final Null Function()? searchAction;
   final Widget? floatButton;
+  final bool? showBottomNavigation;
   final PreferredSizeWidget? bottom;
 
   const DefaultScaffold(
       {super.key,
       this.floatButton,
+      this.showBottomNavigation,
       required this.title,
       required this.body,
       this.searchAction,
@@ -21,21 +25,23 @@ class DefaultScaffold extends StatefulWidget {
 }
 
 class _DefaultScaffoldState extends State<DefaultScaffold> {
+  var currentState = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         bottom: widget.bottom,
         leading: Navigator.canPop(context) ||
-                ModalRoute.of(context)!.settings.name != "/"
+                ModalRoute.of(context)!.settings.name != AppRouter.HOME
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.canPop(context)
                       ? Navigator.of(context).pop()
-                      : ModalRoute.of(context)!.settings.name != "/"
+                      : ModalRoute.of(context)!.settings.name != AppRouter.HOME
                           ? Navigator.pushNamedAndRemoveUntil(
-                              context, "/", (r) => false)
+                              context, AppRouter.HOME, (r) => false)
                           : null;
                 })
             : null,
@@ -75,6 +81,9 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
         ],
       ),
       endDrawer: const MyDrawer(),
+      bottomNavigationBar: widget.showBottomNavigation != null
+          ? const BottomNavigation()
+          : const SizedBox(),
       body: widget.body,
       floatingActionButton: widget.floatButton,
     );

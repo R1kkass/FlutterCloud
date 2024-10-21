@@ -18,6 +18,7 @@ class NotificationMessage extends $pb.GeneratedMessage {
     $core.String? type,
     $core.String? title,
     $core.String? description,
+    $core.Map<$core.String, $core.String>? options,
   }) {
     final $result = create();
     if (type != null) {
@@ -29,6 +30,9 @@ class NotificationMessage extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
+    if (options != null) {
+      $result.options.addAll(options);
+    }
     return $result;
   }
   NotificationMessage._() : super();
@@ -39,6 +43,7 @@ class NotificationMessage extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'type')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..m<$core.String, $core.String>(4, _omitFieldNames ? '' : 'options', entryClassName: 'NotificationMessage.OptionsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('notification'))
     ..hasRequiredFields = false
   ;
 
@@ -89,6 +94,9 @@ class NotificationMessage extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.Map<$core.String, $core.String> get options => $_getMap(3);
 }
 
 class Empty extends $pb.GeneratedMessage {

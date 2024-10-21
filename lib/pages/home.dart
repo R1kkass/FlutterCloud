@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/components/bottom_sheeet.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/grpc/files_grpc.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_application_2/widget/file/search_file.dart';
@@ -27,6 +29,7 @@ class Home extends StatefulWidget with RouteAware {
 class _HomeState extends State<Home> with RouteAware {
   var mainContext =
       NavigationService.navigatorKey.currentContext as BuildContext;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -41,7 +44,7 @@ class _HomeState extends State<Home> with RouteAware {
 
   @override
   void didPopNext() async {
-    if (ModalRoute.of(context)!.settings.name == "/") {
+    if (ModalRoute.of(context)!.settings.name == AppRouter.HOME) {
       final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
       var response = await FilesGrpc().findFile(FindFileRequest(
           folderId: args?.id, search: "", findEveryWhere: false));
@@ -53,7 +56,7 @@ class _HomeState extends State<Home> with RouteAware {
 
   @override
   void didPush() async {
-    if (ModalRoute.of(context)!.settings.name == "/") {
+    if (ModalRoute.of(context)!.settings.name == AppRouter.HOME) {
       final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
       var response = await FilesGrpc().findFile(FindFileRequest(
           folderId: args?.id, search: "", findEveryWhere: false));
@@ -63,6 +66,12 @@ class _HomeState extends State<Home> with RouteAware {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<CurrentPageBloc>().add(const ChangePage(0));
+  }
+
   bool searchSaw = false;
 
   @override
@@ -70,6 +79,7 @@ class _HomeState extends State<Home> with RouteAware {
     final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
     return BlocBuilder<ContentBloc, ContentState>(builder: (context, state) {
       return DefaultScaffold(
+          showBottomNavigation: true,
           searchAction: () {
             setState(() {
               searchSaw = true;

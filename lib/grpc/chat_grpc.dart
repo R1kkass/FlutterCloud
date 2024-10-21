@@ -26,9 +26,13 @@ class ChatGrpc {
     return response;
   }
 
-  Future<GetResponseChat> getChat(GetRequestChat request) async {
-    GetResponseChat response = await _stub.getChat(request, options: _options);
+  Future<GetResponseChat> getChat() async {
+    GetResponseChat response = await _stub.getChat(Empty(), options: _options);
     return response;
+  }
+
+  Future<GetUnSuccessChatsResponse> getUnSuccessChats() async {
+    return await _stub.getUnSuccessChats(Empty(), options: _options);
   }
 
   Future<CreateSecondaryKeyResponse> createSecondaryKey(
@@ -61,5 +65,16 @@ class ChatGrpc {
     DissalowChatResponse response =
         await _stub.dissalowChat(request, options: _options);
     return response;
+  }
+
+  Future<GetMessagesResponse> getMessages(GetMessagesRequest request) async {
+    GetMessagesResponse response =
+        await _stub.getMessages(request, options: _options);
+    return response;
+  }
+
+  Future streamGetMessagesGeneral(
+      void Function(StreamGetMessagesGeneralResponse) callback) async {
+    _stub.streamGetMessagesGeneral(Empty(), options: _options).listen(callback);
   }
 }

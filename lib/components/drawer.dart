@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/consts/links.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/services/file_size.dart';
 import 'package:flutter_application_2/services/token_clear.dart';
 
@@ -73,7 +73,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
-                      context, SEARCH_USERS, (r) => false);
+                      context, AppRouter.SEARCH_USERS, (r) => false);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -92,26 +92,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
-                      context, CHAT_LIST, (r) => false);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.chat_outlined),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Сообщения",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                )),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, CHANGE_ACCOUNT, (r) => false);
+                      context, AppRouter.CHANGE_ACCOUNT, (r) => false);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -130,7 +111,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
-                      context, AUTH, (r) => false);
+                      context, AppRouter.AUTH, (r) => false);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -149,7 +130,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
-                      context, DOWNLOAD, (r) => false);
+                      context, AppRouter.DOWNLOAD, (r) => false);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -168,7 +149,7 @@ class _MyDrawerState extends State<MyDrawer> {
             TextButton(
                 onPressed: () {
                   tokenClear(context);
-                  Navigator.pushNamed(context, AUTH);
+                  Navigator.pushNamed(context, AppRouter.AUTH);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,

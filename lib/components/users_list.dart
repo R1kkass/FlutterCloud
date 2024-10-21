@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/pages/files_users.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
@@ -61,7 +61,7 @@ class _UsersListState extends State<UsersList> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushNamed(context, FILES_USERS,
+                Navigator.pushNamed(context, AppRouter.FILES_USERS,
                     arguments: ArgsFilesUsers(user: users[index]));
               },
             ),

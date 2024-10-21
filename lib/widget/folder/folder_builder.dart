@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/features/file/file.dart';
+import 'package:flutter_application_2/features/file/upload_file.dart';
 import 'package:flutter_application_2/features/folder/folder.dart';
 import 'package:flutter_application_2/components/move_to_main.dart';
 import 'package:flutter_application_2/pages/home.dart';
@@ -58,8 +60,19 @@ class _FolderBuilderState extends State<FolderBuilder> {
       builder: (context, state) {
         List<Widget> children = [];
         if (!state.error) {
-          var allFiles = [...state.folders, ...state.files];
-          children = _paintFiles(allFiles);
+          List<dynamic> allFiles = [];
+          var folderId = widget.folderId ?? 0;
+
+          if (state.uploadFile[folderId] != null) {
+            allFiles = [...allFiles, ...state.uploadFile[folderId]!.keys];
+          }
+          allFiles = [
+            ...allFiles,
+            ...state.folders,
+            ...state.files,
+          ];
+
+          children = _paintFiles(allFiles, state.uploadFile);
           if (children.isEmpty) {
             children = [
               SizedBox(
@@ -111,6 +124,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
             },
             child: ListView(
               controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
               children: [
                 dragStart && args?.id != null
                     ? const MoveToMain()
@@ -127,14 +141,14 @@ class _FolderBuilderState extends State<FolderBuilder> {
             _scrollController.position.maxScrollExtent * _scrollThreshold &&
         !_scrollController.position.outOfRange) {
       page++;
-      ContentBloc.paginationRequestFile(widget.folderId, page,
-           context);
-      log('Scroll position is at ${_scrollThreshold * 100}%.');
+      ContentBloc.paginationRequestFile(widget.folderId, page, context);
     }
   }
 
-  List<Widget> _paintFiles(List<GeneratedMessage?> contents) {
+  List<Widget> _paintFiles(
+      List<dynamic> contents, Map<int, Map<int, FileUpload?>> uploadFile) {
     List<Widget> children = [];
+    var folderId = widget.folderId ?? 0;
     for (final (index, item) in contents.indexed) {
       if (item.runtimeType == FolderFind) {
         children.add(LongPressDraggable<DragFields>(
@@ -151,6 +165,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
             child: FolderComponent(
               folder: item,
             )));
+        continue;
       }
       if (item.runtimeType == FileFind) {
         children.add(LongPressDraggable<DragFields>(
@@ -166,6 +181,14 @@ class _FolderBuilderState extends State<FolderBuilder> {
           feedback: FileComponent(file: item),
           child: FileComponent(file: item),
         ));
+        continue;
+      }
+      if ((uploadFile[folderId])?[item].runtimeType == FileUpload) {
+        children.add(
+          UploadFile(
+              file: (uploadFile[folderId])?[item] as FileUpload,
+              folderId: folderId),
+        );
       }
     }
     return children;

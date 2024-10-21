@@ -9,3 +9,24 @@
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
+import 'dart:core' as $core;
+
+import 'package:protobuf/protobuf.dart' as $pb;
+
+class TypeMessage extends $pb.ProtobufEnum {
+  static const TypeMessage SEND_MESSAGE = TypeMessage._(0, _omitEnumNames ? '' : 'SEND_MESSAGE');
+  static const TypeMessage READ_MESSAGE = TypeMessage._(1, _omitEnumNames ? '' : 'READ_MESSAGE');
+
+  static const $core.List<TypeMessage> values = <TypeMessage> [
+    SEND_MESSAGE,
+    READ_MESSAGE,
+  ];
+
+  static final $core.Map<$core.int, TypeMessage> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static TypeMessage? valueOf($core.int value) => _byValue[value];
+
+  const TypeMessage._($core.int v, $core.String n) : super(v, n);
+}
+
+
+const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');

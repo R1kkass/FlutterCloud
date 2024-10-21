@@ -25,9 +25,9 @@ class ChatGreeterClient extends $grpc.Client {
       '/chat.ChatGreeter/CreateChat',
       ($0.CreateRequestChat value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.CreateResponseChat.fromBuffer(value));
-  static final _$getChat = $grpc.ClientMethod<$0.GetRequestChat, $0.GetResponseChat>(
+  static final _$getChat = $grpc.ClientMethod<$0.Empty, $0.GetResponseChat>(
       '/chat.ChatGreeter/GetChat',
-      ($0.GetRequestChat value) => value.writeToBuffer(),
+      ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetResponseChat.fromBuffer(value));
   static final _$createSecondaryKey = $grpc.ClientMethod<$0.CreateSecondaryKeyRequest, $0.CreateSecondaryKeyResponse>(
       '/chat.ChatGreeter/CreateSecondaryKey',
@@ -49,6 +49,22 @@ class ChatGreeterClient extends $grpc.Client {
       '/chat.ChatGreeter/DissalowChat',
       ($0.DissalowChatRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DissalowChatResponse.fromBuffer(value));
+  static final _$getMessages = $grpc.ClientMethod<$0.GetMessagesRequest, $0.GetMessagesResponse>(
+      '/chat.ChatGreeter/GetMessages',
+      ($0.GetMessagesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetMessagesResponse.fromBuffer(value));
+  static final _$streamGetMessagesGeneral = $grpc.ClientMethod<$0.Empty, $0.StreamGetMessagesGeneralResponse>(
+      '/chat.ChatGreeter/StreamGetMessagesGeneral',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.StreamGetMessagesGeneralResponse.fromBuffer(value));
+  static final _$streamGetMessages = $grpc.ClientMethod<$0.StreamGetMessagesRequest, $0.StreamGetMessagesResponse>(
+      '/chat.ChatGreeter/StreamGetMessages',
+      ($0.StreamGetMessagesRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.StreamGetMessagesResponse.fromBuffer(value));
+  static final _$getUnSuccessChats = $grpc.ClientMethod<$0.Empty, $0.GetUnSuccessChatsResponse>(
+      '/chat.ChatGreeter/GetUnSuccessChats',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetUnSuccessChatsResponse.fromBuffer(value));
 
   ChatGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -60,7 +76,7 @@ class ChatGreeterClient extends $grpc.Client {
     return $createUnaryCall(_$createChat, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.GetResponseChat> getChat($0.GetRequestChat request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.GetResponseChat> getChat($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getChat, request, options: options);
   }
 
@@ -83,6 +99,22 @@ class ChatGreeterClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.DissalowChatResponse> dissalowChat($0.DissalowChatRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$dissalowChat, request, options: options);
   }
+
+  $grpc.ResponseFuture<$0.GetMessagesResponse> getMessages($0.GetMessagesRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getMessages, request, options: options);
+  }
+
+  $grpc.ResponseStream<$0.StreamGetMessagesGeneralResponse> streamGetMessagesGeneral($0.Empty request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$streamGetMessagesGeneral, $async.Stream.fromIterable([request]), options: options);
+  }
+
+  $grpc.ResponseStream<$0.StreamGetMessagesResponse> streamGetMessages($async.Stream<$0.StreamGetMessagesRequest> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$streamGetMessages, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetUnSuccessChatsResponse> getUnSuccessChats($0.Empty request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getUnSuccessChats, request, options: options);
+  }
 }
 
 @$pb.GrpcServiceName('chat.ChatGreeter')
@@ -97,12 +129,12 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.CreateRequestChat.fromBuffer(value),
         ($0.CreateResponseChat value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.GetRequestChat, $0.GetResponseChat>(
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetResponseChat>(
         'GetChat',
         getChat_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $0.GetRequestChat.fromBuffer(value),
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.GetResponseChat value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.CreateSecondaryKeyRequest, $0.CreateSecondaryKeyResponse>(
         'CreateSecondaryKey',
@@ -139,13 +171,41 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.DissalowChatRequest.fromBuffer(value),
         ($0.DissalowChatResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetMessagesRequest, $0.GetMessagesResponse>(
+        'GetMessages',
+        getMessages_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetMessagesRequest.fromBuffer(value),
+        ($0.GetMessagesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.StreamGetMessagesGeneralResponse>(
+        'StreamGetMessagesGeneral',
+        streamGetMessagesGeneral_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.StreamGetMessagesGeneralResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.StreamGetMessagesRequest, $0.StreamGetMessagesResponse>(
+        'StreamGetMessages',
+        streamGetMessages,
+        true,
+        true,
+        ($core.List<$core.int> value) => $0.StreamGetMessagesRequest.fromBuffer(value),
+        ($0.StreamGetMessagesResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.GetUnSuccessChatsResponse>(
+        'GetUnSuccessChats',
+        getUnSuccessChats_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.GetUnSuccessChatsResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateResponseChat> createChat_Pre($grpc.ServiceCall call, $async.Future<$0.CreateRequestChat> request) async {
     return createChat(call, await request);
   }
 
-  $async.Future<$0.GetResponseChat> getChat_Pre($grpc.ServiceCall call, $async.Future<$0.GetRequestChat> request) async {
+  $async.Future<$0.GetResponseChat> getChat_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return getChat(call, await request);
   }
 
@@ -169,11 +229,27 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
     return dissalowChat(call, await request);
   }
 
+  $async.Future<$0.GetMessagesResponse> getMessages_Pre($grpc.ServiceCall call, $async.Future<$0.GetMessagesRequest> request) async {
+    return getMessages(call, await request);
+  }
+
+  $async.Stream<$0.StreamGetMessagesGeneralResponse> streamGetMessagesGeneral_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async* {
+    yield* streamGetMessagesGeneral(call, await request);
+  }
+
+  $async.Future<$0.GetUnSuccessChatsResponse> getUnSuccessChats_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return getUnSuccessChats(call, await request);
+  }
+
   $async.Future<$0.CreateResponseChat> createChat($grpc.ServiceCall call, $0.CreateRequestChat request);
-  $async.Future<$0.GetResponseChat> getChat($grpc.ServiceCall call, $0.GetRequestChat request);
+  $async.Future<$0.GetResponseChat> getChat($grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.CreateSecondaryKeyResponse> createSecondaryKey($grpc.ServiceCall call, $0.CreateSecondaryKeyRequest request);
   $async.Future<$0.GetSecondaryKeyResponse> getSecondaryKey($grpc.ServiceCall call, $0.GetSecondaryKeyRequest request);
   $async.Future<$0.GetPublicKeyResponse> getPublicKey($grpc.ServiceCall call, $0.GetPublicKeyRequest request);
   $async.Future<$0.AcceptChatResponse> acceptChat($grpc.ServiceCall call, $0.AcceptChatRequest request);
   $async.Future<$0.DissalowChatResponse> dissalowChat($grpc.ServiceCall call, $0.DissalowChatRequest request);
+  $async.Future<$0.GetMessagesResponse> getMessages($grpc.ServiceCall call, $0.GetMessagesRequest request);
+  $async.Stream<$0.StreamGetMessagesGeneralResponse> streamGetMessagesGeneral($grpc.ServiceCall call, $0.Empty request);
+  $async.Stream<$0.StreamGetMessagesResponse> streamGetMessages($grpc.ServiceCall call, $async.Stream<$0.StreamGetMessagesRequest> request);
+  $async.Future<$0.GetUnSuccessChatsResponse> getUnSuccessChats($grpc.ServiceCall call, $0.Empty request);
 }

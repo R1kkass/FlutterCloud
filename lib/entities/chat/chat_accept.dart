@@ -101,9 +101,9 @@ Future _accept(ChatUsers chat) async {
   json = crypt(true, utf8.encode(json), pass);
 
   await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
-  await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.id));
+  await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.chat.id));
 }
 
 Future _dissalow(ChatUsers chat) async {
-  await ChatGrpc().dissalowChat(DissalowChatRequest(chatId: chat.id));
+  await ChatGrpc().dissalowChat(DissalowChatRequest(chatId: chat.chat.id));
 }

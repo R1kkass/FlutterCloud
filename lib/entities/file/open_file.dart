@@ -26,20 +26,26 @@ class _OpenFileState extends State<OpenFileButton> {
           const SizedBox(
             width: 15,
           ),
-          Text(
-            'Файл "${widget.fileName}" скачан',
-            style: TextStyle(
-                fontSize: 16,
-                color: Colors.deepOrange.shade800,
-                fontWeight: FontWeight.w500),
+          Expanded(
+            flex: 2,
+            child: Text(
+              'Файл "${widget.fileName}" скачан',
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.deepOrange.shade800,
+                  fontWeight: FontWeight.w500),
+            ),
           ),
-          const Spacer(),
-          SizedBox(
-              child: TextButton(
-                  onPressed: () async {
-                    await OpenFile.open(widget.path);
-                  },
-                  child: const Text("Открыть")))
+          Expanded(
+            flex: 1,
+            child: TextButton(
+                onPressed: () async {
+                  await OpenFile.open(widget.path);
+                },
+                child: const Text("Открыть")),
+          ),
         ],
       ),
     );

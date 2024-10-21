@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/components/dialog_loading.dart';
 import 'package:flutter_application_2/components/my_input.dart';
 import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/consts/links.dart';
 import 'package:flutter_application_2/grpc/auth_grpc.dart';
 import 'package:flutter_application_2/grpc/keys_grpc.dart';
 import 'package:flutter_application_2/proto/auth/auth.pb.dart';
@@ -117,7 +117,7 @@ class _AuthorizationState extends State<Authorization> {
                         child: TextButton(
                       child: const Text("Регистрация"),
                       onPressed: () async {
-                        Navigator.pushNamed(context, REGISTRATION);
+                        Navigator.pushNamed(context, AppRouter.REGISTRATION);
                       },
                     ))
                   ],

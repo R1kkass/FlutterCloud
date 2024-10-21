@@ -32,7 +32,6 @@ class _ChatInputState extends State<ChatInput> {
       elevation: 5.0,
       child: TextFormField(
         onFieldSubmitted: widget.fieldSubmit,
-        keyboardType: TextInputType.emailAddress,
         controller: widget.controller,
         obscureText: widget.obscureText,
         decoration: InputDecoration(
