@@ -32,15 +32,13 @@ const StreamGetMessagesRequest$json = {
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.chat.TypeMessage', '10': 'type'},
     {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
-    {'1': 'messageId', '3': 3, '4': 1, '5': 13, '10': 'messageId'},
   ],
 };
 
 /// Descriptor for `StreamGetMessagesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamGetMessagesRequestDescriptor = $convert.base64Decode(
     'ChhTdHJlYW1HZXRNZXNzYWdlc1JlcXVlc3QSJQoEdHlwZRgBIAEoDjIRLmNoYXQuVHlwZU1lc3'
-    'NhZ2VSBHR5cGUSGAoHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZRIcCgltZXNzYWdlSWQYAyABKA1S'
-    'CW1lc3NhZ2VJZA==');
+    'NhZ2VSBHR5cGUSGAoHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZQ==');
 
 @$core.Deprecated('Use streamGetMessagesResponseDescriptor instead')
 const StreamGetMessagesResponse$json = {
@@ -165,18 +163,18 @@ const Keys$json = {
 final $typed_data.Uint8List keysDescriptor = $convert.base64Decode(
     'CgRLZXlzEgwKAXAYASABKAlSAXASDAoBZxgCIAEoA1IBZw==');
 
-@$core.Deprecated('Use getResponseChatDescriptor instead')
-const GetResponseChat$json = {
-  '1': 'GetResponseChat',
+@$core.Deprecated('Use streamGetResponseChatDescriptor instead')
+const StreamGetResponseChat$json = {
+  '1': 'StreamGetResponseChat',
   '2': [
     {'1': 'chats', '3': 1, '4': 3, '5': 11, '6': '.chat.ChatUsersCount', '10': 'chats'},
   ],
 };
 
-/// Descriptor for `GetResponseChat`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List getResponseChatDescriptor = $convert.base64Decode(
-    'Cg9HZXRSZXNwb25zZUNoYXQSKgoFY2hhdHMYASADKAsyFC5jaGF0LkNoYXRVc2Vyc0NvdW50Ug'
-    'VjaGF0cw==');
+/// Descriptor for `StreamGetResponseChat`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List streamGetResponseChatDescriptor = $convert.base64Decode(
+    'ChVTdHJlYW1HZXRSZXNwb25zZUNoYXQSKgoFY2hhdHMYASADKAsyFC5jaGF0LkNoYXRVc2Vyc0'
+    'NvdW50UgVjaGF0cw==');
 
 @$core.Deprecated('Use getUnSuccessChatsResponseDescriptor instead')
 const GetUnSuccessChatsResponse$json = {

@@ -26,9 +26,8 @@ class ChatGrpc {
     return response;
   }
 
-  Future<GetResponseChat> getChat() async {
-    GetResponseChat response = await _stub.getChat(Empty(), options: _options);
-    return response;
+  ResponseStream<StreamGetResponseChat> streamGetChat() {
+    return _stub.streamGetChat(Empty(), options: _options);
   }
 
   Future<GetUnSuccessChatsResponse> getUnSuccessChats() async {
@@ -73,8 +72,16 @@ class ChatGrpc {
     return response;
   }
 
-  Future streamGetMessagesGeneral(
-      void Function(StreamGetMessagesGeneralResponse) callback) async {
-    _stub.streamGetMessagesGeneral(Empty(), options: _options).listen(callback);
+  ResponseStream<StreamGetMessagesGeneralResponse>  streamGetMessagesGeneral() {
+    return _stub.streamGetMessagesGeneral(Empty(), options: _options);
+  }
+
+  Future<ResponseStream<StreamGetMessagesResponse>> streamGetMessages(
+      Stream<StreamGetMessagesRequest> request, String chatId) async {
+    return _stub.streamGetMessages(request,
+        options: CallOptions(metadata: {
+          "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+          "chat_id": chatId
+        }));
   }
 }

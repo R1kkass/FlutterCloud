@@ -12,7 +12,7 @@ class AnimatedChatList extends StatefulWidget {
       required this.controller,
       required this.globalKey});
 
-  final List<dynamic> data;
+  final List<Message> data;
   final String keyChat;
   final ScrollController controller;
   final GlobalKey globalKey;
@@ -24,32 +24,17 @@ class AnimatedChatList extends StatefulWidget {
 class _AnimatedChatListState extends State<AnimatedChatList> {
   @override
   Widget build(BuildContext context) {
-    List<dynamic> data = widget.data;
+    List<Message> data = widget.data;
     Map<int, DateTime> dataWithDate = {};
     DateTime? time;
-    for (var (key, item) in data.reversed.indexed) {
+    for (var item in data.reversed) {
       if (item.runtimeType == Message) {
-        item = {
-          "id": item.id,
-          "created_at": item.createdAt,
-          "updated_at": item.updatedAt,
-          "chat_id": item.chatId,
-          "user": {
-            "id": item.user.id,
-            "name": item.user.name,
-            "email": item.user.email,
-          },
-          "text": item.text,
-          "user_id": item.userId
-        };
-        data[data.length - key - 1] = item;
-      }
-
-      var timeParse = DateTime.parse(item["created_at"]);
-      if ("${time?.day}${time?.month}" !=
-          "${timeParse.day}${timeParse.month}") {
-        time = timeParse;
-        dataWithDate[item["id"]] = timeParse;
+        var timeParse = DateTime.parse(item.createdAt);
+        if ("${time?.day}${time?.month}" !=
+            "${timeParse.day}${timeParse.month}") {
+          time = timeParse;
+          dataWithDate[item.id] = timeParse;
+        }
       }
     }
 
@@ -60,7 +45,7 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
         reverse: true,
         padding: const EdgeInsets.all(10),
         itemBuilder: (context, index, animation) {
-          var id = data[index]["id"];
+          var id = data[index].id;
 
           return FadeTransition(
             opacity: animation,
@@ -69,11 +54,11 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
               sizeFactor: animation,
               child: MessageComponent(
                 dateChange: dataWithDate[id],
-                createdAt: data[index]["created_at"],
-                name: data[index]["user"]["name"],
-                status: jwtDecode().email == data[index]["user"]?["email"],
-                text: EncryptMessage()
-                    .decrypt(data[index]["text"], widget.keyChat),
+                createdAt: data[index].createdAt,
+                name: data[index].user.name,
+                status: jwtDecode().email == data[index].user.email,
+                text:
+                    EncryptMessage().decrypt(data[index].text, widget.keyChat),
               ),
             ),
           );

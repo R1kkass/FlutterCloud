@@ -18,12 +18,6 @@ class ChatUnitList extends StatefulWidget {
 class _ChatUnitListState extends State<ChatUnitList> {
   JwtPayload? jwt;
   String decryptMessage = "";
-  @override
-  void initState() {
-    super.initState();
-
-    decryptMessageFn(widget.chat);
-  }
 
   void decryptMessageFn(ChatUsersCount chat) async {
     jwt = jwtDecode();
@@ -38,7 +32,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
   @override
   Widget build(BuildContext context) {
     ChatUsersCount chat = widget.chat;
-
+    decryptMessageFn(chat);
     return SizedBox(
       height: 60,
       child: Material(
@@ -58,9 +52,12 @@ class _ChatUnitListState extends State<ChatUnitList> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(children: [
-                    Text(
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 80,
+                    child: Text(
                       chat.chat.nameChat == ""
                           ? jwt?.email != chat.chat.chatUsers[0].user.email
                               ? chat.chat.chatUsers[0].user.name
@@ -69,18 +66,15 @@ class _ChatUnitListState extends State<ChatUnitList> {
                       style: const TextStyle(
                           fontSize: 21, fontWeight: FontWeight.w700),
                     ),
-                  ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        decryptMessage,
-                        style: const TextStyle(fontSize: 16),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                      ),
-                    ],
+                  ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width - 60,
+                    child: Text(
+                      decryptMessage,
+                      style: const TextStyle(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
                   ),
                 ],
               ),

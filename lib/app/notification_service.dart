@@ -123,7 +123,7 @@ class NotificationServices {
   }
 
   // Stream that receives NotificationMessage from the gRPC service.
-  static Stream<NotificationMessage> getNotification() async* {
+   static Stream<NotificationMessage> getNotification() async* {
     final responseStream = NotificationGrpc().getNotification();
     await for (var notification in responseStream) {
       // Yield each received NotificationMessage.

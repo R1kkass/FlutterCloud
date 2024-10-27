@@ -6,7 +6,7 @@ package chat;
 
 service ChatGreeter {
     rpc CreateChat(CreateRequestChat) returns (CreateResponseChat);
-    rpc GetChat(Empty) returns (GetResponseChat);
+    rpc StreamGetChat(Empty) returns (stream StreamGetResponseChat);
     rpc CreateSecondaryKey(CreateSecondaryKeyRequest) returns (CreateSecondaryKeyResponse);
     rpc GetSecondaryKey(GetSecondaryKeyRequest) returns (GetSecondaryKeyResponse);
     rpc GetPublicKey(GetPublicKeyRequest) returns (GetPublicKeyResponse);
@@ -26,7 +26,6 @@ enum TypeMessage {
 message StreamGetMessagesRequest {
     TypeMessage type = 1;
     string message = 2;
-    uint32 messageId = 3;
 }
 
 message StreamGetMessagesResponse {
@@ -70,7 +69,7 @@ message Keys {
     int64 g = 2;
 }
 
-message GetResponseChat {
+message StreamGetResponseChat {
     repeated ChatUsersCount chats = 1;
 }
 
@@ -97,6 +96,8 @@ message ChatUsersCount  {
     string updated_at = 6;
     Chat chat = 7;
     int32 un_readed_messages_count = 8;
+    string text = 9;
+    string message_user_id = 10;
 }
 
 message Chat {

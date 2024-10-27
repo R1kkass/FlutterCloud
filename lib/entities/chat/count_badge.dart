@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:grpc/grpc.dart';
 
 class CountBadge extends StatefulWidget {
   const CountBadge({super.key});
@@ -11,7 +12,7 @@ class CountBadge extends StatefulWidget {
 
 class _CountBadgeState extends State<CountBadge> {
   var count = 0;
-
+  ResponseStream<StreamGetMessagesGeneralResponse>? stream;
   void setCount(StreamGetMessagesGeneralResponse e) {
     setState(() {
       count = e.count;
@@ -21,7 +22,16 @@ class _CountBadgeState extends State<CountBadge> {
   @override
   void initState() {
     super.initState();
-    ChatGrpc().streamGetMessagesGeneral(setCount);
+    stream = ChatGrpc().streamGetMessagesGeneral();
+    stream?.listen((e) {
+      setCount(e);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stream?.cancel();
   }
 
   @override
@@ -36,4 +46,3 @@ class _CountBadgeState extends State<CountBadge> {
     );
   }
 }
-

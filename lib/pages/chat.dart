@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -34,8 +35,7 @@ class _ChatPageState extends State<ChatPage> {
   late final ScrollController _scrollController;
   var page = 0;
 
-  WebSocket? socket;
-  List<dynamic> data = [];
+  List<Message> data = [];
   bool init = false;
   String key = "";
 
@@ -58,9 +58,16 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _socket();
-      _getBox();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _getBox();
+
+      var response = await ChatGrpc()
+          .getMessages(GetMessagesRequest(chatId: widget.args.chatId, page: 0));
+      data = [...data, ...response.messages];
+      _key.currentState?.insertAllItems(0, data.length,
+          duration: const Duration(milliseconds: 300));
+      setState(() {});
+      await _grpc();
     });
   }
 
@@ -70,43 +77,38 @@ class _ChatPageState extends State<ChatPage> {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await socket?.close();
+      await controller?.close();
     });
   }
 
-  _socket() async {
-    String token = Hive.box('token').get('access_token');
+  StreamController<StreamGetMessagesRequest>? controller;
 
-    WebSocket.connect('ws://$ipServer:8000/ws?id=${widget.args.chatId}',
-        headers: {"Access-Token": "Bearer $token"}).then((value) {
-      socket = value;
+  _grpc() async {
+    controller = StreamController<StreamGetMessagesRequest>();
+    Stream<StreamGetMessagesRequest> onExit = controller!.stream;
 
-      socket?.listen((onData) {
-        setState(() {
-          if (!init) {
-            data = json.decode(onData);
-            data = List.from(data);
-            init = true;
-            _key.currentState?.insertAllItems(0, data.length,
-                duration: const Duration(milliseconds: 300));
-          } else {
-            data = [
-              json.decode(onData),
-              ...data,
-            ];
+    var t = await ChatGrpc()
+        .streamGetMessages(onExit, widget.args.chatId.toString());
 
-            _key.currentState
-                ?.insertItem(0, duration: const Duration(milliseconds: 300));
-          }
-        });
+    t.listen((onData) {
+      setState(() {
+        var message = onData.message;
+
+        data = [
+          message,
+          ...data,
+        ];
+
+        _key.currentState
+            ?.insertItem(0, duration: const Duration(milliseconds: 300));
       });
-      return null;
     });
   }
 
   _addMessage() {
     var hashText = EncryptMessage().encrypt(text.text, key);
-    socket?.add(hashText.base64);
+    controller?.add(StreamGetMessagesRequest(
+        message: hashText.base64, type: TypeMessage.SEND_MESSAGE));
     text.text = "";
   }
 

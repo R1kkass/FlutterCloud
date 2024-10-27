@@ -1,104 +1,57 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/features/chat/chat_unit_list.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/entities/chat/chat_accept.dart';
-import 'package:flutter_application_2/features/chat/chat_list_general.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/grpc/keys_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
 import 'package:flutter_application_2/proto/keys/keys.pb.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/widget/chat/chat_list_messages.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:grpc/grpc.dart';
+import 'package:hive/hive.dart';
 
-class ChatLists extends StatefulWidget {
-  const ChatLists({super.key, required this.title});
-
-  final String title;
+class ChatListMessages extends StatefulWidget {
+  const ChatListMessages({super.key});
 
   @override
-  State<ChatLists> createState() => _ChatListsState();
+  State<ChatListMessages> createState() => _ChatListMessagesGeneralState();
 }
 
-Map<int, String> titleTab = {
-  0: "Чаты",
-  1: "Подтверждение",
-};
-
-class _ChatListsState extends State<ChatLists>
-    with SingleTickerProviderStateMixin {
-  List<ChatUsers>? chats = [];
-  TabController? controller;
-  String? title;
-
+class _ChatListMessagesGeneralState extends State<ChatListMessages> {
+  ResponseStream<StreamGetResponseChat>? stream;
+  List<ChatUsersCount> chats = [];
   @override
   void initState() {
     super.initState();
-    controller = TabController(length: 2, initialIndex: 0, vsync: this);
-    controller?.addListener(() {
-      title = titleTab[controller?.index];
+    stream = ChatGrpc().streamGetChat();
+    stream?.listen((data) {
+      chats = data.chats;
+      setState(() {});
     });
-    context.read<CurrentPageBloc>().add(const ChangePage(1));
+    _checkPubKey(chats);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stream?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultScaffold(
-      showBottomNavigation: true,
-      title: title ?? widget.title,
-      bottom: PreferredSize(
-        preferredSize: const Size(0, 0),
-        child: TabBar(
-          controller: controller,
-          labelColor: Colors.white,
-          dividerColor: Colors.transparent,
-          tabs: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              child: const Tab(
-                height: 2,
-                text: "",
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2,
-              child: const Tab(
-                height: 2,
-                text: "",
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: controller,
-        children: [
-          ChatListMessages(),
-          ChatListGeneral(
-              callback: ChatGrpc().getUnSuccessChats,
-              chatUnit: _paintChatAccept,
-              generateKey: false)
-        ],
-      ),
-    );
-  }
+    List<ChatUnitList> widg = [];
 
-  Widget _paintChat({required ChatUsersCount chat}) {
-    return ChatUnitList(chat: chat);
+    for (var item in chats) {
+      widg.add(ChatUnitList(
+        chat: item,
+      ));
+    }
+    return ListView(
+        physics: const AlwaysScrollableScrollPhysics(), children: widg);
   }
-
-  Widget _paintChatAccept({required ChatUsers chat}) {
-    return ChatAccept(chat: chat);
-  }
-
 
   Future _checkPubKey(List<ChatUsersCount>? chats) async {
     var secretBox = await Hive.openBox("secretkey");
@@ -166,3 +119,48 @@ class _ChatListsState extends State<ChatLists>
     }
   }
 }
+
+// class ChatState extends StatefulWidget {
+//   final ConnectionState connectionState;
+//   List<ChatUsersCount> chats;
+//   ChatState({super.key, required this.connectionState, required this.chats});
+
+//   @override
+//   State<ChatState> createState() => _ChatStateState();
+// }
+
+// class _ChatStateState extends State<ChatState> {
+//   @override
+//   Widget build(BuildContext context) {
+//     if (widget.connectionState == ConnectionState.waiting) {
+//       return const Center(child: CircularProgressIndicator());
+//     } else if (widget.connectionState == ConnectionState.none) {
+//       return Center(
+//         child: SingleChildScrollView(
+//             physics: const AlwaysScrollableScrollPhysics(),
+//             child: SizedBox(
+//                 height: MediaQuery.sizeOf(context).height - 70 - 100,
+//                 child: const Center(
+//                     child: Icon(Icons.error, color: Colors.red, size: 70)))),
+//       );
+//     } else if (widget.chats.isEmpty && (widget.chats as List).isEmpty) {
+//       return Center(
+//         child: SingleChildScrollView(
+//             physics: const AlwaysScrollableScrollPhysics(),
+//             child: SizedBox(
+//                 height: MediaQuery.sizeOf(context).height - 70 - 100,
+//                 child:
+//                     const Center(child: Icon(Icons.search_rounded, size: 70)))),
+//       );
+//     } else {
+//       return ListView.builder(
+//           physics: const AlwaysScrollableScrollPhysics(),
+//           itemCount: widget.chats.length,
+//           itemBuilder: (context, index) {
+//             return ChatUnitList(
+//               chat: widget.chats[index],
+//             );
+//           });
+//     }
+//   }
+// }
