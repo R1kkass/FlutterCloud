@@ -22,6 +22,7 @@ class StreamGetMessagesRequest extends $pb.GeneratedMessage {
   factory StreamGetMessagesRequest({
     TypeMessage? type,
     $core.String? message,
+    $core.int? messageId,
   }) {
     final $result = create();
     if (type != null) {
@@ -29,6 +30,9 @@ class StreamGetMessagesRequest extends $pb.GeneratedMessage {
     }
     if (message != null) {
       $result.message = message;
+    }
+    if (messageId != null) {
+      $result.messageId = messageId;
     }
     return $result;
   }
@@ -39,6 +43,7 @@ class StreamGetMessagesRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamGetMessagesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..e<TypeMessage>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: TypeMessage.SEND_MESSAGE, valueOf: TypeMessage.valueOf, enumValues: TypeMessage.values)
     ..aOS(2, _omitFieldNames ? '' : 'message')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'messageId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -80,13 +85,26 @@ class StreamGetMessagesRequest extends $pb.GeneratedMessage {
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearMessage() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get messageId => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set messageId($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasMessageId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMessageId() => clearField(3);
 }
 
 class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   factory StreamGetMessagesResponse({
+    TypeMessage? type,
     Message? message,
   }) {
     final $result = create();
+    if (type != null) {
+      $result.type = type;
+    }
     if (message != null) {
       $result.message = message;
     }
@@ -97,6 +115,7 @@ class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   factory StreamGetMessagesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamGetMessagesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..e<TypeMessage>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: TypeMessage.SEND_MESSAGE, valueOf: TypeMessage.valueOf, enumValues: TypeMessage.values)
     ..aOM<Message>(2, _omitFieldNames ? '' : 'message', subBuilder: Message.create)
     ..hasRequiredFields = false
   ;
@@ -122,16 +141,25 @@ class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   static StreamGetMessagesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<StreamGetMessagesResponse>(create);
   static StreamGetMessagesResponse? _defaultInstance;
 
+  @$pb.TagNumber(1)
+  TypeMessage get type => $_getN(0);
+  @$pb.TagNumber(1)
+  set type(TypeMessage v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasType() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearType() => clearField(1);
+
   @$pb.TagNumber(2)
-  Message get message => $_getN(0);
+  Message get message => $_getN(1);
   @$pb.TagNumber(2)
   set message(Message v) { setField(2, v); }
   @$pb.TagNumber(2)
-  $core.bool hasMessage() => $_has(0);
+  $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
   void clearMessage() => clearField(2);
   @$pb.TagNumber(2)
-  Message ensureMessage() => $_ensure(0);
+  Message ensureMessage() => $_ensure(1);
 }
 
 class Empty extends $pb.GeneratedMessage {
@@ -846,6 +874,8 @@ class ChatUsersCount extends $pb.GeneratedMessage {
     $core.String? updatedAt,
     Chat? chat,
     $core.int? unReadedMessagesCount,
+    $core.String? text,
+    $core.String? messageUserId,
   }) {
     final $result = create();
     if (id != null) {
@@ -872,6 +902,12 @@ class ChatUsersCount extends $pb.GeneratedMessage {
     if (unReadedMessagesCount != null) {
       $result.unReadedMessagesCount = unReadedMessagesCount;
     }
+    if (text != null) {
+      $result.text = text;
+    }
+    if (messageUserId != null) {
+      $result.messageUserId = messageUserId;
+    }
     return $result;
   }
   ChatUsersCount._() : super();
@@ -887,6 +923,8 @@ class ChatUsersCount extends $pb.GeneratedMessage {
     ..aOS(6, _omitFieldNames ? '' : 'updatedAt')
     ..aOM<Chat>(7, _omitFieldNames ? '' : 'chat', subBuilder: Chat.create)
     ..a<$core.int>(8, _omitFieldNames ? '' : 'unReadedMessagesCount', $pb.PbFieldType.O3)
+    ..aOS(9, _omitFieldNames ? '' : 'text')
+    ..aOS(10, _omitFieldNames ? '' : 'messageUserId')
     ..hasRequiredFields = false
   ;
 
@@ -986,6 +1024,24 @@ class ChatUsersCount extends $pb.GeneratedMessage {
   $core.bool hasUnReadedMessagesCount() => $_has(7);
   @$pb.TagNumber(8)
   void clearUnReadedMessagesCount() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.String get text => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set text($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasText() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearText() => clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.String get messageUserId => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set messageUserId($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasMessageUserId() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearMessageUserId() => clearField(10);
 }
 
 class Chat extends $pb.GeneratedMessage {
@@ -1085,6 +1141,8 @@ class Message extends $pb.GeneratedMessage {
     $core.int? chatId,
     $core.String? text,
     User? user,
+    $core.bool? statusRead,
+    $core.bool? unReadedMessage,
   }) {
     final $result = create();
     if (id != null) {
@@ -1108,6 +1166,12 @@ class Message extends $pb.GeneratedMessage {
     if (user != null) {
       $result.user = user;
     }
+    if (statusRead != null) {
+      $result.statusRead = statusRead;
+    }
+    if (unReadedMessage != null) {
+      $result.unReadedMessage = unReadedMessage;
+    }
     return $result;
   }
   Message._() : super();
@@ -1122,6 +1186,8 @@ class Message extends $pb.GeneratedMessage {
     ..a<$core.int>(5, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
     ..aOS(6, _omitFieldNames ? '' : 'text')
     ..aOM<User>(7, _omitFieldNames ? '' : 'user', subBuilder: User.create)
+    ..aOB(8, _omitFieldNames ? '' : 'statusRead')
+    ..aOB(9, _omitFieldNames ? '' : 'unReadedMessage')
     ..hasRequiredFields = false
   ;
 
@@ -1210,6 +1276,24 @@ class Message extends $pb.GeneratedMessage {
   void clearUser() => clearField(7);
   @$pb.TagNumber(7)
   User ensureUser() => $_ensure(6);
+
+  @$pb.TagNumber(8)
+  $core.bool get statusRead => $_getBF(7);
+  @$pb.TagNumber(8)
+  set statusRead($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasStatusRead() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearStatusRead() => clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get unReadedMessage => $_getBF(8);
+  @$pb.TagNumber(9)
+  set unReadedMessage($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasUnReadedMessage() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearUnReadedMessage() => clearField(9);
 }
 
 class User extends $pb.GeneratedMessage {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_application_2/components/move_to_main.dart';
 import 'package:flutter_application_2/pages/home.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:protobuf/protobuf.dart';
 
 class FolderBuilder extends StatefulWidget {
   final int? folderId;

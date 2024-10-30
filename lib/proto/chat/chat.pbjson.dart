@@ -32,26 +32,29 @@ const StreamGetMessagesRequest$json = {
   '2': [
     {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.chat.TypeMessage', '10': 'type'},
     {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'message_id', '3': 3, '4': 1, '5': 13, '10': 'messageId'},
   ],
 };
 
 /// Descriptor for `StreamGetMessagesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamGetMessagesRequestDescriptor = $convert.base64Decode(
     'ChhTdHJlYW1HZXRNZXNzYWdlc1JlcXVlc3QSJQoEdHlwZRgBIAEoDjIRLmNoYXQuVHlwZU1lc3'
-    'NhZ2VSBHR5cGUSGAoHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZQ==');
+    'NhZ2VSBHR5cGUSGAoHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZRIdCgptZXNzYWdlX2lkGAMgASgN'
+    'UgltZXNzYWdlSWQ=');
 
 @$core.Deprecated('Use streamGetMessagesResponseDescriptor instead')
 const StreamGetMessagesResponse$json = {
   '1': 'StreamGetMessagesResponse',
   '2': [
     {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.chat.Message', '10': 'message'},
+    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.chat.TypeMessage', '10': 'type'},
   ],
 };
 
 /// Descriptor for `StreamGetMessagesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamGetMessagesResponseDescriptor = $convert.base64Decode(
     'ChlTdHJlYW1HZXRNZXNzYWdlc1Jlc3BvbnNlEicKB21lc3NhZ2UYAiABKAsyDS5jaGF0Lk1lc3'
-    'NhZ2VSB21lc3NhZ2U=');
+    'NhZ2VSB21lc3NhZ2USJQoEdHlwZRgBIAEoDjIRLmNoYXQuVHlwZU1lc3NhZ2VSBHR5cGU=');
 
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
@@ -222,6 +225,8 @@ const ChatUsersCount$json = {
     {'1': 'updated_at', '3': 6, '4': 1, '5': 9, '10': 'updatedAt'},
     {'1': 'chat', '3': 7, '4': 1, '5': 11, '6': '.chat.Chat', '10': 'chat'},
     {'1': 'un_readed_messages_count', '3': 8, '4': 1, '5': 5, '10': 'unReadedMessagesCount'},
+    {'1': 'text', '3': 9, '4': 1, '5': 9, '10': 'text'},
+    {'1': 'message_user_id', '3': 10, '4': 1, '5': 9, '10': 'messageUserId'},
   ],
 };
 
@@ -231,7 +236,8 @@ final $typed_data.Uint8List chatUsersCountDescriptor = $convert.base64Decode(
     'lkEhcKB3VzZXJfaWQYAyABKA1SBnVzZXJJZBIeCgR1c2VyGAQgASgLMgouY2hhdC5Vc2VyUgR1'
     'c2VyEh0KCmNyZWF0ZWRfYXQYBSABKAlSCWNyZWF0ZWRBdBIdCgp1cGRhdGVkX2F0GAYgASgJUg'
     'l1cGRhdGVkQXQSHgoEY2hhdBgHIAEoCzIKLmNoYXQuQ2hhdFIEY2hhdBI3Chh1bl9yZWFkZWRf'
-    'bWVzc2FnZXNfY291bnQYCCABKAVSFXVuUmVhZGVkTWVzc2FnZXNDb3VudA==');
+    'bWVzc2FnZXNfY291bnQYCCABKAVSFXVuUmVhZGVkTWVzc2FnZXNDb3VudBISCgR0ZXh0GAkgAS'
+    'gJUgR0ZXh0EiYKD21lc3NhZ2VfdXNlcl9pZBgKIAEoCVINbWVzc2FnZVVzZXJJZA==');
 
 @$core.Deprecated('Use chatDescriptor instead')
 const Chat$json = {
@@ -261,6 +267,8 @@ const Message$json = {
     {'1': 'chat_id', '3': 5, '4': 1, '5': 13, '10': 'chatId'},
     {'1': 'text', '3': 6, '4': 1, '5': 9, '10': 'text'},
     {'1': 'user', '3': 7, '4': 1, '5': 11, '6': '.chat.User', '10': 'user'},
+    {'1': 'status_read', '3': 8, '4': 1, '5': 8, '10': 'statusRead'},
+    {'1': 'un_readed_message', '3': 9, '4': 1, '5': 8, '10': 'unReadedMessage'},
   ],
 };
 
@@ -269,7 +277,8 @@ final $typed_data.Uint8List messageDescriptor = $convert.base64Decode(
     'CgdNZXNzYWdlEg4KAmlkGAEgASgNUgJpZBIdCgpjcmVhdGVkX2F0GAIgASgJUgljcmVhdGVkQX'
     'QSHQoKdXBkYXRlZF9hdBgDIAEoCVIJdXBkYXRlZEF0EhcKB3VzZXJfaWQYBCABKA1SBnVzZXJJ'
     'ZBIXCgdjaGF0X2lkGAUgASgNUgZjaGF0SWQSEgoEdGV4dBgGIAEoCVIEdGV4dBIeCgR1c2VyGA'
-    'cgASgLMgouY2hhdC5Vc2VyUgR1c2Vy');
+    'cgASgLMgouY2hhdC5Vc2VyUgR1c2VyEh8KC3N0YXR1c19yZWFkGAggASgIUgpzdGF0dXNSZWFk'
+    'EioKEXVuX3JlYWRlZF9tZXNzYWdlGAkgASgIUg91blJlYWRlZE1lc3NhZ2U=');
 
 @$core.Deprecated('Use userDescriptor instead')
 const User$json = {

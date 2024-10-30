@@ -10,13 +10,17 @@ class MessageComponent extends StatefulWidget {
       required this.text,
       required this.createdAt,
       required this.name,
+      required this.controller,
+      required this.statusRead,
       required this.dateChange});
 
   final bool status;
   final DateTime? dateChange;
   final String text;
+  final ScrollController controller;
   final String createdAt;
   final String name;
+  final bool statusRead;
 
   @override
   State<MessageComponent> createState() => _MessageComponentState();
@@ -89,12 +93,35 @@ class _MessageComponentState extends State<MessageComponent> {
                       ),
                       Container(
                         alignment: Alignment.topRight,
-                        child: Text(
-                          "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
-                          style: const TextStyle(
-                              color: Colors.white60,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
+                              style: const TextStyle(
+                                  color: Colors.white60,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 10),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            // widget.status
+                            true
+                                ? widget.statusRead
+                                    ? const Icon(
+                                        Icons.done_all,
+                                        size: 14,
+                                        color: Colors.white60,
+                                      )
+                                    : const Icon(
+                                        Icons.done,
+                                        size: 14,
+                                        color: Colors.white60,
+                                      )
+                                : const SizedBox()
+                          ],
                         ),
                       )
                     ],

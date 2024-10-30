@@ -56,6 +56,7 @@ dependencies:
   flutter_local_notifications: ^17.2.3
   flutter_background_service: ^5.0.10
   shared_preferences: ^2.3.2
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:
