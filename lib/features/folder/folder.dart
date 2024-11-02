@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/api/file_api.dart';
 import 'package:flutter_application_2/api/folder_api.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
 import 'package:flutter_application_2/features/access/dialog_access.dart';
 import 'package:flutter_application_2/entities/folder/dialog_create_folder.dart';
@@ -35,7 +36,7 @@ class _FolderState extends State<FolderComponent> {
                         ? Colors.deepOrange.shade100
                         : Colors.white)),
             onPressed: () {
-              Navigator.pushNamed(context, '/',
+              Navigator.pushNamed(context, AppRouter.HOME,
                   arguments:
                       HomeArgs(widget.folder.id, widget.folder.nameFolder));
             },

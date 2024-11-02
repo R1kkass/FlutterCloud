@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/my_input.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/features/file/search_input_file.dart';
 import 'package:flutter_application_2/grpc/files_grpc.dart';
 import 'package:flutter_application_2/proto/files/files.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,11 +31,19 @@ class _SearchFileState extends State<SearchFile> {
           },
         );
       });
-    }, builder: (BuildContext cotnext, SearchController controller) {
-      return MyInput(
+    }, builder: (BuildContext context, SearchController controller) {
+      return SearchInputFile(
           autoFocus: true,
+          suffixIcon: context.read<ContentBloc>().state.search != ""
+              ? IconButton(
+                  onPressed: _cancelFindFile,
+                  icon: Icon(
+                    Icons.cancel_outlined,
+                    color: Colors.deepOrange.shade500,
+                  ))
+              : null,
           controller: controller,
-          title: "Поиск по папке",
+          title: widget.folderId == null ? "Искать везде" : "Искать в папке",
           icon: Icons.search,
           error: "Поле пустое",
           elevation: false,
@@ -46,12 +54,24 @@ class _SearchFileState extends State<SearchFile> {
   _findFile(String text) async {
     context.read<ContentBloc>().add(SetSearch(search: text));
     var response = await FilesGrpc().findFile(FindFileRequest(
-        search: text, folderId: widget.folderId, findEveryWhere: false));
+        search: text,
+        folderId: widget.folderId,
+        findEveryWhere: widget.folderId == null));
     context
         .read<ContentBloc>()
         .add(ContentInit(files: response.files, folders: response.folders));
     if (text.isEmpty) {
       widget.fn();
     }
+  }
+
+  _cancelFindFile() async {
+    context.read<ContentBloc>().add(SetSearch(search: ""));
+    var response = await FilesGrpc().findFile(
+        FindFileRequest(folderId: widget.folderId, findEveryWhere: false));
+    context
+        .read<ContentBloc>()
+        .add(ContentInit(files: response.files, folders: response.folders));
+    widget.fn();
   }
 }

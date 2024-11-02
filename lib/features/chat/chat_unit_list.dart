@@ -33,6 +33,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
   Widget build(BuildContext context) {
     ChatUsersCount chat = widget.chat;
     decryptMessageFn(chat);
+    DateTime time = DateTime.parse(widget.chat.createdAt).toLocal();
     return SizedBox(
       height: 60,
       child: Material(
@@ -56,7 +57,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 80,
+                    width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
                       chat.chat.nameChat == ""
                           ? jwt?.email != chat.chat.chatUsers[0].user.email
@@ -68,7 +69,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
                     ),
                   ),
                   SizedBox(
-                    width: MediaQuery.sizeOf(context).width - 60,
+                    width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
                       decryptMessage,
                       style: const TextStyle(fontSize: 16),
@@ -78,12 +79,35 @@ class _ChatUnitListState extends State<ChatUnitList> {
                   ),
                 ],
               ),
-              chat.unReadedMessagesCount != 0
-                  ? Badge.count(
-                      count: chat.unReadedMessagesCount,
-                      backgroundColor: Colors.blueAccent,
-                    )
-                  : const SizedBox()
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.done,
+                          size: 17, color: Colors.blueAccent),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
+                        style: const TextStyle(
+                            fontSize: 13, color: Colors.black45),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  chat.unReadedMessagesCount != 0
+                      ? Badge(
+                          label: Text(chat.unReadedMessagesCount > 99
+                              ? "99+"
+                              : "${chat.unReadedMessagesCount}"),
+                          backgroundColor: Colors.blueAccent,
+                        )
+                      : const SizedBox()
+                ],
+              )
             ],
           ),
         ),

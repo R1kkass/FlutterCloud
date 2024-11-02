@@ -48,19 +48,23 @@ class _BottomSheetExample extends State<BottomSheetExample> {
 
   void selectFile() async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+      );
       Navigator.of(context).pop();
 
       if (result != null) {
-        var idFileUpload = DateTime.now().microsecond;
-        context.read<ContentBloc>().add(UploadFileSet(
-            id: widget.id,
-            data: FileUpload(
-                size: 0,
-                id: idFileUpload,
-                fileName: result.files.single.path!.split("/").last)));
+        for (var file in result.files) {
+          var idFileUpload = DateTime.now().microsecond;
+          context.read<ContentBloc>().add(UploadFileSet(
+              id: widget.id,
+              data: FileUpload(
+                  size: 0,
+                  id: idFileUpload,
+                  fileName: file.path!.split("/").last)));
 
-        _functionCreate(result, idFileUpload, widget.context);
+          _functionCreate(file, idFileUpload, widget.context);
+        }
       } else {
         showToast(widget.context, "Файл не выбран");
       }
@@ -181,16 +185,16 @@ class _BottomSheetExample extends State<BottomSheetExample> {
     );
   }
 
-  _functionCreate(result, int id, BuildContext myContext) async {
+  _functionCreate(PlatformFile result, int id, BuildContext myContext) async {
     var mainContext =
         NavigationService.navigatorKey.currentContext as BuildContext;
 
     var box = Hive.box('token');
     var password = box.get("password");
     var folderId = widget.id ?? 0;
-    var fileName = result.files.single.path!.split("/").last;
+    var fileName = result.path!.split("/").last;
 
-    var filePath = result.files.single.path!;
+    var filePath = result.path!;
     var argsStream = await Isolate.run(() => FilesGrpc().createStreamArg(
         ArgsForStream(
             file: filePath,

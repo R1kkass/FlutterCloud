@@ -1,7 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/message.dart';
+import 'package:flutter_application_2/features/chat/message.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
@@ -32,15 +30,19 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
     List<Message> data = widget.data;
     Map<int, DateTime> dataWithDate = {};
     DateTime? time;
+    int? newMessage;
 
     for (var item in data.reversed) {
-      if (item.runtimeType == Message) {
-        var timeParse = DateTime.parse(item.createdAt);
-        if ("${time?.day}${time?.month}" !=
-            "${timeParse.day}${timeParse.month}") {
-          time = timeParse;
-          dataWithDate[item.id] = timeParse;
-        }
+      var timeParse = DateTime.parse(item.createdAt).toLocal();
+      if ("${time?.day}${time?.month}${time?.year}" !=
+          "${timeParse.day}${timeParse.month}${timeParse.year}") {
+        time = timeParse;
+        dataWithDate[item.id] = timeParse;
+      }
+      if (item.unReadedMessage &&
+          newMessage == null &&
+          item.user.email != jwtDecode().email) {
+        newMessage = item.id;
       }
     }
 
@@ -55,8 +57,8 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
           return VisibilityDetector(
             key: Key("$id"),
             onVisibilityChanged: (visibilityInfo) {
-              if (data[index].unReadedMessage) {
-                log(id.toString());
+              if (data[index].unReadedMessage &&
+                  data[index].user.email != jwtDecode().email) {
                 widget.readCallback(id);
               }
             },
@@ -67,6 +69,7 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                 key: UniqueKey(),
                 sizeFactor: animation,
                 child: MessageComponent(
+                  newMessage: newMessage == id,
                   controller: widget.controller,
                   statusRead: data[index].statusRead,
                   dateChange: dataWithDate[id],

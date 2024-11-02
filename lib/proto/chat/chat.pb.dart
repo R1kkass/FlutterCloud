@@ -1720,6 +1720,7 @@ class GetMessagesRequest extends $pb.GeneratedMessage {
   factory GetMessagesRequest({
     $core.int? chatId,
     $core.int? page,
+    $core.bool? init,
   }) {
     final $result = create();
     if (chatId != null) {
@@ -1727,6 +1728,9 @@ class GetMessagesRequest extends $pb.GeneratedMessage {
     }
     if (page != null) {
       $result.page = page;
+    }
+    if (init != null) {
+      $result.init = init;
     }
     return $result;
   }
@@ -1737,6 +1741,7 @@ class GetMessagesRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMessagesRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3, protoName: 'chatId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'page', $pb.PbFieldType.OU3)
+    ..aOB(3, _omitFieldNames ? '' : 'init')
     ..hasRequiredFields = false
   ;
 
@@ -1778,15 +1783,32 @@ class GetMessagesRequest extends $pb.GeneratedMessage {
   $core.bool hasPage() => $_has(1);
   @$pb.TagNumber(2)
   void clearPage() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.bool get init => $_getBF(2);
+  @$pb.TagNumber(3)
+  set init($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasInit() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearInit() => clearField(3);
 }
 
 class GetMessagesResponse extends $pb.GeneratedMessage {
   factory GetMessagesResponse({
     $core.Iterable<Message>? messages,
+    $core.int? page,
+    $core.int? countNotRead,
   }) {
     final $result = create();
     if (messages != null) {
       $result.messages.addAll(messages);
+    }
+    if (page != null) {
+      $result.page = page;
+    }
+    if (countNotRead != null) {
+      $result.countNotRead = countNotRead;
     }
     return $result;
   }
@@ -1796,6 +1818,8 @@ class GetMessagesResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetMessagesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..pc<Message>(1, _omitFieldNames ? '' : 'messages', $pb.PbFieldType.PM, subBuilder: Message.create)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'page', $pb.PbFieldType.O3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'countNotRead', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -1822,6 +1846,24 @@ class GetMessagesResponse extends $pb.GeneratedMessage {
 
   @$pb.TagNumber(1)
   $core.List<Message> get messages => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.int get page => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set page($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPage() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPage() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get countNotRead => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set countNotRead($core.int v) { $_setSignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCountNotRead() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCountNotRead() => clearField(3);
 }
 
 

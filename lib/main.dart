@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/consts/domen.dart';
 import 'package:flutter_application_2/cubit/content_bloc.dart';
+import 'package:flutter_application_2/cubit/count_bloc.dart';
 import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/cubit/download_file_bloc.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/cubit/space_cubit.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/observers/observer.dart';
+import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:grpc/grpc.dart';
@@ -42,6 +45,7 @@ void main() async {
   await Hive.openBox('secretkey');
 
   Bloc.observer = const MyBlocObserver();
+
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
       create: (context) => FolderCubit(),
@@ -58,6 +62,9 @@ void main() async {
     BlocProvider(
       create: (context) =>
           DownloadFileBloc(state: DownloadFileState(downloadFile: {})),
+    ),
+    BlocProvider(
+      create: (context) => CountBloc(state: CountState(count: 0)),
     ),
     BlocProvider(
       create: (context) => CurrentPageBloc(state: CurrentPageState(page: 0)),
@@ -91,6 +98,22 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       access_token = token;
     });
+  }
+
+  ResponseStream<StreamGetMessagesGeneralResponse>? stream;
+  @override
+  void initState() {
+    super.initState();
+    stream = ChatGrpc().streamGetMessagesGeneral();
+    stream?.listen((e) {
+      context.read<CountBloc>().add(SetCount(e.count));
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stream?.cancel();
   }
 
   @override

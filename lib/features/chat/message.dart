@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/month.dart';
+import 'package:flutter_application_2/entities/chat/message_badge.dart';
 
 class MessageComponent extends StatefulWidget {
   const MessageComponent(
       {super.key,
       required this.status,
+      required this.newMessage,
       required this.text,
       required this.createdAt,
       required this.name,
@@ -15,6 +17,7 @@ class MessageComponent extends StatefulWidget {
       required this.dateChange});
 
   final bool status;
+  final bool newMessage;
   final DateTime? dateChange;
   final String text;
   final ScrollController controller;
@@ -33,23 +36,9 @@ class _MessageComponentState extends State<MessageComponent> {
     DateTime time = DateTime.parse(widget.createdAt).toLocal();
     return Column(
       children: [
+        if (widget.newMessage) const MessageBadge(text: "Новые сообщение"),
         dateChange != null
-            ? SizedBox(
-                height: 30,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.only(
-                        top: 0.5, bottom: 0.5, left: 5, right: 5),
-                    decoration: const BoxDecoration(
-                        color: Color.fromARGB(66, 41, 41, 41),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                    child: Text(
-                      "${dateChange.day} ${month[dateChange.month]}",
-                      style: const TextStyle(color: Colors.white, fontSize: 11),
-                    ),
-                  ),
-                ),
-              )
+            ? MessageBadge(text: "${dateChange.day} ${month[dateChange.month]}")
             : const SizedBox(
                 height: 0,
               ),
@@ -108,7 +97,7 @@ class _MessageComponentState extends State<MessageComponent> {
                               width: 5,
                             ),
                             // widget.status
-                            true
+                            widget.status
                                 ? widget.statusRead
                                     ? const Icon(
                                         Icons.done_all,

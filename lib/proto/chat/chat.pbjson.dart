@@ -378,24 +378,28 @@ const GetMessagesRequest$json = {
   '2': [
     {'1': 'chatId', '3': 1, '4': 1, '5': 13, '10': 'chatId'},
     {'1': 'page', '3': 2, '4': 1, '5': 13, '10': 'page'},
+    {'1': 'init', '3': 3, '4': 1, '5': 8, '10': 'init'},
   ],
 };
 
 /// Descriptor for `GetMessagesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getMessagesRequestDescriptor = $convert.base64Decode(
     'ChJHZXRNZXNzYWdlc1JlcXVlc3QSFgoGY2hhdElkGAEgASgNUgZjaGF0SWQSEgoEcGFnZRgCIA'
-    'EoDVIEcGFnZQ==');
+    'EoDVIEcGFnZRISCgRpbml0GAMgASgIUgRpbml0');
 
 @$core.Deprecated('Use getMessagesResponseDescriptor instead')
 const GetMessagesResponse$json = {
   '1': 'GetMessagesResponse',
   '2': [
     {'1': 'messages', '3': 1, '4': 3, '5': 11, '6': '.chat.Message', '10': 'messages'},
+    {'1': 'page', '3': 2, '4': 1, '5': 5, '10': 'page'},
+    {'1': 'count_not_read', '3': 3, '4': 1, '5': 5, '10': 'countNotRead'},
   ],
 };
 
 /// Descriptor for `GetMessagesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getMessagesResponseDescriptor = $convert.base64Decode(
     'ChNHZXRNZXNzYWdlc1Jlc3BvbnNlEikKCG1lc3NhZ2VzGAEgAygLMg0uY2hhdC5NZXNzYWdlUg'
-    'htZXNzYWdlcw==');
+    'htZXNzYWdlcxISCgRwYWdlGAIgASgFUgRwYWdlEiQKDmNvdW50X25vdF9yZWFkGAMgASgFUgxj'
+    'b3VudE5vdFJlYWQ=');
 

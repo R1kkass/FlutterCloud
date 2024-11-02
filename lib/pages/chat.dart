@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_2/entities/chat/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
+import 'package:flutter_application_2/entities/chat/chat_float_button.dart';
 import 'package:flutter_application_2/entities/chat/chat_input.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
@@ -32,6 +31,8 @@ class _ChatPageState extends State<ChatPage> {
 
   late final ScrollController _scrollController;
   var page = 0;
+  var pageBottom = 0;
+  var count = 0;
   ResponseStream<StreamGetMessagesResponse>? connect;
 
   List<Message> data = [];
@@ -47,11 +48,18 @@ class _ChatPageState extends State<ChatPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _getBox();
 
-      var response = await ChatGrpc()
-          .getMessages(GetMessagesRequest(chatId: widget.args.chatId, page: 0));
+      var response = await ChatGrpc().getMessages(
+          GetMessagesRequest(chatId: widget.args.chatId, page: 0, init: true));
+      page = response.page;
+      pageBottom = response.page;
+      count = response.countNotRead;
+
       data = [...data, ...response.messages];
       _key.currentState?.insertAllItems(0, data.length,
-          duration: const Duration(milliseconds: 300));
+          duration: const Duration(milliseconds: 0));
+      if (response.countNotRead != 0) {
+        showFloatButton == true;
+      }
       setState(() {});
       await _grpc();
     });
@@ -86,20 +94,35 @@ class _ChatPageState extends State<ChatPage> {
           ];
 
           _key.currentState
-              ?.insertItem(0, duration: const Duration(milliseconds: 300));
+              ?.insertItem(0, duration: const Duration(milliseconds: 0));
         }
         if (onData.type == TypeMessage.READ_MESSAGE) {
-          data.firstWhere((item) {
-                return item.id == onData.message.id;
-              }) ==
-              onData.message;
           var index = data.indexWhere((item) {
             return item.id == onData.message.id;
           });
-          _key.currentState
-              ?.insertItem(index, duration: const Duration(milliseconds: 0));
+          _key.currentState?.setState(() {
+            data[index] = onData.message;
+          });
         }
       });
+    });
+  }
+
+  var scrolling = false;
+
+  _scrollDown() {
+    scrolling = true;
+    _scrollController
+        .animateTo(
+      _scrollController.position.minScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    )
+        .then((e) {
+      scrolling = false;
+    });
+    setState(() {
+      showFloatButton = false;
     });
   }
 
@@ -119,12 +142,26 @@ class _ChatPageState extends State<ChatPage> {
   _readMessage(int messageId) {
     controller?.add(StreamGetMessagesRequest(
         messageId: messageId, type: TypeMessage.READ_MESSAGE));
+    setState(() {
+      count--;
+    });
   }
+
+  var showFloatButton = false;
+  double currPosition = 0;
 
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
       title: widget.title,
+      floatButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: ChatFloatButton(
+          action: _scrollDown,
+          count: count,
+          showFloatButton: showFloatButton,
+        ),
+      ),
       body: Container(
         child: Column(
           children: [
@@ -132,7 +169,26 @@ class _ChatPageState extends State<ChatPage> {
                 flex: 2,
                 child: NotificationListener(
                   onNotification: (t) {
-                    if (t is ScrollEndNotification && t.metrics.pixels != 0.0) {
+                    if (t is ScrollStartNotification && scrolling == false) {
+                      currPosition = t.metrics.pixels;
+                    }
+                    if (t is ScrollUpdateNotification && scrolling == false) {
+                      if (currPosition > t.metrics.pixels &&
+                          showFloatButton == false) {
+                        setState(() {
+                          showFloatButton = true;
+                        });
+                      } else if (currPosition < t.metrics.pixels &&
+                          showFloatButton == true) {
+                        setState(() {
+                          showFloatButton = false;
+                        });
+                      }
+                    }
+
+                    if (t is ScrollEndNotification &&
+                        t.metrics.pixels ==
+                            _scrollController.position.maxScrollExtent) {
                       page++;
                       ChatGrpc()
                           .getMessages(GetMessagesRequest(
@@ -143,6 +199,24 @@ class _ChatPageState extends State<ChatPage> {
                         _key.currentState
                             ?.insertAllItems(0, response.messages.length);
                       });
+                    }
+                    if (t is ScrollEndNotification && t.metrics.pixels == 0.0) {
+                      setState(() {
+                        showFloatButton = false;
+                      });
+                      if (pageBottom > 0) {
+                        pageBottom--;
+
+                        ChatGrpc()
+                            .getMessages(GetMessagesRequest(
+                                chatId: widget.args.chatId, page: pageBottom))
+                            .then((response) {
+                          data = [...response.messages, ...data];
+                          setState(() {});
+                          _key.currentState
+                              ?.insertAllItems(0, response.messages.length);
+                        });
+                      }
                     }
                     return true;
                   },
