@@ -403,3 +403,18 @@ final $typed_data.Uint8List getMessagesResponseDescriptor = $convert.base64Decod
     'htZXNzYWdlcxISCgRwYWdlGAIgASgFUgRwYWdlEiQKDmNvdW50X25vdF9yZWFkGAMgASgFUgxj'
     'b3VudE5vdFJlYWQ=');
 
+@$core.Deprecated('Use uploadFileChatDescriptor instead')
+const UploadFileChat$json = {
+  '1': 'UploadFileChat',
+  '2': [
+    {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
+    {'1': 'fileName', '3': 2, '4': 1, '5': 9, '10': 'fileName'},
+    {'1': 'chatId', '3': 3, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `UploadFileChat`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uploadFileChatDescriptor = $convert.base64Decode(
+    'Cg5VcGxvYWRGaWxlQ2hhdBIUCgVjaHVuaxgBIAEoDFIFY2h1bmsSGgoIZmlsZU5hbWUYAiABKA'
+    'lSCGZpbGVOYW1lEhYKBmNoYXRJZBgDIAEoDVIGY2hhdElk');
+

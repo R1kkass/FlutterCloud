@@ -57,6 +57,7 @@ dependencies:
   flutter_background_service: ^5.0.10
   shared_preferences: ^2.3.2
   visibility_detector: ^0.4.0+2
+  keyboard_height_plugin: ^0.1.5
 
 dev_dependencies:
   flutter_test:

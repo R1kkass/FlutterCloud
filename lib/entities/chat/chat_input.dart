@@ -16,7 +16,7 @@ class ChatInput extends StatefulWidget {
   final TextEditingController? controller;
   final String title;
   final IconData icon;
-  IconButton? suffixIcon;
+  Widget? suffixIcon;
   final String error;
   bool obscureText;
   void Function(String)? fieldSubmit;
@@ -41,7 +41,7 @@ class _ChatInputState extends State<ChatInput> {
             ),
             suffixIcon: widget.suffixIcon,
             filled: true,
-            contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+            contentPadding: const EdgeInsets.all(20.0),
             enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(500.0)),
                 borderSide: BorderSide(color: Colors.white, width: 3.0)),

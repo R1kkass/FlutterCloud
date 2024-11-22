@@ -1,8 +1,35 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_application_2/main.dart';
 import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
+import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
+
+class ArrayStream {
+  final List<int> chunk;
+  final int chatId;
+  final double size;
+  final String fileName;
+
+  const ArrayStream(
+      {required this.chunk,
+      required this.chatId,
+      required this.size,
+      required this.fileName});
+}
+
+class ArgsForStream {
+  final String secretKey;
+  final String filePath;
+  final UploadFileChat request;
+
+  const ArgsForStream(
+      {required this.filePath, required this.secretKey, required this.request});
+}
 
 class ChatGrpc {
   final _stub = ChatGreeterClient(channel);
@@ -72,7 +99,7 @@ class ChatGrpc {
     return response;
   }
 
-  ResponseStream<StreamGetMessagesGeneralResponse>  streamGetMessagesGeneral() {
+  ResponseStream<StreamGetMessagesGeneralResponse> streamGetMessagesGeneral() {
     return _stub.streamGetMessagesGeneral(Empty(), options: _options);
   }
 
@@ -83,5 +110,43 @@ class ChatGrpc {
           "authorization": "Bearer ${Hive.box('token').get('access_token')}",
           "chat_id": chatId
         }));
+  }
+
+  ResponseFuture<Empty> uploadFile(List<ArrayStream> arrFUR) {
+    Stream<UploadFileChat> generateRoute() async* {
+      for (final item in arrFUR) {
+        yield UploadFileChat(
+          chunk: item.chunk,
+          fileName: item.fileName,
+        );
+      }
+    }
+
+    return _stub.uploadChatFile(generateRoute(), options: _options);
+  }
+
+  List<ArrayStream> createStreamArg(ArgsForStream some) {
+    var key = some.secretKey;
+
+    var file = File(some.filePath);
+    var request = some.request;
+
+    List<ArrayStream> arrFUR = [];
+    var bufferSize = 5 * 1024 * 1024;
+    var curItem = 0;
+    RandomAccessFile raf = file.openSync(mode: FileMode.read);
+    var bytesLength = raf.lengthSync();
+    for (int i = 0; i < bytesLength / bufferSize; i++) {
+      raf.setPositionSync(curItem);
+      Uint8List bytes = raf.readSync(bufferSize);
+      curItem += bufferSize;
+      arrFUR.add(ArrayStream(
+          chunk: crypt(true, bytes, key),
+          chatId: request.chatId,
+          size: curItem / bytesLength * 100,
+          fileName: request.fileName));
+    }
+
+    return arrFUR;
   }
 }

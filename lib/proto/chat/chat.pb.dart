@@ -1866,6 +1866,84 @@ class GetMessagesResponse extends $pb.GeneratedMessage {
   void clearCountNotRead() => clearField(3);
 }
 
+class UploadFileChat extends $pb.GeneratedMessage {
+  factory UploadFileChat({
+    $core.List<$core.int>? chunk,
+    $core.String? fileName,
+    $core.int? chatId,
+  }) {
+    final $result = create();
+    if (chunk != null) {
+      $result.chunk = chunk;
+    }
+    if (fileName != null) {
+      $result.fileName = fileName;
+    }
+    if (chatId != null) {
+      $result.chatId = chatId;
+    }
+    return $result;
+  }
+  UploadFileChat._() : super();
+  factory UploadFileChat.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UploadFileChat.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UploadFileChat', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
+    ..aOS(2, _omitFieldNames ? '' : 'fileName', protoName: 'fileName')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3, protoName: 'chatId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  UploadFileChat clone() => UploadFileChat()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  UploadFileChat copyWith(void Function(UploadFileChat) updates) => super.copyWith((message) => updates(message as UploadFileChat)) as UploadFileChat;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static UploadFileChat create() => UploadFileChat._();
+  UploadFileChat createEmptyInstance() => create();
+  static $pb.PbList<UploadFileChat> createRepeated() => $pb.PbList<UploadFileChat>();
+  @$core.pragma('dart2js:noInline')
+  static UploadFileChat getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UploadFileChat>(create);
+  static UploadFileChat? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get chunk => $_getN(0);
+  @$pb.TagNumber(1)
+  set chunk($core.List<$core.int> v) { $_setBytes(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChunk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChunk() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get fileName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set fileName($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFileName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFileName() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get chatId => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set chatId($core.int v) { $_setUnsignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasChatId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearChatId() => clearField(3);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

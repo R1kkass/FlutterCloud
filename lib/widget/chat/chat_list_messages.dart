@@ -30,8 +30,8 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
     stream?.listen((data) {
       chats = data.chats;
       setState(() {});
+      _checkPubKey(chats);
     });
-    _checkPubKey(chats);
   }
 
   @override

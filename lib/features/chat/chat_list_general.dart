@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 
 class ChatListGeneral extends StatefulWidget {
   final Future<dynamic> Function() callback;

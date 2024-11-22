@@ -5,6 +5,7 @@ import 'package:flutter_application_2/entities/chat/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/entities/chat/chat_float_button.dart';
 import 'package:flutter_application_2/entities/chat/chat_input.dart';
+import 'package:flutter_application_2/features/chat/upload_files.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
@@ -233,11 +234,19 @@ class _ChatPageState extends State<ChatPage> {
               title: "Сообщение",
               error: "Введите сообщение",
               icon: Icons.mail,
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                color: Colors.deepOrange.shade400,
-                onPressed: _addMessage,
-                iconSize: 30,
+              suffixIcon: SizedBox(
+                width: 100,
+                child: Row(
+                  children: [
+                    MessageUploadFile(chatId: widget.args.chatId, secretKey: key),
+                    IconButton(
+                      icon: const Icon(Icons.send),
+                      color: Colors.deepOrange.shade400,
+                      onPressed: _addMessage,
+                      iconSize: 25,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

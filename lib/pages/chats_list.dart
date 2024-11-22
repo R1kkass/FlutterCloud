@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
@@ -43,6 +42,10 @@ class _ChatListsState extends State<ChatLists>
   @override
   Widget build(BuildContext context) {
     return DefaultScaffold(
+      floatButton: FloatingActionButton.small(
+          shape: const CircleBorder(),
+          onPressed: () {},
+          child: const Icon(Icons.mode_edit)),
       showBottomNavigation: true,
       title: title ?? widget.title,
       bottom: PreferredSize(
@@ -81,7 +84,6 @@ class _ChatListsState extends State<ChatLists>
       ),
     );
   }
-
 
   Widget _paintChatAccept({required ChatUsers chat}) {
     return ChatAccept(chat: chat);

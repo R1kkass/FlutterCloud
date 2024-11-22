@@ -85,8 +85,12 @@ class _ChatUnitListState extends State<ChatUnitList> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.done,
-                          size: 17, color: Colors.blueAccent),
+                      if (chat.chat.message.user.email == jwtDecode().email)
+                        chat.chat.message.statusRead
+                            ? const Icon(Icons.done_all,
+                                size: 17, color: Colors.blueAccent)
+                            : const Icon(Icons.done,
+                                size: 17, color: Colors.blueAccent),
                       const SizedBox(
                         width: 5,
                       ),

@@ -65,6 +65,10 @@ class ChatGreeterClient extends $grpc.Client {
       '/chat.ChatGreeter/GetUnSuccessChats',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.GetUnSuccessChatsResponse.fromBuffer(value));
+  static final _$uploadChatFile = $grpc.ClientMethod<$0.UploadFileChat, $0.Empty>(
+      '/chat.ChatGreeter/UploadChatFile',
+      ($0.UploadFileChat value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
 
   ChatGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -114,6 +118,10 @@ class ChatGreeterClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.GetUnSuccessChatsResponse> getUnSuccessChats($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getUnSuccessChats, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> uploadChatFile($async.Stream<$0.UploadFileChat> request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$uploadChatFile, request, options: options).single;
   }
 }
 
@@ -199,6 +207,13 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.GetUnSuccessChatsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.UploadFileChat, $0.Empty>(
+        'UploadChatFile',
+        uploadChatFile,
+        true,
+        false,
+        ($core.List<$core.int> value) => $0.UploadFileChat.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateResponseChat> createChat_Pre($grpc.ServiceCall call, $async.Future<$0.CreateRequestChat> request) async {
@@ -252,4 +267,5 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
   $async.Stream<$0.StreamGetMessagesGeneralResponse> streamGetMessagesGeneral($grpc.ServiceCall call, $0.Empty request);
   $async.Stream<$0.StreamGetMessagesResponse> streamGetMessages($grpc.ServiceCall call, $async.Stream<$0.StreamGetMessagesRequest> request);
   $async.Future<$0.GetUnSuccessChatsResponse> getUnSuccessChats($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.Empty> uploadChatFile($grpc.ServiceCall call, $async.Stream<$0.UploadFileChat> request);
 }

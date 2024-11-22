@@ -18,26 +18,30 @@ class _BottomNavigationState extends State<BottomNavigation> {
       0: () => Navigator.of(context).popAndPushNamed(AppRouter.HOME),
       1: () => Navigator.of(context).popAndPushNamed(AppRouter.CHAT_LIST)
     };
-    return BottomNavigationBar(
-      selectedFontSize: 10,
-      unselectedFontSize: 10,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.cloud),
-          label: 'Облако',
-        ),
-        BottomNavigationBarItem(
-          icon: CountBadge(),
-          label: 'Сообщения',
-        ),
-      ],
-      currentIndex: context.read<CurrentPageBloc>().state.page,
-      onTap: (v) {
-        setState(() {
-          context.read<CurrentPageBloc>().add(ChangePage(v));
-          objectNavigation[v]!();
-        });
-      },
-    );
+    return BlocBuilder<CurrentPageBloc, CurrentPageState>(
+        builder: (context, state) {
+      return BottomNavigationBar(
+        enableFeedback: false,
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.cloud),
+            label: 'Облако',
+          ),
+          BottomNavigationBarItem(
+            icon: CountBadge(),
+            label: 'Сообщения',
+          ),
+        ],
+        currentIndex: state.page,
+        onTap: (v) {
+          setState(() {
+            context.read<CurrentPageBloc>().add(ChangePage(v));
+            objectNavigation[v]!();
+          });
+        },
+      );
+    });
   }
 }
