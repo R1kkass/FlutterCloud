@@ -410,11 +410,37 @@ const UploadFileChat$json = {
     {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
     {'1': 'fileName', '3': 2, '4': 1, '5': 9, '10': 'fileName'},
     {'1': 'chatId', '3': 3, '4': 1, '5': 13, '10': 'chatId'},
+    {'1': 'text', '3': 4, '4': 1, '5': 9, '10': 'text'},
   ],
 };
 
 /// Descriptor for `UploadFileChat`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List uploadFileChatDescriptor = $convert.base64Decode(
     'Cg5VcGxvYWRGaWxlQ2hhdBIUCgVjaHVuaxgBIAEoDFIFY2h1bmsSGgoIZmlsZU5hbWUYAiABKA'
-    'lSCGZpbGVOYW1lEhYKBmNoYXRJZBgDIAEoDVIGY2hhdElk');
+    'lSCGZpbGVOYW1lEhYKBmNoYXRJZBgDIAEoDVIGY2hhdElkEhIKBHRleHQYBCABKAlSBHRleHQ=');
+
+@$core.Deprecated('Use downloadFileChatResponseDescriptor instead')
+const DownloadFileChatResponse$json = {
+  '1': 'DownloadFileChatResponse',
+  '2': [
+    {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
+  ],
+};
+
+/// Descriptor for `DownloadFileChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadFileChatResponseDescriptor = $convert.base64Decode(
+    'ChhEb3dubG9hZEZpbGVDaGF0UmVzcG9uc2USFAoFY2h1bmsYASABKAxSBWNodW5r');
+
+@$core.Deprecated('Use downloadFileChatRequestDescriptor instead')
+const DownloadFileChatRequest$json = {
+  '1': 'DownloadFileChatRequest',
+  '2': [
+    {'1': 'chat_file_id', '3': 1, '4': 1, '5': 13, '10': 'chatFileId'},
+  ],
+};
+
+/// Descriptor for `DownloadFileChatRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List downloadFileChatRequestDescriptor = $convert.base64Decode(
+    'ChdEb3dubG9hZEZpbGVDaGF0UmVxdWVzdBIgCgxjaGF0X2ZpbGVfaWQYASABKA1SCmNoYXRGaW'
+    'xlSWQ=');
 

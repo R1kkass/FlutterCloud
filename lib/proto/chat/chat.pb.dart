@@ -1871,6 +1871,7 @@ class UploadFileChat extends $pb.GeneratedMessage {
     $core.List<$core.int>? chunk,
     $core.String? fileName,
     $core.int? chatId,
+    $core.String? text,
   }) {
     final $result = create();
     if (chunk != null) {
@@ -1882,6 +1883,9 @@ class UploadFileChat extends $pb.GeneratedMessage {
     if (chatId != null) {
       $result.chatId = chatId;
     }
+    if (text != null) {
+      $result.text = text;
+    }
     return $result;
   }
   UploadFileChat._() : super();
@@ -1892,6 +1896,7 @@ class UploadFileChat extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
     ..aOS(2, _omitFieldNames ? '' : 'fileName', protoName: 'fileName')
     ..a<$core.int>(3, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3, protoName: 'chatId')
+    ..aOS(4, _omitFieldNames ? '' : 'text')
     ..hasRequiredFields = false
   ;
 
@@ -1942,6 +1947,115 @@ class UploadFileChat extends $pb.GeneratedMessage {
   $core.bool hasChatId() => $_has(2);
   @$pb.TagNumber(3)
   void clearChatId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get text => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set text($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasText() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearText() => clearField(4);
+}
+
+class DownloadFileChatResponse extends $pb.GeneratedMessage {
+  factory DownloadFileChatResponse({
+    $core.List<$core.int>? chunk,
+  }) {
+    final $result = create();
+    if (chunk != null) {
+      $result.chunk = chunk;
+    }
+    return $result;
+  }
+  DownloadFileChatResponse._() : super();
+  factory DownloadFileChatResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadFileChatResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DownloadFileChatResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadFileChatResponse clone() => DownloadFileChatResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadFileChatResponse copyWith(void Function(DownloadFileChatResponse) updates) => super.copyWith((message) => updates(message as DownloadFileChatResponse)) as DownloadFileChatResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DownloadFileChatResponse create() => DownloadFileChatResponse._();
+  DownloadFileChatResponse createEmptyInstance() => create();
+  static $pb.PbList<DownloadFileChatResponse> createRepeated() => $pb.PbList<DownloadFileChatResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadFileChatResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadFileChatResponse>(create);
+  static DownloadFileChatResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get chunk => $_getN(0);
+  @$pb.TagNumber(1)
+  set chunk($core.List<$core.int> v) { $_setBytes(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChunk() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChunk() => clearField(1);
+}
+
+class DownloadFileChatRequest extends $pb.GeneratedMessage {
+  factory DownloadFileChatRequest({
+    $core.int? chatFileId,
+  }) {
+    final $result = create();
+    if (chatFileId != null) {
+      $result.chatFileId = chatFileId;
+    }
+    return $result;
+  }
+  DownloadFileChatRequest._() : super();
+  factory DownloadFileChatRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DownloadFileChatRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DownloadFileChatRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'chatFileId', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DownloadFileChatRequest clone() => DownloadFileChatRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DownloadFileChatRequest copyWith(void Function(DownloadFileChatRequest) updates) => super.copyWith((message) => updates(message as DownloadFileChatRequest)) as DownloadFileChatRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DownloadFileChatRequest create() => DownloadFileChatRequest._();
+  DownloadFileChatRequest createEmptyInstance() => create();
+  static $pb.PbList<DownloadFileChatRequest> createRepeated() => $pb.PbList<DownloadFileChatRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DownloadFileChatRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DownloadFileChatRequest>(create);
+  static DownloadFileChatRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get chatFileId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set chatFileId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasChatFileId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearChatFileId() => clearField(1);
 }
 
 

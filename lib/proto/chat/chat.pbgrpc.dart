@@ -69,6 +69,10 @@ class ChatGreeterClient extends $grpc.Client {
       '/chat.ChatGreeter/UploadChatFile',
       ($0.UploadFileChat value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$downloadChatFile = $grpc.ClientMethod<$0.DownloadFileChatRequest, $0.DownloadFileChatResponse>(
+      '/chat.ChatGreeter/DownloadChatFile',
+      ($0.DownloadFileChatRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.DownloadFileChatResponse.fromBuffer(value));
 
   ChatGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -122,6 +126,10 @@ class ChatGreeterClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.Empty> uploadChatFile($async.Stream<$0.UploadFileChat> request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$uploadChatFile, request, options: options).single;
+  }
+
+  $grpc.ResponseStream<$0.DownloadFileChatResponse> downloadChatFile($0.DownloadFileChatRequest request, {$grpc.CallOptions? options}) {
+    return $createStreamingCall(_$downloadChatFile, $async.Stream.fromIterable([request]), options: options);
   }
 }
 
@@ -214,6 +222,13 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UploadFileChat.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DownloadFileChatRequest, $0.DownloadFileChatResponse>(
+        'DownloadChatFile',
+        downloadChatFile_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $0.DownloadFileChatRequest.fromBuffer(value),
+        ($0.DownloadFileChatResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateResponseChat> createChat_Pre($grpc.ServiceCall call, $async.Future<$0.CreateRequestChat> request) async {
@@ -256,6 +271,10 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
     return getUnSuccessChats(call, await request);
   }
 
+  $async.Stream<$0.DownloadFileChatResponse> downloadChatFile_Pre($grpc.ServiceCall call, $async.Future<$0.DownloadFileChatRequest> request) async* {
+    yield* downloadChatFile(call, await request);
+  }
+
   $async.Future<$0.CreateResponseChat> createChat($grpc.ServiceCall call, $0.CreateRequestChat request);
   $async.Stream<$0.StreamGetResponseChat> streamGetChat($grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.CreateSecondaryKeyResponse> createSecondaryKey($grpc.ServiceCall call, $0.CreateSecondaryKeyRequest request);
@@ -268,4 +287,5 @@ abstract class ChatGreeterServiceBase extends $grpc.Service {
   $async.Stream<$0.StreamGetMessagesResponse> streamGetMessages($grpc.ServiceCall call, $async.Stream<$0.StreamGetMessagesRequest> request);
   $async.Future<$0.GetUnSuccessChatsResponse> getUnSuccessChats($grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Empty> uploadChatFile($grpc.ServiceCall call, $async.Stream<$0.UploadFileChat> request);
+  $async.Stream<$0.DownloadFileChatResponse> downloadChatFile($grpc.ServiceCall call, $0.DownloadFileChatRequest request);
 }

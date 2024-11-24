@@ -7,7 +7,15 @@ import 'package:keyboard_height_plugin/keyboard_height_plugin.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileGallery extends StatefulWidget {
-  const FileGallery({super.key});
+  final int chatId;
+  final String secretKey;
+  final dynamic Function(Map<String, bool> selectedFiles, String text)
+      functionCreate;
+  const FileGallery(
+      {super.key,
+      required this.secretKey,
+      required this.chatId,
+      required this.functionCreate});
 
   @override
   State<FileGallery> createState() => _FileGalleryState();
@@ -19,7 +27,7 @@ class _FileGalleryState extends State<FileGallery>
   Map<String, bool> selectedFiles = {};
   final ScrollController _scrollController = ScrollController();
   bool sizeModal = false;
-  final TextEditingController _messsageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   double _messageInputHeight = 0;
   bool _inputFocused = false;
   final KeyboardHeightPlugin _keyboardHeightPlugin = KeyboardHeightPlugin();
@@ -51,14 +59,12 @@ class _FileGalleryState extends State<FileGallery>
 
     WidgetsBinding.instance.addPostFrameCallback((e) async {
       String directory;
-      directory = (await getApplicationDocumentsDirectory()).path;
 
-      // TODO: Сделать путь до директории изображений
-      // if (io.Platform.isIOS) {
-      //   directory = (await getApplicationSupportDirectory()).path;
-      // } else {
-      // directory = '/storage/emulated/0/Android/data/';
-      // }
+      if (io.Platform.isIOS) {
+        directory = (await getApplicationSupportDirectory()).path;
+      } else {
+        directory = '/storage/emulated/0/DCIM/Camera/';
+      }
       files = io.Directory(directory).listSync();
       setState(() {});
     });
@@ -79,10 +85,6 @@ class _FileGalleryState extends State<FileGallery>
 
   _setMessageInputHeight() {
     setState(() {
-      // if (_count != 0 && _inputFocused) {
-      //   _messageInputHeight = _keyboardHeight;
-      //   return;
-      // }
       if (_count != 0 && !_inputFocused) {
         _messageInputHeight = 60;
         return;
@@ -134,19 +136,19 @@ class _FileGalleryState extends State<FileGallery>
                 controller: _scrollController,
                 primary: false,
                 padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
+                crossAxisSpacing: 3,
+                mainAxisSpacing: 3,
                 crossAxisCount: 3,
                 children: [
-                  for (var file in files)
+                  for (var file in files.reversed.toList().sublist(0, 20))
                     AnimatedScale(
                       duration: const Duration(milliseconds: 100),
                       scale: selectedFiles[file.path] != null ? .9 : 1,
                       child: GestureDetector(
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[100],
-                          child: Text(file.path),
+                        child: FittedBox(
+                          // color: Colors.teal[100],
+                          fit: BoxFit.fill,
+                          child: Image.file(io.File(file.path)),
                         ),
                         onTap: () {
                           _selectFile(file.path);
@@ -166,7 +168,7 @@ class _FileGalleryState extends State<FileGallery>
                       _setMessageInputHeight();
                     },
                     child: ChatInput(
-                        controller: _messsageController,
+                        controller: _messageController,
                         title: "Сообщение",
                         icon: Icons.mail,
                         suffixIcon: IconButton(
@@ -174,11 +176,14 @@ class _FileGalleryState extends State<FileGallery>
                           icon: IconButton(
                             icon: const Icon(Icons.send),
                             color: Colors.deepOrange.shade400,
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.functionCreate(
+                                  selectedFiles, _messageController.text);
+                            },
                             iconSize: 25,
                           ),
                         ),
-                        error: "error"),
+                        error: ""),
                   ),
                 ))
           ]),

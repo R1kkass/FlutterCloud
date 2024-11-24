@@ -19,7 +19,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:permission_handler/permission_handler.dart';
 ClientChannel channel = ClientChannel(
   ipServer,
   port: 50051,
@@ -43,6 +43,11 @@ void main() async {
   await Hive.openBox('list_token');
   await Hive.openBox('pubkey');
   await Hive.openBox('secretkey');
+
+var permissionStatus = await Permission.storage.status;
+if (!permissionStatus.isGranted) {
+  await Permission.storage.request();
+}
 
   Bloc.observer = const MyBlocObserver();
 

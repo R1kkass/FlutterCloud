@@ -1,10 +1,9 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/features/chat/file_galery.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'dart:isolate';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:flutter_application_2/services/encrypt_message.dart';
 
 class MessageUploadFile extends StatefulWidget {
   final int chatId;
@@ -17,19 +16,20 @@ class MessageUploadFile extends StatefulWidget {
 }
 
 class _MessageUploadFileState extends State<MessageUploadFile> {
-  _functionCreate(PlatformFile result, int id, BuildContext myContext) async {
+  _functionCreate(Map<String, bool> selectedFiles, String text) async {
     // var mainContext =
     //     NavigationService.navigatorKey.currentContext as BuildContext;
-
     var chatId = widget.chatId;
-    var fileName = result.path!.split("/").last;
+    var fileName = selectedFiles.keys.toList()[0].split("/").last;
     var key = widget.secretKey;
-    var filePath = result.path!;
+    var filePath = selectedFiles.keys.toList()[0];
+    var hashText = EncryptMessage().encrypt(text, key);
     var argsStream = await Isolate.run(() => ChatGrpc().createStreamArg(
         ArgsForStream(
             filePath: filePath,
             secretKey: key.substring(0, 32),
-            request: UploadFileChat(fileName: fileName, chatId: chatId))));
+            request: UploadFileChat(
+                fileName: fileName, chatId: chatId, text: hashText.base64))));
     // if (mainContext.read<ContentBloc>().state.uploadFile[folderId]?[id] !=
     //     null) {
     var callback = ChatGrpc().uploadFile(argsStream);
@@ -46,26 +46,6 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
 
   @override
   Widget build(BuildContext context) {
-    void selectFile() async {
-      try {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          allowMultiple: true,
-        );
-
-        if (result != null) {
-          for (var file in result.files) {
-            var idFileUpload = DateTime.now().microsecond;
-
-            _functionCreate(file, idFileUpload, context);
-          }
-        } else {
-          showToast(context, "Файл не выбран");
-        }
-      } catch (e) {
-        showToast(context, "Файл не выбран");
-      }
-    }
-
     return RotationTransition(
       turns: const AlwaysStoppedAnimation(0.07),
       child: IconButton(
@@ -77,7 +57,10 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
             context: context,
             isScrollControlled: true,
             builder: (BuildContext context) {
-              return const FileGallery();
+              return FileGallery(
+                  chatId: widget.chatId,
+                  secretKey: widget.secretKey,
+                  functionCreate: _functionCreate);
             },
           );
         },

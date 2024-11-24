@@ -14,9 +14,11 @@ class ArrayStream {
   final int chatId;
   final double size;
   final String fileName;
+  final String text;
 
   const ArrayStream(
       {required this.chunk,
+      required this.text,
       required this.chatId,
       required this.size,
       required this.fileName});
@@ -116,9 +118,10 @@ class ChatGrpc {
     Stream<UploadFileChat> generateRoute() async* {
       for (final item in arrFUR) {
         yield UploadFileChat(
-          chunk: item.chunk,
-          fileName: item.fileName,
-        );
+            chunk: item.chunk,
+            fileName: item.fileName,
+            chatId: item.chatId,
+            text: item.text);
       }
     }
 
@@ -144,6 +147,7 @@ class ChatGrpc {
           chunk: crypt(true, bytes, key),
           chatId: request.chatId,
           size: curItem / bytesLength * 100,
+          text: request.text,
           fileName: request.fileName));
     }
 
