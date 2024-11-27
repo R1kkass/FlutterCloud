@@ -72,8 +72,8 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
                     : const SizedBox(),
                 IconButton(
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
-                  iconSize: 35,
-                  icon: const Icon(Icons.dehaze),
+                  iconSize: 30,
+                  icon: const Icon(Icons.menu),
                 ),
               ],
             );

@@ -4,60 +4,93 @@ import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'dart:isolate';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 
 class MessageUploadFile extends StatefulWidget {
   final int chatId;
   final String secretKey;
+  final void Function(int) addUploadFile;
   const MessageUploadFile(
-      {super.key, required this.chatId, required this.secretKey});
+      {super.key,
+      required this.chatId,
+      required this.secretKey,
+      required this.addUploadFile});
 
   @override
   State<MessageUploadFile> createState() => _MessageUploadFileState();
 }
 
 class _MessageUploadFileState extends State<MessageUploadFile> {
-  _functionCreate(Map<String, bool> selectedFiles, String text) async {
-    // var mainContext =
-    //     NavigationService.navigatorKey.currentContext as BuildContext;
-    var chatId = widget.chatId;
-    var fileName = selectedFiles.keys.toList()[0].split("/").last;
-    var key = widget.secretKey;
-    var filePath = selectedFiles.keys.toList()[0];
-    var hashText = EncryptMessage().encrypt(text, key);
-    var argsStream = await Isolate.run(() => ChatGrpc().createStreamArg(
-        ArgsForStream(
-            filePath: filePath,
-            secretKey: key.substring(0, 32),
-            request: UploadFileChat(
-                fileName: fileName, chatId: chatId, text: hashText.base64))));
-    // if (mainContext.read<ContentBloc>().state.uploadFile[folderId]?[id] !=
-    //     null) {
-    var callback = ChatGrpc().uploadFile(argsStream);
+  final TextEditingController _messageController = TextEditingController();
+  List<Future<Empty>> filesNeedUploading = [];
+  int countFiles = 0;
+  _isolate(
+      {required selectFile,
+      required key,
+      required message,
+      required hashText,
+      required selectedFilesLength}) async {
+    try {
+      var fileName = selectFile.split("/").last;
+      var filePath = selectFile;
+      var hashFileName = EncryptMessage().encrypt(fileName, key);
+      var argsStream = await Isolate.run(() => ChatGrpc().createStreamArg(
+          ArgsForStream(
+              filePath: filePath,
+              secretKey: key.substring(0, 32),
+              request: UploadFileChatRequest(
+                  fileName: hashFileName.base64,
+                  messageId: message.messageId,
+                  text: hashText))));
 
-    // mainContext.read<ContentBloc>().add(
-    //     UploadSetCallback(id: id, folderId: folderId, callback: callback));
-    await callback;
-    // mainContext
-    //     .read<ContentBloc>()
-    //     .add(UploadFileRemove(folderId: folderId, id: id));
-    // ContentBloc.defaultRequestFile(folderId, mainContext);
-    // }
+      await ChatGrpc().uploadFile(argsStream);
+      countFiles++;
+      if (countFiles == selectedFilesLength) {
+        widget.addUploadFile(message.messageId);
+      }
+    } catch (e) {
+      showToast(context, "Не удалось загрузить файлы");
+    }
+  }
+
+  _functionCreate(Map<String, bool> selectedFiles, String text) async {
+    var chatId = widget.chatId;
+    var key = widget.secretKey;
+    var hashText = text != "" ? EncryptMessage().encrypt(text, key).base64 : "";
+    countFiles = 0;
+    Navigator.pop(context);
+    _messageController.text = "";
+
+    var message = await ChatGrpc().createFileMessage(
+        CreateFileMessageRequest(text: hashText, chatId: chatId));
+
+    for (var selectFile in selectedFiles.keys) {
+      _isolate(
+          selectedFilesLength: selectedFiles.keys.length,
+          key: key,
+          selectFile: selectFile,
+          hashText: hashText,
+          message: message);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: const AlwaysStoppedAnimation(0.07),
+      turns: const AlwaysStoppedAnimation(-0.15),
       child: IconButton(
-        icon: const Icon(Icons.attach_file),
+        icon: const Icon(
+          Icons.attachment,
+          size: 27,
+        ),
         color: Colors.deepOrange.shade400,
         onPressed: () {
-          // selectFile();
           showModalBottomSheet<void>(
             context: context,
             isScrollControlled: true,
             builder: (BuildContext context) {
               return FileGallery(
+                  textController: _messageController,
                   chatId: widget.chatId,
                   secretKey: widget.secretKey,
                   functionCreate: _functionCreate);

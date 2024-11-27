@@ -148,6 +148,11 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  _addUploadFile(int messageId) {
+    controller?.add(StreamGetMessagesRequest(
+        type: TypeMessage.UPLOAD_MESSAGE, messageId: messageId));
+  }
+
   var showFloatButton = false;
   double currPosition = 0;
 
@@ -238,7 +243,7 @@ class _ChatPageState extends State<ChatPage> {
                 width: 100,
                 child: Row(
                   children: [
-                    MessageUploadFile(chatId: widget.args.chatId, secretKey: key),
+                    MessageUploadFile(chatId: widget.args.chatId, secretKey: key, addUploadFile: _addUploadFile),
                     IconButton(
                       icon: const Icon(Icons.send),
                       color: Colors.deepOrange.shade400,

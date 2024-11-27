@@ -23,21 +23,25 @@ class EncodeFile {
     fileExist.writeAsBytesSync(crypt(false, file.readAsBytesSync(), key));
   }
 
-  static void decryptByte(Uint8List byte, String pathExist, String key) async {
-    var fileExist = File(pathExist);
-    var countFile = 1;
-    while (await fileExist.exists()) {
-      var nameFileArr = pathExist.split(".");
-      if (nameFileArr.length > 1) {
-        nameFileArr[nameFileArr.length - 2] =
-            "${nameFileArr[nameFileArr.length - 2]} ($countFile)";
-        fileExist = File(nameFileArr.join("."));
-      } else {
-        fileExist = File("$pathExist ($countFile)");
+  static void decryptByte(Uint8List byte, String pathExist, String key) {
+    try {
+      var fileExist = File(pathExist);
+      var countFile = 1;
+      while (fileExist.existsSync()) {
+        var nameFileArr = pathExist.split(".");
+        if (nameFileArr.length > 1) {
+          nameFileArr[nameFileArr.length - 2] =
+              "${nameFileArr[nameFileArr.length - 2]} ($countFile)";
+          fileExist = File(nameFileArr.join("."));
+        } else {
+          fileExist = File("$pathExist ($countFile)");
+        }
+        countFile++;
       }
-      countFile++;
-    }
 
-    fileExist.writeAsBytesSync(crypt(false, byte, key));
+      fileExist.writeAsBytesSync(crypt(false, byte, key));
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -16,10 +16,12 @@ import 'package:protobuf/protobuf.dart' as $pb;
 class TypeMessage extends $pb.ProtobufEnum {
   static const TypeMessage SEND_MESSAGE = TypeMessage._(0, _omitEnumNames ? '' : 'SEND_MESSAGE');
   static const TypeMessage READ_MESSAGE = TypeMessage._(1, _omitEnumNames ? '' : 'READ_MESSAGE');
+  static const TypeMessage UPLOAD_MESSAGE = TypeMessage._(2, _omitEnumNames ? '' : 'UPLOAD_MESSAGE');
 
   static const $core.List<TypeMessage> values = <TypeMessage> [
     SEND_MESSAGE,
     READ_MESSAGE,
+    UPLOAD_MESSAGE,
   ];
 
   static final $core.Map<$core.int, TypeMessage> _byValue = $pb.ProtobufEnum.initByValue(values);

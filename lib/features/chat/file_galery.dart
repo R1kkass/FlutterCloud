@@ -1,20 +1,21 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/entities/chat/chat_input.dart';
+import 'package:flutter_application_2/entities/chat/file_gallery_type.dart';
+import 'package:flutter_application_2/widget/chat/file_gallery_images.dart';
 import 'dart:io' as io;
 import 'package:keyboard_height_plugin/keyboard_height_plugin.dart';
-import 'package:path_provider/path_provider.dart';
 
 class FileGallery extends StatefulWidget {
   final int chatId;
   final String secretKey;
   final dynamic Function(Map<String, bool> selectedFiles, String text)
       functionCreate;
+  final TextEditingController textController;
   const FileGallery(
       {super.key,
       required this.secretKey,
       required this.chatId,
+      required this.textController,
       required this.functionCreate});
 
   @override
@@ -27,7 +28,6 @@ class _FileGalleryState extends State<FileGallery>
   Map<String, bool> selectedFiles = {};
   final ScrollController _scrollController = ScrollController();
   bool sizeModal = false;
-  final TextEditingController _messageController = TextEditingController();
   double _messageInputHeight = 0;
   bool _inputFocused = false;
   final KeyboardHeightPlugin _keyboardHeightPlugin = KeyboardHeightPlugin();
@@ -40,12 +40,7 @@ class _FileGalleryState extends State<FileGallery>
         _messageInputHeight = height + _messageInputHeight;
       });
     });
-    // _prevOffset = _scrollController.offset;
     _scrollController.addListener(() {
-      log((!_scrollController.keepScrollOffset &&
-              !sizeModal &&
-              _scrollController.offset == 0)
-          .toString());
       if (!_scrollController.keepScrollOffset &&
           !sizeModal &&
           _scrollController.offset == 0) {
@@ -55,18 +50,6 @@ class _FileGalleryState extends State<FileGallery>
         sizeModal = true;
         setState(() {});
       }
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((e) async {
-      String directory;
-
-      if (io.Platform.isIOS) {
-        directory = (await getApplicationSupportDirectory()).path;
-      } else {
-        directory = '/storage/emulated/0/DCIM/Camera/';
-      }
-      files = io.Directory(directory).listSync();
-      setState(() {});
     });
   }
 
@@ -131,32 +114,12 @@ class _FileGalleryState extends State<FileGallery>
                 ),
               ],
             ),
+            const FileGalleryType(),
             Expanded(
-              child: GridView.count(
-                controller: _scrollController,
-                primary: false,
-                padding: const EdgeInsets.all(20),
-                crossAxisSpacing: 3,
-                mainAxisSpacing: 3,
-                crossAxisCount: 3,
-                children: [
-                  for (var file in files.reversed.toList().sublist(0, 20))
-                    AnimatedScale(
-                      duration: const Duration(milliseconds: 100),
-                      scale: selectedFiles[file.path] != null ? .9 : 1,
-                      child: GestureDetector(
-                        child: FittedBox(
-                          // color: Colors.teal[100],
-                          fit: BoxFit.fill,
-                          child: Image.file(io.File(file.path)),
-                        ),
-                        onTap: () {
-                          _selectFile(file.path);
-                        },
-                      ),
-                    ),
-                ],
-              ),
+              child: FileGalleryImages(
+                  scrollController: _scrollController,
+                  selectedFiles: selectedFiles,
+                  selectFile: _selectFile),
             ),
             AnimatedSize(
                 duration: const Duration(milliseconds: 200),
@@ -168,17 +131,20 @@ class _FileGalleryState extends State<FileGallery>
                       _setMessageInputHeight();
                     },
                     child: ChatInput(
-                        controller: _messageController,
+                        controller: widget.textController,
+                        fieldSubmit: (text) {
+                          widget.functionCreate(selectedFiles, text);
+                        },
                         title: "Сообщение",
                         icon: Icons.mail,
                         suffixIcon: IconButton(
                           onPressed: () {},
                           icon: IconButton(
                             icon: const Icon(Icons.send),
-                            color: Colors.deepOrange.shade400,
+                            color: Colors.deepOrange.shade500,
                             onPressed: () {
                               widget.functionCreate(
-                                  selectedFiles, _messageController.text);
+                                  selectedFiles, widget.textController.text);
                             },
                             iconSize: 25,
                           ),

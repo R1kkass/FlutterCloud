@@ -41,13 +41,9 @@ dependencies:
   flutter_bcrypt: ^1.0.8
   crypto: ^3.0.3
   file_picker: ^8.0.3
-  http_parser: ^4.0.2
-  flutter_downloader: ^1.11.7
   protobuf: ^3.1.0
   grpc: ^4.0.0
-  flutter_chat_ui: ^1.6.15
   jwt_decode: ^0.3.1
-  ninja_prime: ^2.0.0
   pointycastle: ^3.9.1
   encrypt: ^5.0.3
   path_provider: ^2.1.4
@@ -59,6 +55,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   keyboard_height_plugin: ^0.1.5
   permission_handler: ^11.3.1
+  video_player: ^2.9.2
 
 dev_dependencies:
   flutter_test:

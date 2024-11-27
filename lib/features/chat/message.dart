@@ -3,25 +3,31 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/month.dart';
 import 'package:flutter_application_2/entities/chat/message_badge.dart';
+import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:flutter_application_2/widget/chat/chat_files_column.dart';
 
 class MessageComponent extends StatefulWidget {
   const MessageComponent(
       {super.key,
       required this.status,
       required this.newMessage,
+      required this.secretKey,
       required this.text,
       required this.createdAt,
       required this.name,
       required this.controller,
       required this.statusRead,
+      required this.chatFiles,
       required this.dateChange});
 
   final bool status;
   final bool newMessage;
   final DateTime? dateChange;
+  final List<ChatFile> chatFiles;
   final String text;
   final ScrollController controller;
   final String createdAt;
+  final String secretKey;
   final String name;
   final bool statusRead;
 
@@ -49,39 +55,56 @@ class _MessageComponentState extends State<MessageComponent> {
               child: IntrinsicWidth(
                 child: Container(
                   constraints: BoxConstraints(
-                      maxWidth: MediaQuery.sizeOf(context).width / 1.5,
+                      maxWidth: MediaQuery.sizeOf(context).width - 70,
                       minWidth: 170),
-                  padding: const EdgeInsets.only(
-                      left: 15, right: 15, top: 15, bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 5),
                   color: widget.status
                       ? Colors.blueAccent
                       : Colors.deepOrange.shade400,
                   child: Column(
                     children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              widget.name,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ]),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          widget.text,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
+                      if (!widget.status)
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 10, left: 15, right: 15),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    widget.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ]),
                         ),
+                      const SizedBox(
+                        height: 5,
                       ),
+                      ChatFilesColumn(
+                          chatFiles: widget.chatFiles,
+                          secretKey: widget.secretKey,
+                          status: widget.status),
+                      if (widget.text != "")
+                        Container(
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            widget.text,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
                       Container(
                         alignment: Alignment.topRight,
+                        padding: const EdgeInsets.only(right: 10, top: 3),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -96,7 +119,6 @@ class _MessageComponentState extends State<MessageComponent> {
                             const SizedBox(
                               width: 5,
                             ),
-                            // widget.status
                             widget.status
                                 ? widget.statusRead
                                     ? const Icon(
@@ -148,7 +170,7 @@ class MyCustomClipper extends CustomClipper<Path> {
       ..addPolygon([
         Offset(size.width, size.height),
         Offset(size.width - 80, size.height - 20),
-        Offset(size.width - 20, size.height - 80),
+        Offset(size.width - 20, size.height - 40),
       ], true)
       ..close();
 
@@ -168,7 +190,7 @@ class OtherCustomClipper extends CustomClipper<Path> {
       ..moveTo(0, 0)
       ..addPolygon([
         Offset(4, size.height),
-        Offset(30, size.height - 80),
+        Offset(30, size.height - 70),
         Offset(70, size.height - 20),
       ], true)
       ..arcTo(

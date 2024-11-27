@@ -2,16 +2,21 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_application_2/main.dart';
 import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
+import 'package:flutter_application_2/services/encode_file.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:flutter_application_2/services/get_download_path.dart';
+import 'package:flutter_application_2/services/hive_boxes.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 
 class ArrayStream {
   final List<int> chunk;
-  final int chatId;
+  final int messageId;
   final double size;
   final String fileName;
   final String text;
@@ -19,7 +24,7 @@ class ArrayStream {
   const ArrayStream(
       {required this.chunk,
       required this.text,
-      required this.chatId,
+      required this.messageId,
       required this.size,
       required this.fileName});
 }
@@ -27,7 +32,7 @@ class ArrayStream {
 class ArgsForStream {
   final String secretKey;
   final String filePath;
-  final UploadFileChat request;
+  final UploadFileChatRequest request;
 
   const ArgsForStream(
       {required this.filePath, required this.secretKey, required this.request});
@@ -114,13 +119,13 @@ class ChatGrpc {
         }));
   }
 
-  ResponseFuture<Empty> uploadFile(List<ArrayStream> arrFUR) {
-    Stream<UploadFileChat> generateRoute() async* {
+  ResponseFuture<UploadFileChatResponse> uploadFile(List<ArrayStream> arrFUR) {
+    Stream<UploadFileChatRequest> generateRoute() async* {
       for (final item in arrFUR) {
-        yield UploadFileChat(
+        yield UploadFileChatRequest(
             chunk: item.chunk,
             fileName: item.fileName,
-            chatId: item.chatId,
+            messageId: item.messageId,
             text: item.text);
       }
     }
@@ -145,12 +150,54 @@ class ChatGrpc {
       curItem += bufferSize;
       arrFUR.add(ArrayStream(
           chunk: crypt(true, bytes, key),
-          chatId: request.chatId,
+          messageId: request.messageId,
           size: curItem / bytesLength * 100,
           text: request.text,
           fileName: request.fileName));
     }
 
     return arrFUR;
+  }
+
+  ResponseStream<DownloadFileChatResponse> downloadChatFile(
+      DownloadFileChatRequest request) {
+    return _stub.downloadChatFile(request, options: _options);
+  }
+
+  Future<CreateFileMessageResponse> createFileMessage(
+      CreateFileMessageRequest request) {
+    return _stub.createFileMessage(request, options: _options);
+  }
+
+  downloadChatFileFn(BuildContext context, int chatFileId, String fileName,
+      String secretKey, Function fn) {
+    List<int> chunks = [];
+
+    try {
+      var downloadFile = downloadChatFile(
+        DownloadFileChatRequest(
+          chatFileId: chatFileId,
+        ),
+      );
+      downloadFile.listen((e) async {
+        try {
+          chunks = [...chunks, ...e.chunk];
+
+          if (e.progress >= 100) {
+            var downloadPath = await getDownloadPath() ?? "";
+            EncodeFile.decryptByte(Uint8List.fromList(chunks),
+                "$downloadPath/$fileName", secretKey.substring(0, 32));
+            HiveBoxes()
+                .chatFileUploaded
+                .put(chatFileId, "$downloadPath/$fileName");
+            fn("$downloadPath/$fileName");
+          }
+        } catch (_) {
+          showToast(context, 'Не удалось скачать файл: $fileName');
+        }
+      });
+    } catch (e) {
+      showToast(context, 'Не удалось скачать файл: $fileName');
+    }
   }
 }

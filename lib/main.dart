@@ -15,11 +15,10 @@ import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/observers/observer.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:permission_handler/permission_handler.dart';
+
 ClientChannel channel = ClientChannel(
   ipServer,
   port: 50051,
@@ -32,22 +31,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // channel = await chan();
 
-  await FlutterDownloader.initialize(
-      debug:
-          true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-          true // option: set to false to disable working with http links (default: false)
-      );
   await Hive.initFlutter();
   await Hive.openBox('token');
   await Hive.openBox('list_token');
   await Hive.openBox('pubkey');
   await Hive.openBox('secretkey');
-
-var permissionStatus = await Permission.storage.status;
-if (!permissionStatus.isGranted) {
-  await Permission.storage.request();
-}
+  await Hive.openBox<String>('chatFileUploaded');
 
   Bloc.observer = const MyBlocObserver();
 

@@ -69,6 +69,8 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                 key: UniqueKey(),
                 sizeFactor: animation,
                 child: MessageComponent(
+                  secretKey: widget.keyChat,
+                  chatFiles: data[index].chatFiles,
                   newMessage: newMessage == id,
                   controller: widget.controller,
                   statusRead: data[index].statusRead,
@@ -76,8 +78,10 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                   createdAt: data[index].createdAt,
                   name: data[index].user.name,
                   status: jwtDecode().email == data[index].user.email,
-                  text: EncryptMessage()
-                      .decrypt(data[index].text, widget.keyChat),
+                  text: data[index].text != ""
+                      ? EncryptMessage()
+                          .decrypt(data[index].text, widget.keyChat)
+                      : "",
                 ),
               ),
             ),

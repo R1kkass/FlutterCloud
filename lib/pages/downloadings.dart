@@ -35,12 +35,6 @@ class _DownloadingsState extends State<Downloadings> {
             ));
       }
 
-      List<Widget> children = [];
-
-      for (var key in downloadFile.keys) {
-        children.add(
-            DownloadingFile(file: downloadFile[key] as FileDownload, id: key));
-      }
       return DefaultScaffold(
           floatButton: FloatingActionButton.extended(
               label: const Text('Очистить'),
@@ -52,7 +46,11 @@ class _DownloadingsState extends State<Downloadings> {
               }),
           title: widget.title,
           body: ListView(
-            children: children,
+            children: [
+              for (var key in downloadFile.keys)
+                DownloadingFile(
+                    file: downloadFile[key] as FileDownload, id: key),
+            ],
           ));
     });
   }

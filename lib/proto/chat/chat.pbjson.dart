@@ -19,12 +19,14 @@ const TypeMessage$json = {
   '2': [
     {'1': 'SEND_MESSAGE', '2': 0},
     {'1': 'READ_MESSAGE', '2': 1},
+    {'1': 'UPLOAD_MESSAGE', '2': 2},
   ],
 };
 
 /// Descriptor for `TypeMessage`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List typeMessageDescriptor = $convert.base64Decode(
-    'CgtUeXBlTWVzc2FnZRIQCgxTRU5EX01FU1NBR0UQABIQCgxSRUFEX01FU1NBR0UQAQ==');
+    'CgtUeXBlTWVzc2FnZRIQCgxTRU5EX01FU1NBR0UQABIQCgxSRUFEX01FU1NBR0UQARISCg5VUE'
+    'xPQURfTUVTU0FHRRAC');
 
 @$core.Deprecated('Use streamGetMessagesRequestDescriptor instead')
 const StreamGetMessagesRequest$json = {
@@ -269,6 +271,7 @@ const Message$json = {
     {'1': 'user', '3': 7, '4': 1, '5': 11, '6': '.chat.User', '10': 'user'},
     {'1': 'status_read', '3': 8, '4': 1, '5': 8, '10': 'statusRead'},
     {'1': 'un_readed_message', '3': 9, '4': 1, '5': 8, '10': 'unReadedMessage'},
+    {'1': 'chat_files', '3': 10, '4': 3, '5': 11, '6': '.chat.ChatFile', '10': 'chatFiles'},
   ],
 };
 
@@ -278,7 +281,27 @@ final $typed_data.Uint8List messageDescriptor = $convert.base64Decode(
     'QSHQoKdXBkYXRlZF9hdBgDIAEoCVIJdXBkYXRlZEF0EhcKB3VzZXJfaWQYBCABKA1SBnVzZXJJ'
     'ZBIXCgdjaGF0X2lkGAUgASgNUgZjaGF0SWQSEgoEdGV4dBgGIAEoCVIEdGV4dBIeCgR1c2VyGA'
     'cgASgLMgouY2hhdC5Vc2VyUgR1c2VyEh8KC3N0YXR1c19yZWFkGAggASgIUgpzdGF0dXNSZWFk'
-    'EioKEXVuX3JlYWRlZF9tZXNzYWdlGAkgASgIUg91blJlYWRlZE1lc3NhZ2U=');
+    'EioKEXVuX3JlYWRlZF9tZXNzYWdlGAkgASgIUg91blJlYWRlZE1lc3NhZ2USLQoKY2hhdF9maW'
+    'xlcxgKIAMoCzIOLmNoYXQuQ2hhdEZpbGVSCWNoYXRGaWxlcw==');
+
+@$core.Deprecated('Use chatFileDescriptor instead')
+const ChatFile$json = {
+  '1': 'ChatFile',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 13, '10': 'id'},
+    {'1': 'chat_id', '3': 2, '4': 1, '5': 13, '10': 'chatId'},
+    {'1': 'user_id', '3': 3, '4': 1, '5': 13, '10': 'userId'},
+    {'1': 'message_id', '3': 4, '4': 1, '5': 13, '10': 'messageId'},
+    {'1': 'size', '3': 5, '4': 1, '5': 3, '10': 'size'},
+    {'1': 'file_name', '3': 6, '4': 1, '5': 9, '10': 'fileName'},
+  ],
+};
+
+/// Descriptor for `ChatFile`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List chatFileDescriptor = $convert.base64Decode(
+    'CghDaGF0RmlsZRIOCgJpZBgBIAEoDVICaWQSFwoHY2hhdF9pZBgCIAEoDVIGY2hhdElkEhcKB3'
+    'VzZXJfaWQYAyABKA1SBnVzZXJJZBIdCgptZXNzYWdlX2lkGAQgASgNUgltZXNzYWdlSWQSEgoE'
+    'c2l6ZRgFIAEoA1IEc2l6ZRIbCglmaWxlX25hbWUYBiABKAlSCGZpbGVOYW1l');
 
 @$core.Deprecated('Use userDescriptor instead')
 const User$json = {
@@ -403,33 +426,48 @@ final $typed_data.Uint8List getMessagesResponseDescriptor = $convert.base64Decod
     'htZXNzYWdlcxISCgRwYWdlGAIgASgFUgRwYWdlEiQKDmNvdW50X25vdF9yZWFkGAMgASgFUgxj'
     'b3VudE5vdFJlYWQ=');
 
-@$core.Deprecated('Use uploadFileChatDescriptor instead')
-const UploadFileChat$json = {
-  '1': 'UploadFileChat',
+@$core.Deprecated('Use uploadFileChatRequestDescriptor instead')
+const UploadFileChatRequest$json = {
+  '1': 'UploadFileChatRequest',
   '2': [
     {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
     {'1': 'fileName', '3': 2, '4': 1, '5': 9, '10': 'fileName'},
-    {'1': 'chatId', '3': 3, '4': 1, '5': 13, '10': 'chatId'},
+    {'1': 'messageId', '3': 3, '4': 1, '5': 13, '10': 'messageId'},
     {'1': 'text', '3': 4, '4': 1, '5': 9, '10': 'text'},
   ],
 };
 
-/// Descriptor for `UploadFileChat`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List uploadFileChatDescriptor = $convert.base64Decode(
-    'Cg5VcGxvYWRGaWxlQ2hhdBIUCgVjaHVuaxgBIAEoDFIFY2h1bmsSGgoIZmlsZU5hbWUYAiABKA'
-    'lSCGZpbGVOYW1lEhYKBmNoYXRJZBgDIAEoDVIGY2hhdElkEhIKBHRleHQYBCABKAlSBHRleHQ=');
+/// Descriptor for `UploadFileChatRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uploadFileChatRequestDescriptor = $convert.base64Decode(
+    'ChVVcGxvYWRGaWxlQ2hhdFJlcXVlc3QSFAoFY2h1bmsYASABKAxSBWNodW5rEhoKCGZpbGVOYW'
+    '1lGAIgASgJUghmaWxlTmFtZRIcCgltZXNzYWdlSWQYAyABKA1SCW1lc3NhZ2VJZBISCgR0ZXh0'
+    'GAQgASgJUgR0ZXh0');
+
+@$core.Deprecated('Use uploadFileChatResponseDescriptor instead')
+const UploadFileChatResponse$json = {
+  '1': 'UploadFileChatResponse',
+  '2': [
+    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+  ],
+};
+
+/// Descriptor for `UploadFileChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List uploadFileChatResponseDescriptor = $convert.base64Decode(
+    'ChZVcGxvYWRGaWxlQ2hhdFJlc3BvbnNlEhgKB21lc3NhZ2UYASABKAlSB21lc3NhZ2U=');
 
 @$core.Deprecated('Use downloadFileChatResponseDescriptor instead')
 const DownloadFileChatResponse$json = {
   '1': 'DownloadFileChatResponse',
   '2': [
     {'1': 'chunk', '3': 1, '4': 1, '5': 12, '10': 'chunk'},
+    {'1': 'progress', '3': 2, '4': 1, '5': 2, '10': 'progress'},
   ],
 };
 
 /// Descriptor for `DownloadFileChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List downloadFileChatResponseDescriptor = $convert.base64Decode(
-    'ChhEb3dubG9hZEZpbGVDaGF0UmVzcG9uc2USFAoFY2h1bmsYASABKAxSBWNodW5r');
+    'ChhEb3dubG9hZEZpbGVDaGF0UmVzcG9uc2USFAoFY2h1bmsYASABKAxSBWNodW5rEhoKCHByb2'
+    'dyZXNzGAIgASgCUghwcm9ncmVzcw==');
 
 @$core.Deprecated('Use downloadFileChatRequestDescriptor instead')
 const DownloadFileChatRequest$json = {
@@ -443,4 +481,31 @@ const DownloadFileChatRequest$json = {
 final $typed_data.Uint8List downloadFileChatRequestDescriptor = $convert.base64Decode(
     'ChdEb3dubG9hZEZpbGVDaGF0UmVxdWVzdBIgCgxjaGF0X2ZpbGVfaWQYASABKA1SCmNoYXRGaW'
     'xlSWQ=');
+
+@$core.Deprecated('Use createFileMessageRequestDescriptor instead')
+const CreateFileMessageRequest$json = {
+  '1': 'CreateFileMessageRequest',
+  '2': [
+    {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
+    {'1': 'chat_id', '3': 2, '4': 1, '5': 13, '10': 'chatId'},
+  ],
+};
+
+/// Descriptor for `CreateFileMessageRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createFileMessageRequestDescriptor = $convert.base64Decode(
+    'ChhDcmVhdGVGaWxlTWVzc2FnZVJlcXVlc3QSEgoEdGV4dBgBIAEoCVIEdGV4dBIXCgdjaGF0X2'
+    'lkGAIgASgNUgZjaGF0SWQ=');
+
+@$core.Deprecated('Use createFileMessageResponseDescriptor instead')
+const CreateFileMessageResponse$json = {
+  '1': 'CreateFileMessageResponse',
+  '2': [
+    {'1': 'message_id', '3': 1, '4': 1, '5': 13, '10': 'messageId'},
+  ],
+};
+
+/// Descriptor for `CreateFileMessageResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List createFileMessageResponseDescriptor = $convert.base64Decode(
+    'ChlDcmVhdGVGaWxlTWVzc2FnZVJlc3BvbnNlEh0KCm1lc3NhZ2VfaWQYASABKA1SCW1lc3NhZ2'
+    'VJZA==');
 
