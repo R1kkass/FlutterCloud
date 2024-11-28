@@ -45,7 +45,6 @@ class _FilegalleryVideoUnitState extends State<FilegalleryVideoUnit> {
                         scale:
                             widget.selectedFiles[widget.path] != null ? .9 : 1,
                         child: FittedBox(
-                          // color: Colors.teal[100],
                           fit: BoxFit.fill,
                           child: Image.file(File(widget.path)),
                         ),

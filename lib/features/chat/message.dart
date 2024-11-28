@@ -58,9 +58,11 @@ class _MessageComponentState extends State<MessageComponent> {
                       maxWidth: MediaQuery.sizeOf(context).width - 70,
                       minWidth: 170),
                   padding: const EdgeInsets.only(bottom: 5),
-                  color: widget.status
-                      ? Colors.blueAccent
-                      : Colors.deepOrange.shade400,
+                  decoration: BoxDecoration(
+                    color: widget.status
+                        ? Colors.blueAccent
+                        : Colors.deepOrange.shade400,
+                  ),
                   child: Column(
                     children: [
                       if (!widget.status)

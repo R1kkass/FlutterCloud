@@ -3,8 +3,8 @@ import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/pages/chat.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
-import 'package:hive/hive.dart';
 
 class ChatUnitList extends StatefulWidget {
   final ChatUsersCount chat;
@@ -21,7 +21,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
 
   void decryptMessageFn(ChatUsersCount chat) async {
     jwt = jwtDecode();
-    var box = Hive.box('secretkey');
+    var box = HiveBoxes().secretKey;
     var hash = box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
     decryptMessage = chat.chat.message.text != ""
         ? EncryptMessage().decrypt(chat.chat.message.text, hash)

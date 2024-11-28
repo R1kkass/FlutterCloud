@@ -10,6 +10,7 @@ import 'package:flutter_application_2/services/encode_file.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
 import 'package:flutter_application_2/services/get_download_path.dart';
 import 'package:flutter_application_2/services/hive_boxes.dart';
+import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:flutter_application_2/shared/toast.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
@@ -187,9 +188,8 @@ class ChatGrpc {
             var downloadPath = await getDownloadPath() ?? "";
             EncodeFile.decryptByte(Uint8List.fromList(chunks),
                 "$downloadPath/$fileName", secretKey.substring(0, 32));
-            HiveBoxes()
-                .chatFileUploaded
-                .put(chatFileId, "$downloadPath/$fileName");
+            HiveBoxes().chatFileUploaded.get("$chatFileId${jwtDecode().email}");
+
             fn("$downloadPath/$fileName");
           }
         } catch (_) {

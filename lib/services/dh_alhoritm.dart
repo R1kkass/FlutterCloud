@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:hive/hive.dart';
 import 'package:crypto/crypto.dart';
@@ -30,7 +31,7 @@ Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   BigInt secretKey = BigInt.parse(B);
   secretKey = secretKey.pow(a) % BigInt.parse(p);
 
-  box = await Hive.openBox('secretkey');
+  box = HiveBoxes().secretKey;
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
 

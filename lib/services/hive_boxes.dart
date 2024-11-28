@@ -8,4 +8,8 @@ class HiveBoxes {
   Box<String> get token {
     return Hive.box<String>("token");
   }
+
+  Box<String> get secretKey {
+    return Hive.box<String>("secretkey");
+  }
 }

@@ -9,6 +9,7 @@ import 'package:flutter_application_2/features/chat/upload_files.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
@@ -135,8 +136,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _getBox() async {
-    var box = await Hive.openBox('secretkey');
-    key = box.get(widget.args.chatId.toString() + jwtDecode().email);
+    var box = HiveBoxes().secretKey;
+    key = box.get(widget.args.chatId.toString() + jwtDecode().email)!;
     setState(() {});
   }
 
@@ -243,7 +244,10 @@ class _ChatPageState extends State<ChatPage> {
                 width: 100,
                 child: Row(
                   children: [
-                    MessageUploadFile(chatId: widget.args.chatId, secretKey: key, addUploadFile: _addUploadFile),
+                    MessageUploadFile(
+                        chatId: widget.args.chatId,
+                        secretKey: key,
+                        addUploadFile: _addUploadFile),
                     IconButton(
                       icon: const Icon(Icons.send),
                       color: Colors.deepOrange.shade400,

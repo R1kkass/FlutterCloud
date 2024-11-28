@@ -6,6 +6,7 @@ import 'package:flutter_application_2/pages/chats_list.dart';
 import 'package:flutter_application_2/pages/downloadings.dart';
 import 'package:flutter_application_2/pages/files_users.dart';
 import 'package:flutter_application_2/pages/home.dart';
+import 'package:flutter_application_2/pages/image_viewer.dart';
 import 'package:flutter_application_2/pages/open_file.dart';
 import 'package:flutter_application_2/pages/registration.dart';
 import 'package:flutter_application_2/pages/search_users.dart';
@@ -22,6 +23,7 @@ class AppRouter {
   static const CHAT_LIST = "/chatlist";
   static const CHANGE_ACCOUNT = "/changeaccount";
   static const DOWNLOAD = "/download";
+  static const IMAGE_VIEWER = "/imageviewer";
 
   static var routes = {
     "/": (context) => const Splash(title: "Загрузка"),
@@ -40,6 +42,7 @@ class AppRouter {
     CHAT_LIST: (context) => const ChatLists(title: "Чаты"),
     CHANGE_ACCOUNT: (context) =>
         const ChangeUser(title: "Сменить пользователя"),
-    DOWNLOAD: (context) => const Downloadings(title: "Загрузки")
+    DOWNLOAD: (context) => const Downloadings(title: "Загрузки"),
+    IMAGE_VIEWER: (context) => const ImageViewer(title: "Фото"),
   };
 }

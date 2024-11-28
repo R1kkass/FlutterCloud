@@ -8,6 +8,7 @@ import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/proto/keys/keys.pb.dart';
 import 'package:flutter_application_2/services/dh_alhoritm.dart';
 import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:flutter_application_2/shared/toast.dart';
 import 'package:grpc/grpc.dart';
@@ -42,19 +43,16 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
 
   @override
   Widget build(BuildContext context) {
-    List<ChatUnitList> widg = [];
-
-    for (var item in chats) {
-      widg.add(ChatUnitList(
-        chat: item,
-      ));
-    }
-    return ListView(
-        physics: const AlwaysScrollableScrollPhysics(), children: widg);
+    return ListView(physics: const AlwaysScrollableScrollPhysics(), children: [
+      for (var item in chats)
+        ChatUnitList(
+          chat: item,
+        )
+    ]);
   }
 
   Future _checkPubKey(List<ChatUsersCount>? chats) async {
-    var secretBox = await Hive.openBox("secretkey");
+    var secretBox = HiveBoxes().secretKey;
     var box = await Hive.openBox("pubkey");
     var token = await Hive.openBox("token");
     var email = jwtDecode().email;
@@ -64,7 +62,6 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
     try {
       for (var chat in chats as List<ChatUsersCount>) {
         var key = chat.chatId.toString() + email;
-
         if (secretBox.get(key) == null && !keyGeted) {
           try {
             var y = await KeysGrpc().downloadKeys;

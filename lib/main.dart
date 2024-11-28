@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:permission_handler/permission_handler.dart';
 
 ClientChannel channel = ClientChannel(
   ipServer,
@@ -35,7 +36,7 @@ void main() async {
   await Hive.openBox('token');
   await Hive.openBox('list_token');
   await Hive.openBox('pubkey');
-  await Hive.openBox('secretkey');
+  await Hive.openBox<String>('secretkey');
   await Hive.openBox<String>('chatFileUploaded');
 
   Bloc.observer = const MyBlocObserver();
@@ -102,6 +103,16 @@ class _MyAppState extends State<MyApp> {
     stream?.listen((e) {
       context.read<CountBloc>().add(SetCount(e.count));
     });
+    WidgetsBinding.instance.addPostFrameCallback((e) async {
+      var permissionStatus = await Permission.storage.status;
+      if (!permissionStatus.isGranted) {
+        await Permission.storage.request();
+      }
+
+      if (!await Permission.photos.status.isGranted) {
+        await Permission.photos.request();
+      }
+    });
   }
 
   @override
@@ -149,7 +160,10 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         title: "MyCloud",
-        navigatorObservers: [routeObserver],
+        navigatorObservers: [
+          routeObserver,
+          HeroController(),
+        ],
         routes: AppRouter.routes);
   }
 }

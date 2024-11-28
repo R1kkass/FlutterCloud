@@ -56,7 +56,7 @@ class _FileGalleryState extends State<FileGallery>
   int _count = 0;
 
   _selectFile(path) {
-    if (selectedFiles[path] == null) {
+    if (selectedFiles[path] == null && selectedFiles.keys.length < 10) {
       selectedFiles[path] = true;
     } else {
       selectedFiles.remove(path);
