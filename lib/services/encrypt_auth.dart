@@ -60,7 +60,8 @@ Uint8List crypt(bool isEncrypt, Uint8List data, String secretKey) {
   return paddingCipher.process(data);
 }
 
-Future<Uint8List> cryptFuture(bool isEncrypt, Uint8List data, String secretKey) async{
+Future<Uint8List> cryptFuture(
+    bool isEncrypt, Uint8List data, String secretKey) async {
   var iv = generateIV(secretKey);
   final ivbytes = base64Decode(iv);
   final key = utf8.encode(secretKey);
@@ -75,7 +76,6 @@ Future<Uint8List> cryptFuture(bool isEncrypt, Uint8List data, String secretKey) 
     ..init(isEncrypt, paddingParams);
   return paddingCipher.process(data);
 }
-
 
 String encrypt(String data, String secretKey) {
   final plaintext = utf8.encode(data);

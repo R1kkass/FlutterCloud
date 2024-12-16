@@ -98,15 +98,19 @@ class StreamGetMessagesRequest extends $pb.GeneratedMessage {
 
 class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   factory StreamGetMessagesResponse({
-    TypeMessage? type,
     Message? message,
+    $core.Iterable<Message>? messages,
+    TypeMessage? type,
   }) {
     final $result = create();
-    if (type != null) {
-      $result.type = type;
-    }
     if (message != null) {
       $result.message = message;
+    }
+    if (messages != null) {
+      $result.messages.addAll(messages);
+    }
+    if (type != null) {
+      $result.type = type;
     }
     return $result;
   }
@@ -115,8 +119,9 @@ class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   factory StreamGetMessagesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'StreamGetMessagesResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
-    ..e<TypeMessage>(1, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: TypeMessage.SEND_MESSAGE, valueOf: TypeMessage.valueOf, enumValues: TypeMessage.values)
-    ..aOM<Message>(2, _omitFieldNames ? '' : 'message', subBuilder: Message.create)
+    ..aOM<Message>(1, _omitFieldNames ? '' : 'message', subBuilder: Message.create)
+    ..pc<Message>(2, _omitFieldNames ? '' : 'messages', $pb.PbFieldType.PM, subBuilder: Message.create)
+    ..e<TypeMessage>(3, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: TypeMessage.SEND_MESSAGE, valueOf: TypeMessage.valueOf, enumValues: TypeMessage.values)
     ..hasRequiredFields = false
   ;
 
@@ -142,24 +147,27 @@ class StreamGetMessagesResponse extends $pb.GeneratedMessage {
   static StreamGetMessagesResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  TypeMessage get type => $_getN(0);
+  Message get message => $_getN(0);
   @$pb.TagNumber(1)
-  set type(TypeMessage v) { setField(1, v); }
+  set message(Message v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasType() => $_has(0);
+  $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(1)
-  void clearType() => clearField(1);
+  void clearMessage() => clearField(1);
+  @$pb.TagNumber(1)
+  Message ensureMessage() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  Message get message => $_getN(1);
-  @$pb.TagNumber(2)
-  set message(Message v) { setField(2, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasMessage() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearMessage() => clearField(2);
-  @$pb.TagNumber(2)
-  Message ensureMessage() => $_ensure(1);
+  $core.List<Message> get messages => $_getList(1);
+
+  @$pb.TagNumber(3)
+  TypeMessage get type => $_getN(2);
+  @$pb.TagNumber(3)
+  set type(TypeMessage v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasType() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearType() => clearField(3);
 }
 
 class Empty extends $pb.GeneratedMessage {
@@ -2317,10 +2325,18 @@ class CreateFileMessageRequest extends $pb.GeneratedMessage {
 class CreateFileMessageResponse extends $pb.GeneratedMessage {
   factory CreateFileMessageResponse({
     $core.int? messageId,
+    $core.String? createdAt,
+    $core.String? updatedAt,
   }) {
     final $result = create();
     if (messageId != null) {
       $result.messageId = messageId;
+    }
+    if (createdAt != null) {
+      $result.createdAt = createdAt;
+    }
+    if (updatedAt != null) {
+      $result.updatedAt = updatedAt;
     }
     return $result;
   }
@@ -2330,6 +2346,8 @@ class CreateFileMessageResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateFileMessageResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'messageId', $pb.PbFieldType.OU3)
+    ..aOS(2, _omitFieldNames ? '' : 'createdAt')
+    ..aOS(3, _omitFieldNames ? '' : 'updatedAt')
     ..hasRequiredFields = false
   ;
 
@@ -2362,6 +2380,24 @@ class CreateFileMessageResponse extends $pb.GeneratedMessage {
   $core.bool hasMessageId() => $_has(0);
   @$pb.TagNumber(1)
   void clearMessageId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get createdAt => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set createdAt($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCreatedAt() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCreatedAt() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get updatedAt => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set updatedAt($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasUpdatedAt() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUpdatedAt() => clearField(3);
 }
 
 

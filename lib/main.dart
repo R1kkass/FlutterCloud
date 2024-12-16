@@ -11,6 +11,7 @@ import 'package:flutter_application_2/cubit/download_file_bloc.dart';
 import 'package:flutter_application_2/cubit/folder_cubit.dart';
 import 'package:flutter_application_2/cubit/space_cubit.dart';
 import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/observers/observer.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
@@ -57,6 +58,10 @@ void main() async {
     BlocProvider(
       create: (context) =>
           DownloadFileBloc(state: DownloadFileState(downloadFile: {})),
+    ),
+    BlocProvider(
+      create: (context) =>
+          UploadFileBloc(state: UploadFileState(chatUploadFiles: {})),
     ),
     BlocProvider(
       create: (context) => CountBloc(state: CountState(count: 0)),
@@ -111,6 +116,10 @@ class _MyAppState extends State<MyApp> {
 
       if (!await Permission.photos.status.isGranted) {
         await Permission.photos.request();
+      }
+
+      if (!await Permission.videos.status.isGranted) {
+        await Permission.videos.request();
       }
     });
   }

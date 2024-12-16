@@ -20,13 +20,14 @@ const TypeMessage$json = {
     {'1': 'SEND_MESSAGE', '2': 0},
     {'1': 'READ_MESSAGE', '2': 1},
     {'1': 'UPLOAD_MESSAGE', '2': 2},
+    {'1': 'READ_MESSAGE_ALL', '2': 3},
   ],
 };
 
 /// Descriptor for `TypeMessage`. Decode as a `google.protobuf.EnumDescriptorProto`.
 final $typed_data.Uint8List typeMessageDescriptor = $convert.base64Decode(
     'CgtUeXBlTWVzc2FnZRIQCgxTRU5EX01FU1NBR0UQABIQCgxSRUFEX01FU1NBR0UQARISCg5VUE'
-    'xPQURfTUVTU0FHRRAC');
+    'xPQURfTUVTU0FHRRACEhQKEFJFQURfTUVTU0FHRV9BTEwQAw==');
 
 @$core.Deprecated('Use streamGetMessagesRequestDescriptor instead')
 const StreamGetMessagesRequest$json = {
@@ -48,15 +49,17 @@ final $typed_data.Uint8List streamGetMessagesRequestDescriptor = $convert.base64
 const StreamGetMessagesResponse$json = {
   '1': 'StreamGetMessagesResponse',
   '2': [
-    {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.chat.Message', '10': 'message'},
-    {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.chat.TypeMessage', '10': 'type'},
+    {'1': 'message', '3': 1, '4': 1, '5': 11, '6': '.chat.Message', '10': 'message'},
+    {'1': 'messages', '3': 2, '4': 3, '5': 11, '6': '.chat.Message', '10': 'messages'},
+    {'1': 'type', '3': 3, '4': 1, '5': 14, '6': '.chat.TypeMessage', '10': 'type'},
   ],
 };
 
 /// Descriptor for `StreamGetMessagesResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List streamGetMessagesResponseDescriptor = $convert.base64Decode(
-    'ChlTdHJlYW1HZXRNZXNzYWdlc1Jlc3BvbnNlEicKB21lc3NhZ2UYAiABKAsyDS5jaGF0Lk1lc3'
-    'NhZ2VSB21lc3NhZ2USJQoEdHlwZRgBIAEoDjIRLmNoYXQuVHlwZU1lc3NhZ2VSBHR5cGU=');
+    'ChlTdHJlYW1HZXRNZXNzYWdlc1Jlc3BvbnNlEicKB21lc3NhZ2UYASABKAsyDS5jaGF0Lk1lc3'
+    'NhZ2VSB21lc3NhZ2USKQoIbWVzc2FnZXMYAiADKAsyDS5jaGF0Lk1lc3NhZ2VSCG1lc3NhZ2Vz'
+    'EiUKBHR5cGUYAyABKA4yES5jaGF0LlR5cGVNZXNzYWdlUgR0eXBl');
 
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
@@ -501,11 +504,14 @@ const CreateFileMessageResponse$json = {
   '1': 'CreateFileMessageResponse',
   '2': [
     {'1': 'message_id', '3': 1, '4': 1, '5': 13, '10': 'messageId'},
+    {'1': 'created_at', '3': 2, '4': 1, '5': 9, '10': 'createdAt'},
+    {'1': 'updated_at', '3': 3, '4': 1, '5': 9, '10': 'updatedAt'},
   ],
 };
 
 /// Descriptor for `CreateFileMessageResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List createFileMessageResponseDescriptor = $convert.base64Decode(
     'ChlDcmVhdGVGaWxlTWVzc2FnZVJlc3BvbnNlEh0KCm1lc3NhZ2VfaWQYASABKA1SCW1lc3NhZ2'
-    'VJZA==');
+    'VJZBIdCgpjcmVhdGVkX2F0GAIgASgJUgljcmVhdGVkQXQSHQoKdXBkYXRlZF9hdBgDIAEoCVIJ'
+    'dXBkYXRlZEF0');
 

@@ -23,7 +23,7 @@ class EncodeFile {
     fileExist.writeAsBytesSync(crypt(false, file.readAsBytesSync(), key));
   }
 
-  static void decryptByte(Uint8List byte, String pathExist, String key) {
+  static File decryptByte(Uint8List byte, String pathExist, String key) {
     try {
       var fileExist = File(pathExist);
       var countFile = 1;
@@ -40,6 +40,7 @@ class EncodeFile {
       }
 
       fileExist.writeAsBytesSync(crypt(false, byte, key));
+      return fileExist;
     } catch (e) {
       rethrow;
     }

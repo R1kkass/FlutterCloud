@@ -171,9 +171,8 @@ class ChatGrpc {
   }
 
   downloadChatFileFn(BuildContext context, int chatFileId, String fileName,
-      String secretKey, Function fn) {
+      String secretKey, Function(String) fn) {
     List<int> chunks = [];
-
     try {
       var downloadFile = downloadChatFile(
         DownloadFileChatRequest(
@@ -186,11 +185,18 @@ class ChatGrpc {
 
           if (e.progress >= 100) {
             var downloadPath = await getDownloadPath() ?? "";
-            EncodeFile.decryptByte(Uint8List.fromList(chunks),
-                "$downloadPath/$fileName", secretKey.substring(0, 32));
-            HiveBoxes().chatFileUploaded.get("$chatFileId${jwtDecode().email}");
+            var path = "$downloadPath/$fileName";
+            var file = EncodeFile.decryptByte(
+                Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
 
-            fn("$downloadPath/$fileName");
+            await HiveBoxes().chatFileUploaded.put(
+                  "$chatFileId${jwtDecode().email}",
+                  file.path,
+                );
+
+            await fn(
+              path,
+            );
           }
         } catch (_) {
           showToast(context, 'Не удалось скачать файл: $fileName');

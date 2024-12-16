@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
 import 'package:flutter_application_2/entities/chat/animated_chat_list.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/entities/chat/chat_float_button.dart';
@@ -12,7 +13,7 @@ import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatArgument {
   final int chatId;
@@ -41,6 +42,7 @@ class _ChatPageState extends State<ChatPage> {
   bool init = false;
   String key = "";
 
+  final GlobalKey<ChatFloatButtonState> globalKey = GlobalKey();
   final GlobalKey<AnimatedListState> _key = GlobalKey();
 
   @override
@@ -60,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
       _key.currentState?.insertAllItems(0, data.length,
           duration: const Duration(milliseconds: 0));
       if (response.countNotRead != 0) {
-        showFloatButton == true;
+        globalKey.currentState?.setShow(true);
       }
       setState(() {});
       await _grpc();
@@ -106,6 +108,18 @@ class _ChatPageState extends State<ChatPage> {
             data[index] = onData.message;
           });
         }
+        if (onData.type == TypeMessage.READ_MESSAGE_ALL) {
+          _key.currentState?.setState(() {
+            for (var message in onData.messages) {
+              var index = data.indexWhere((item) {
+                return item.id == message.id;
+              });
+              if (index >= 0) {
+                data[index] = message;
+              }
+            }
+          });
+        }
       });
     });
   }
@@ -123,9 +137,10 @@ class _ChatPageState extends State<ChatPage> {
         .then((e) {
       scrolling = false;
     });
-    setState(() {
-      showFloatButton = false;
-    });
+    globalKey.currentState?.setShow(false);
+    if (globalKey.currentState!.count > 0) {
+      _readAll();
+    }
   }
 
   _addMessage() {
@@ -133,6 +148,12 @@ class _ChatPageState extends State<ChatPage> {
     controller?.add(StreamGetMessagesRequest(
         message: hashText.base64, type: TypeMessage.SEND_MESSAGE));
     text.text = "";
+  }
+
+  _readAll() {
+    controller
+        ?.add(StreamGetMessagesRequest(type: TypeMessage.READ_MESSAGE_ALL));
+    globalKey.currentState?.setCount(0);
   }
 
   _getBox() async {
@@ -144,17 +165,15 @@ class _ChatPageState extends State<ChatPage> {
   _readMessage(int messageId) {
     controller?.add(StreamGetMessagesRequest(
         messageId: messageId, type: TypeMessage.READ_MESSAGE));
-    setState(() {
-      count--;
-    });
+    globalKey.currentState?.setCount(globalKey.currentState?.count--);
   }
 
   _addUploadFile(int messageId) {
     controller?.add(StreamGetMessagesRequest(
         type: TypeMessage.UPLOAD_MESSAGE, messageId: messageId));
+    // context.read<UploadFileBloc>().add(RemoveUploadFile(messageId: messageId));
   }
 
-  var showFloatButton = false;
   double currPosition = 0;
 
   @override
@@ -164,9 +183,9 @@ class _ChatPageState extends State<ChatPage> {
       floatButton: Padding(
         padding: const EdgeInsets.only(bottom: 50.0),
         child: ChatFloatButton(
+          key: globalKey,
           action: _scrollDown,
           count: count,
-          showFloatButton: showFloatButton,
         ),
       ),
       body: Container(
@@ -176,20 +195,16 @@ class _ChatPageState extends State<ChatPage> {
                 flex: 2,
                 child: NotificationListener(
                   onNotification: (t) {
-                    if (t is ScrollStartNotification && scrolling == false) {
+                    if (t is ScrollStartNotification && !scrolling) {
                       currPosition = t.metrics.pixels;
                     }
-                    if (t is ScrollUpdateNotification && scrolling == false) {
+                    if (t is ScrollUpdateNotification && !scrolling) {
                       if (currPosition > t.metrics.pixels &&
-                          showFloatButton == false) {
-                        setState(() {
-                          showFloatButton = true;
-                        });
+                          !globalKey.currentState!.show) {
+                        globalKey.currentState?.setShow(true);
                       } else if (currPosition < t.metrics.pixels &&
-                          showFloatButton == true) {
-                        setState(() {
-                          showFloatButton = false;
-                        });
+                          globalKey.currentState!.show) {
+                        globalKey.currentState?.setShow(false);
                       }
                     }
 
@@ -208,9 +223,9 @@ class _ChatPageState extends State<ChatPage> {
                       });
                     }
                     if (t is ScrollEndNotification && t.metrics.pixels == 0.0) {
-                      setState(() {
-                        showFloatButton = false;
-                      });
+                      if (globalKey.currentState!.show) {
+                        globalKey.currentState?.setShow(false);
+                      }
                       if (pageBottom > 0) {
                         pageBottom--;
 
@@ -239,7 +254,6 @@ class _ChatPageState extends State<ChatPage> {
               controller: text,
               title: "Сообщение",
               error: "Введите сообщение",
-              icon: Icons.mail,
               suffixIcon: SizedBox(
                 width: 100,
                 child: Row(
@@ -249,7 +263,7 @@ class _ChatPageState extends State<ChatPage> {
                         secretKey: key,
                         addUploadFile: _addUploadFile),
                     IconButton(
-                      icon: const Icon(Icons.send),
+                      icon: const Icon(Icons.send_rounded),
                       color: Colors.deepOrange.shade400,
                       onPressed: _addMessage,
                       iconSize: 25,

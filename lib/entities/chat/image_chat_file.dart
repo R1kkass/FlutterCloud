@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app/app_router.dart';
+import 'package:flutter_application_2/entities/chat/video_chat_file.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'package:flutter_application_2/pages/image_viewer.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
@@ -28,11 +29,12 @@ class ImageChatFile extends StatefulWidget {
 }
 
 class _ImageChatFileState extends State<ImageChatFile> {
-  String path = "";
+  late File file;
   bool downloaded = false;
-
-  setStatus(pathFile) {
-    path = pathFile;
+  bool visible = false;
+  var decodedImage;
+  setStatus(String pathFile) async {
+    file = File(pathFile);
     downloaded = true;
     setState(() {});
   }
@@ -53,31 +55,34 @@ class _ImageChatFileState extends State<ImageChatFile> {
 
   @override
   Widget build(BuildContext context) {
+    var reVideo = RegExp("mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*");
+    var typeFile = file.path.split("/").last.split(".").last;
     return downloaded
-        ? Hero(
-            tag: Image.file(File(path)),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(AppRouter.IMAGE_VIEWER,
-                    arguments: ImageViewerArgs(
-                        index: widget.index,
-                        images: widget.images,
-                        chatId: widget.image.chatId));
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 1.3, bottom: 1.3),
-                child: Positioned.fill(
-                  top: 0,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.file(File(path)),
-                  ),
+        ? InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRouter.IMAGE_VIEWER,
+                  arguments: ImageViewerArgs(
+                      index: widget.index,
+                      images: widget.images,
+                      chatId: widget.image.chatId));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 1.3, bottom: 1.3),
+              child: Visibility(
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                visible: true,
+                key: Key(file.path),
+                replacement: const SizedBox.shrink(
+                  child: Icon(Icons.photo),
                 ),
+                child: reVideo.hasMatch(typeFile)
+                    ? VideoChatFile(path: file.path)
+                    : FittedBox(fit: BoxFit.fill, child: Image.file(file)),
               ),
             ),
           )
-        : const Center(
-            child: Icon(Icons.photo),
-          );
+        : const SizedBox(height: 100, width: 100);
   }
 }

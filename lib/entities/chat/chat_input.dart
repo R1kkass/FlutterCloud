@@ -6,7 +6,6 @@ class ChatInput extends StatefulWidget {
     super.key,
     required this.controller,
     required this.title,
-    required this.icon,
     required this.error,
     this.fieldSubmit,
     this.suffixIcon,
@@ -15,7 +14,6 @@ class ChatInput extends StatefulWidget {
 
   final TextEditingController? controller;
   final String title;
-  final IconData icon;
   Widget? suffixIcon;
   final String error;
   bool obscureText;
@@ -35,10 +33,6 @@ class _ChatInputState extends State<ChatInput> {
         controller: widget.controller,
         obscureText: widget.obscureText,
         decoration: InputDecoration(
-            prefixIcon: Icon(
-              widget.icon,
-              color: Colors.deepOrange,
-            ),
             suffixIcon: widget.suffixIcon,
             filled: true,
             contentPadding: const EdgeInsets.all(20.0),

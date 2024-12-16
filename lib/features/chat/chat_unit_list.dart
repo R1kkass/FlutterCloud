@@ -5,6 +5,7 @@ import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/hive_boxes.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:flutter_application_2/services/message_date.dart';
 
 class ChatUnitList extends StatefulWidget {
   final ChatUsersCount chat;
@@ -33,7 +34,6 @@ class _ChatUnitListState extends State<ChatUnitList> {
   Widget build(BuildContext context) {
     ChatUsersCount chat = widget.chat;
     decryptMessageFn(chat);
-    DateTime time = DateTime.parse(widget.chat.createdAt).toLocal();
     return SizedBox(
       height: 60,
       child: Material(
@@ -95,7 +95,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
                         width: 5,
                       ),
                       Text(
-                        "${time.hour}:${time.minute > 9 ? time.minute : "0${time.minute}"}",
+                        MessageDate().date(widget.chat.chat.message.createdAt),
                         style: const TextStyle(
                             fontSize: 13, color: Colors.black45),
                       ),

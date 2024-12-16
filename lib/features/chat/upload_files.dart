@@ -1,10 +1,15 @@
+import 'dart:io';
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/features/chat/file_galery.dart';
+import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
+import 'package:flutter_application_2/features/chat/file_gallery.dart';
 import 'package:flutter_application_2/grpc/chat_grpc.dart';
 import 'dart:isolate';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:flutter_application_2/services/jwt_decode.dart';
 import 'package:flutter_application_2/shared/toast.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageUploadFile extends StatefulWidget {
   final int chatId;
@@ -64,7 +69,17 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
     var message = await ChatGrpc().createFileMessage(
         CreateFileMessageRequest(text: hashText, chatId: chatId));
 
+    List<ChatFile> chatFiles = [];
+
     for (var selectFile in selectedFiles.keys) {
+      var file = File(selectFile);
+      chatFiles.add(ChatFile(
+          id: 0,
+          chatId: chatId,
+          fileName: selectFile,
+          userId: 0,
+          messageId: message.messageId,
+          size: Int64(file.statSync().size)));
       _isolate(
           selectedFilesLength: selectedFiles.keys.length,
           key: key,
@@ -72,6 +87,18 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
           hashText: hashText,
           message: message);
     }
+
+    context.read<UploadFileBloc>().add(AddUploadFile(
+        id: message.messageId,
+        text: hashText,
+        chatFiles: chatFiles,
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        user: User(
+          email: jwtDecode().email,
+          name: "",
+          id: 0,
+        )));
   }
 
   @override
@@ -87,7 +114,6 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
-            isScrollControlled: true,
             builder: (BuildContext context) {
               return FileGallery(
                   textController: _messageController,

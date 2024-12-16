@@ -1,13 +1,15 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/file_gallery_image_unit.dart';
-import 'package:flutter_application_2/entities/chat/file_gallery_video_unit.dart';
+import 'package:flutter_application_2/entities/chat/gallery_file.dart';
+import 'package:flutter_application_2/shared/text_button_gallery.dart';
+import 'package:flutter_application_2/shared/toast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class FileGalleryImages extends StatefulWidget {
-  const FileGalleryImages(
+class FileGalleryFiles extends StatefulWidget {
+  const FileGalleryFiles(
       {super.key,
       required this.selectedFiles,
       required this.scrollController,
@@ -18,10 +20,10 @@ class FileGalleryImages extends StatefulWidget {
   final void Function(String) selectFile;
 
   @override
-  State<FileGalleryImages> createState() => FileGalleryImagesState();
+  State<FileGalleryFiles> createState() => _FileGalleryFilesState();
 }
 
-class FileGalleryImagesState extends State<FileGalleryImages> {
+class _FileGalleryFilesState extends State<FileGalleryFiles> {
   List<FileSystemEntity> files = [];
 
   @override
@@ -60,31 +62,53 @@ class FileGalleryImagesState extends State<FileGalleryImages> {
     });
   }
 
+  void selectFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+      );
+
+      if (result != null) {
+        for (var file in result.files) {
+          widget.selectFile(file.path!);
+        }
+      } else {
+        showToast(context, "Файл не выбран");
+      }
+    } catch (e) {
+      showToast(context, "Файл не выбран");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var reImg = RegExp("gif|jpe?g|tiff?|png|webp|bmp");
-    var reVideo = RegExp("mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*");
-    return GridView.count(
+    return ListView(
       controller: widget.scrollController,
-      primary: false,
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(20),
-      crossAxisSpacing: 3,
-      mainAxisSpacing: 3,
-      crossAxisCount: 3,
       children: [
+        TextButtonGallery(
+            action: selectFile,
+            icon: Icons.folder,
+            color: Colors.deepOrange.shade400,
+            text: "Выбрать файлы из хранилища",
+            secondaryText: "Поиск в файловой системе",
+            child: const SizedBox()),
+        if (files.isNotEmpty)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+            child: Text(
+              "Недавние файлы",
+              style: TextStyle(
+                  color: Colors.blueAccent, fontWeight: FontWeight.bold),
+            ),
+          )
+        else
+          const Center(child: CircularProgressIndicator()),
         for (var file in files.reversed)
-          if (reImg.hasMatch(file.path.split("/").last.split(".").last))
-            FileGalleryImageUnit(
-              path: file.path,
-              selectFile: widget.selectFile,
+          if (File(file.path).statSync().type == FileSystemEntityType.file)
+            GalleryFile(
               selectedFiles: widget.selectedFiles,
-            )
-          else if (reVideo.hasMatch(file.path.split("/").last.split(".").last))
-            FileGalleryVideoUnit(
-              path: file.path,
+              file: File(file.path),
               selectFile: widget.selectFile,
-              selectedFiles: widget.selectedFiles,
             )
       ],
     );

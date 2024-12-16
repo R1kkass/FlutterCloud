@@ -2,20 +2,41 @@ import 'package:flutter/material.dart';
 
 class ChatFloatButton extends StatefulWidget {
   final int count;
-  final bool showFloatButton;
   final void Function() action;
 
-  const ChatFloatButton(
-      {super.key,
-      required this.action,
-      required this.count,
-      required this.showFloatButton});
+  const ChatFloatButton({
+    super.key,
+    required this.action,
+    required this.count,
+  });
 
   @override
-  State<ChatFloatButton> createState() => _ChatFloatButtonState();
+  State<ChatFloatButton> createState() => ChatFloatButtonState();
 }
 
-class _ChatFloatButtonState extends State<ChatFloatButton> {
+class ChatFloatButtonState extends State<ChatFloatButton> {
+  bool show = false;
+  int count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    show = widget.count > 0;
+    count = widget.count;
+    setState(() {});
+  }
+
+  setShow(status) {
+    show = status;
+    setState(() {});
+  }
+
+  setCount(newCount) {
+    setState(() {
+      count = newCount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -26,11 +47,11 @@ class _ChatFloatButtonState extends State<ChatFloatButton> {
             child: ScaleTransition(scale: animation, child: child),
           );
         },
-        child: widget.showFloatButton
+        child: show
             ? FloatingActionButton.small(
                 shape: const CircleBorder(),
                 onPressed: widget.action,
-                child: widget.count > 0
+                child: count > 0
                     ? Badge(
                         backgroundColor: Colors.blueAccent,
                         label: Text('${widget.count}'),

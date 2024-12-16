@@ -1,15 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/services/message_date.dart';
-import 'package:get_thumbnail_video/index.dart';
-import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:get_thumbnail_video/video_thumbnail.dart';
 
-class FileGalleryVideoUnit extends StatefulWidget {
-  const FileGalleryVideoUnit(
+class FileGalleryImageUnit extends StatefulWidget {
+  const FileGalleryImageUnit(
       {super.key,
       required this.path,
       required this.selectFile,
@@ -20,48 +15,19 @@ class FileGalleryVideoUnit extends StatefulWidget {
   final Map<String, bool> selectedFiles;
 
   @override
-  State<FileGalleryVideoUnit> createState() => _FileGalleryVideoUnitState();
+  State<FileGalleryImageUnit> createState() => _FileGalleryImageUnitState();
 }
 
-class _FileGalleryVideoUnitState extends State<FileGalleryVideoUnit> {
+class _FileGalleryImageUnitState extends State<FileGalleryImageUnit> {
   bool show = false;
-  VideoPlayerController? controller;
-  Uint8List uint8list = Uint8List.fromList([]);
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    controller = VideoPlayerController.file(File(widget.path))
-      ..initialize().then((e) {
-        setState(() {});
-      });
-  }
 
   @override
   Widget build(BuildContext context) {
-    VideoThumbnail.thumbnailData(
-      video: widget.path,
-      imageFormat: ImageFormat.PNG,
-      maxWidth: 0,
-      quality: 0,
-    ).then((e) {
-      if (uint8list.isEmpty) {
-        uint8list = e;
-        setState(() {});
-      }
-    });
+    File file = File(widget.path);
 
     var index = widget.selectedFiles[widget.path] != null
         ? widget.selectedFiles.keys.toList().indexOf(widget.path) + 1
         : "";
-
-    var minutes = controller!.value.duration.inSeconds ~/ 60;
-    var seconds = controller!.value.duration.inSeconds % 60;
 
     return Stack(
       children: [
@@ -82,7 +48,7 @@ class _FileGalleryVideoUnitState extends State<FileGalleryVideoUnit> {
                             widget.selectedFiles[widget.path] != null ? .9 : 1,
                         child: FittedBox(
                           fit: BoxFit.fill,
-                          child: Image.memory(uint8list),
+                          child: Image.file(file),
                         ),
                       )
                     : const Center(
@@ -118,38 +84,12 @@ class _FileGalleryVideoUnitState extends State<FileGalleryVideoUnit> {
                       fontSize: 12)),
             ),
             onTap: () {
-              widget.selectFile(widget.path);
+              if (mounted) {
+                widget.selectFile(widget.path);
+              }
             },
           ),
         ),
-        Positioned(
-            bottom: 5,
-            left: 5,
-            child: Container(
-              padding: const EdgeInsets.only(left: 2, right: 2),
-              decoration: const BoxDecoration(
-                  color: Colors.black45,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.play_arrow,
-                    size: 12,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(
-                    width: 1,
-                  ),
-                  Text(
-                    "$minutes:${MessageDate().addZero(seconds)}",
-                    style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )),
       ],
     );
   }
