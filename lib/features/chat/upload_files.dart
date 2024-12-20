@@ -32,7 +32,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
   _isolate(
       {required selectFile,
       required key,
-      required message,
+      required CreateFileMessageResponse message,
       required hashText,
       required selectedFilesLength}) async {
     try {
@@ -53,8 +53,14 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
       if (countFiles == selectedFilesLength) {
         widget.addUploadFile(message.messageId);
       }
+      context
+          .read<UploadFileBloc>()
+          .add(SuccessUploadFile(filePath: filePath, id: message.messageId));
     } catch (e) {
       showToast(context, "Не удалось загрузить файлы");
+      context
+          .read<UploadFileBloc>()
+          .add(RemoveUploadFile(messageId: message.messageId));
     }
   }
 
@@ -94,6 +100,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
         chatFiles: chatFiles,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
+        successFiles: {},
         user: User(
           email: jwtDecode().email,
           name: "",

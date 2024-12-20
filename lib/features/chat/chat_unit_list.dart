@@ -20,13 +20,28 @@ class _ChatUnitListState extends State<ChatUnitList> {
   JwtPayload? jwt;
   String decryptMessage = "";
 
+  String number(int count) {
+    if (count >= 5) {
+      return "ов";
+    }
+
+    if (count == 1) {
+      return "";
+    }
+    return "а";
+  }
+
   void decryptMessageFn(ChatUsersCount chat) async {
     jwt = jwtDecode();
     var box = HiveBoxes().secretKey;
     var hash = box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
-    decryptMessage = chat.chat.message.text != ""
-        ? EncryptMessage().decrypt(chat.chat.message.text, hash)
-        : "";
+    if (chat.chat.message.text != "") {
+      decryptMessage = EncryptMessage().decrypt(chat.chat.message.text, hash);
+    } else if (chat.chat.message.chatFiles.isNotEmpty) {
+      var countFiles = chat.chat.message.chatFiles.length;
+      decryptMessage = "📎 $countFiles файл${number(countFiles)}";
+    }
+
     setState(() {});
   }
 

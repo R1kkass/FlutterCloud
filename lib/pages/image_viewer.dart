@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/entities/chat/image_viewer_unit.dart';
@@ -78,6 +77,7 @@ class _ImageViewerState extends State<ImageViewer> {
             children: [
               for (var image in args.images)
                 ImageViewerUnit(
+                    decrypt: args.decrypt,
                     image: image,
                     height: appBar.preferredSize.height,
                     secretKey: secretKey)
@@ -89,9 +89,13 @@ class _ImageViewerState extends State<ImageViewer> {
 
 class ImageViewerArgs {
   const ImageViewerArgs(
-      {required this.images, required this.chatId, required this.index});
+      {required this.images,
+      required this.chatId,
+      required this.index,
+      required this.decrypt});
 
   final List<ChatFile> images;
   final int chatId;
   final int index;
+  final bool decrypt;
 }

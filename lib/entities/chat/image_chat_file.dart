@@ -16,11 +16,13 @@ class ImageChatFile extends StatefulWidget {
       required this.image,
       required this.index,
       required this.images,
+      required this.size,
       required this.fileName});
 
   final String secretKey;
   final ChatFile image;
   final int index;
+  final double size;
   final List<ChatFile> images;
   final String fileName;
 
@@ -29,10 +31,9 @@ class ImageChatFile extends StatefulWidget {
 }
 
 class _ImageChatFileState extends State<ImageChatFile> {
-  late File file;
+  File? file;
   bool downloaded = false;
   bool visible = false;
-  var decodedImage;
   setStatus(String pathFile) async {
     file = File(pathFile);
     downloaded = true;
@@ -55,34 +56,47 @@ class _ImageChatFileState extends State<ImageChatFile> {
 
   @override
   Widget build(BuildContext context) {
-    var reVideo = RegExp("mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*");
-    var typeFile = file.path.split("/").last.split(".").last;
-    return downloaded
-        ? InkWell(
+    if (downloaded) {
+      var reVideo = RegExp("mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*");
+      var typeFile = file!.path.split("/").last.split(".").last;
+      return Padding(
+        padding: const EdgeInsets.only(left: 1.3, bottom: 1.3),
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          width: widget.size - 1,
+          height: widget.size - 1,
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(255, 255, 255, 0.2),
+          ),
+          child: InkWell(
             onTap: () {
               Navigator.of(context).pushNamed(AppRouter.IMAGE_VIEWER,
                   arguments: ImageViewerArgs(
+                      decrypt: true,
                       index: widget.index,
                       images: widget.images,
                       chatId: widget.image.chatId));
             },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 1.3, bottom: 1.3),
-              child: Visibility(
-                maintainSize: true,
-                maintainAnimation: true,
-                maintainState: true,
-                visible: true,
-                key: Key(file.path),
-                replacement: const SizedBox.shrink(
-                  child: Icon(Icons.photo),
-                ),
-                child: reVideo.hasMatch(typeFile)
-                    ? VideoChatFile(path: file.path)
-                    : FittedBox(fit: BoxFit.fill, child: Image.file(file)),
+            child: Visibility(
+              maintainSize: true,
+              maintainAnimation: true,
+              maintainState: true,
+              visible: true,
+              key: Key(file!.path),
+              replacement: const SizedBox.shrink(
+                child: Icon(Icons.photo),
               ),
+              child: reVideo.hasMatch(typeFile)
+                  ? VideoChatFile(path: file!.path)
+                  : FittedBox(fit: BoxFit.cover, child: Image.file(file!)),
             ),
-          )
-        : const SizedBox(height: 100, width: 100);
+          ),
+        ),
+      );
+    }
+    return Container(
+        width: widget.size - 1,
+        height: widget.size - 1,
+        color: const Color.fromRGBO(255, 255, 255, 0.2));
   }
 }

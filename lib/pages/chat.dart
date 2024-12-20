@@ -171,7 +171,7 @@ class _ChatPageState extends State<ChatPage> {
   _addUploadFile(int messageId) {
     controller?.add(StreamGetMessagesRequest(
         type: TypeMessage.UPLOAD_MESSAGE, messageId: messageId));
-    // context.read<UploadFileBloc>().add(RemoveUploadFile(messageId: messageId));
+    context.read<UploadFileBloc>().add(RemoveUploadFile(messageId: messageId));
   }
 
   double currPosition = 0;

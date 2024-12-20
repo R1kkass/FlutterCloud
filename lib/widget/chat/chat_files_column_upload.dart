@@ -5,10 +5,14 @@ import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 
 class ChatFilesUploadColumn extends StatefulWidget {
   const ChatFilesUploadColumn(
-      {super.key, required this.chatFiles, required this.status});
+      {super.key,
+      required this.chatFiles,
+      required this.status,
+      required this.messageId});
 
   final List<ChatFile> chatFiles;
   final bool status;
+  final int messageId;
 
   @override
   State<ChatFilesUploadColumn> createState() => _ChatFilesUploadColumnState();
@@ -38,6 +42,7 @@ class _ChatFilesUploadColumnState extends State<ChatFilesUploadColumn> {
       children: [
         if (images.isNotEmpty)
           GridImagesUpload(
+            messageId: widget.messageId,
             images: images,
           ),
         Container(

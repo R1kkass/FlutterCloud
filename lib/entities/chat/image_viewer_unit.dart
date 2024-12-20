@@ -13,10 +13,12 @@ class ImageViewerUnit extends StatefulWidget {
       {super.key,
       required this.image,
       required this.height,
+      required this.decrypt,
       required this.secretKey});
 
   final ChatFile image;
   final String secretKey;
+  final bool decrypt;
   final double height;
 
   @override
@@ -39,15 +41,19 @@ class _ImageViewerUnitState extends State<ImageViewerUnit> {
     var boxPath = HiveBoxes()
         .chatFileUploaded
         .get("${widget.image.id}${jwtDecode().email}");
-    if (boxPath == null) {
-      ChatGrpc().downloadChatFileFn(
-          context,
-          widget.image.id,
-          EncryptMessage().decrypt(widget.image.fileName, widget.secretKey),
-          widget.secretKey,
-          setStatus);
+    if (widget.decrypt) {
+      if (boxPath == null) {
+        ChatGrpc().downloadChatFileFn(
+            context,
+            widget.image.id,
+            EncryptMessage().decrypt(widget.image.fileName, widget.secretKey),
+            widget.secretKey,
+            setStatus);
+      } else {
+        setStatus(boxPath);
+      }
     } else {
-      setStatus(boxPath);
+      setStatus(widget.image.fileName);
     }
   }
 

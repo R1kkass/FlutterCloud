@@ -61,8 +61,8 @@ class _UsersListState extends State<UsersList> {
                 ],
               ),
               onPressed: () {
-                Navigator.pushNamed(context, AppRouter.FILES_USERS,
-                    arguments: ArgsFilesUsers(user: users[index]));
+                // Navigator.pushNamed(context, AppRouter.FILES_USERS,
+                //     arguments: ArgsFilesUsers(user: users[index]));
               },
             ),
           );
@@ -84,7 +84,8 @@ class _UsersListState extends State<UsersList> {
                       onPressed: () async {
                         Navigator.pop(context);
                         try {
-                          await ChatGrpc().createChat(CreateRequestChat(otherId: otherId));
+                          await ChatGrpc()
+                              .createChat(CreateRequestChat(otherId: otherId));
                           showToast(context, "Запрос отправлен");
                         } on GrpcError catch (e) {
                           showToast(context, e.message as String);

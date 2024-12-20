@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/consts/month.dart';
 import 'package:flutter_application_2/entities/chat/message_badge.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/widget/chat/chat_files_column.dart';
 import 'package:flutter_application_2/widget/chat/chat_files_column_upload.dart';
 
 class MessageUploadFileComponent extends StatefulWidget {
@@ -14,6 +13,7 @@ class MessageUploadFileComponent extends StatefulWidget {
       required this.text,
       required this.createdAt,
       required this.name,
+      required this.messageId,
       required this.controller,
       required this.chatFiles,
       required this.dateChange});
@@ -21,6 +21,7 @@ class MessageUploadFileComponent extends StatefulWidget {
   final DateTime? dateChange;
   final List<ChatFile> chatFiles;
   final String text;
+  final int messageId;
   final ScrollController controller;
   final String createdAt;
   final String secretKey;
@@ -58,6 +59,7 @@ class MessageUploadFileState extends State<MessageUploadFileComponent> {
                   child: Column(
                     children: [
                       ChatFilesUploadColumn(
+                        messageId: widget.messageId,
                           chatFiles: widget.chatFiles,
                           status: true),
                       if (widget.text != "")

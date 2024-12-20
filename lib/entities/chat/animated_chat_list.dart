@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
 import 'package:flutter_application_2/features/chat/message.dart';
 import 'package:flutter_application_2/features/chat/message_upload_file.dart';
-import 'package:flutter_application_2/features/chat/upload_files.dart';
 import 'package:flutter_application_2/proto/chat/chat.pb.dart';
 import 'package:flutter_application_2/services/encrypt_message.dart';
 import 'package:flutter_application_2/services/jwt_decode.dart';
@@ -109,6 +108,7 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                   key: UniqueKey(),
                   sizeFactor: animation,
                   child: MessageUploadFileComponent(
+                    messageId: message.id,
                     secretKey: widget.keyChat,
                     chatFiles: message.chatFiles,
                     controller: widget.controller,

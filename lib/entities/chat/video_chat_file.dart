@@ -31,7 +31,7 @@ class _VideoChatFileState extends State<VideoChatFile> {
     });
     if (uint8list.isNotEmpty) {
       return FittedBox(
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -71,9 +71,21 @@ class _VideoChatFileState extends State<VideoChatFile> {
           ));
     }
 
-    return const SizedBox(
-      height: 100,
-      width: 150,
+    return SizedBox(
+      height: 50,
+      width: 50,
+      child: Positioned.fill(
+        child: Container(
+          decoration: const BoxDecoration(
+              color: Colors.black38,
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+          child: const Icon(
+            CupertinoIcons.play_arrow_solid,
+            color: Colors.white,
+            size: 25,
+          ),
+        ),
+      ),
     );
   }
 }

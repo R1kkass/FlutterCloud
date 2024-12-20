@@ -73,25 +73,6 @@ class _MyDrawerState extends State<MyDrawer> {
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pushNamedAndRemoveUntil(
-                      context, AppRouter.SEARCH_USERS, (r) => false);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.search),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Поиск пользователей",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                )),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamedAndRemoveUntil(
                       context, AppRouter.CHANGE_ACCOUNT, (r) => false);
                 },
                 child: const Row(

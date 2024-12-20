@@ -18,7 +18,7 @@ class AppRouter {
   static const FILE = "/file";
   static const REGISTRATION = "/registration";
   static const AUTH = "/auth";
-  static const FILES_USERS = "/filesusers";
+  // static const FILES_USERS = "/filesusers";
   static const CHAT = "/chat";
   static const CHAT_LIST = "/chatlist";
   static const CHANGE_ACCOUNT = "/changeaccount";
@@ -32,13 +32,13 @@ class AppRouter {
     HOME: (context) => const Home(title: "Облако"),
     FILE: (context) => const Openfile(title: "Файл"),
     SEARCH_USERS: (context) => const SearchUsers(title: "Поиск пользователей"),
-    FILES_USERS: (context) => FilesUsers(
-        title: "Файлы пользователей",
-        args: ModalRoute.of(context)!.settings.arguments as ArgsFilesUsers),
-    CHAT: (context) => ChatPage(
-          title: "Чат",
-          args: ModalRoute.of(context)!.settings.arguments as ChatArgument,
-        ),
+    // FILES_USERS: (context) => FilesUsers(
+    //     title: "Файлы пользователей",
+    //     args: ModalRoute.of(context)!.settings.arguments as ArgsFilesUsers),
+    // CHAT: (context) => ChatPage(
+    //       title: "Чат",
+    //       args: ModalRoute.of(context)!.settings.arguments as ChatArgument,
+    //     ),
     CHAT_LIST: (context) => const ChatLists(title: "Чаты"),
     CHANGE_ACCOUNT: (context) =>
         const ChangeUser(title: "Сменить пользователя"),

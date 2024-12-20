@@ -1,22 +1,26 @@
 class MessageDate {
   String date(String time) {
-    DateTime timeParse = DateTime.parse(time).toLocal();
-    var difference = DateTime.now().toLocal().difference(timeParse);
-    var day =
-        DateTime.now().subtract(Duration(days: difference.inDays)).toLocal();
-    if (difference.inDays ~/ 365 > 0) {
-      return "${addZero(day.day)}.${addZero(day.month)}.${day.year.toString().substring(2)}";
-    }
+    try {
+      DateTime timeParse = DateTime.parse(time).toLocal();
+      var difference = DateTime.now().toLocal().difference(timeParse);
+      var day =
+          DateTime.now().subtract(Duration(days: difference.inDays)).toLocal();
+      if (difference.inDays ~/ 365 > 0) {
+        return "${addZero(day.day)}.${addZero(day.month)}.${day.year.toString().substring(2)}";
+      }
 
-    if (difference.inDays ~/ 7 > 0) {
-      return "${day.day} ${month[day.month]}";
-    }
+      if (difference.inDays ~/ 7 > 0) {
+        return "${day.day} ${month[day.month]}";
+      }
 
-    if (difference.inDays > 0) {
-      return "${weekDay[day.weekday]}";
-    }
+      if (difference.inDays > 0) {
+        return "${weekDay[day.weekday]}";
+      }
 
-    return "${addZero(day.hour)}:${addZero(day.minute)}";
+      return "${addZero(day.hour)}:${addZero(day.minute)}";
+    } catch (e) {
+      return "";
+    }
   }
 
   addZero(int number) {

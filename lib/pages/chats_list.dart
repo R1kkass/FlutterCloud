@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/app/app_router.dart';
 import 'package:flutter_application_2/cubit/current_page_bloc.dart';
 import 'package:flutter_application_2/components/default_scaffold.dart';
 import 'package:flutter_application_2/entities/chat/chat_accept.dart';
@@ -44,7 +45,10 @@ class _ChatListsState extends State<ChatLists>
     return DefaultScaffold(
       floatButton: FloatingActionButton.small(
           shape: const CircleBorder(),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRouter.SEARCH_USERS, (r) => false);
+          },
           child: const Icon(Icons.mode_edit)),
       showBottomNavigation: true,
       title: title ?? widget.title,
