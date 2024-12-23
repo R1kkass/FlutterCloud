@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/grid_images_general.dart';
-import 'package:flutter_application_2/entities/chat/image_chat_file.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:TalkSpace/entities/chat/grid_images_general.dart';
+import 'package:TalkSpace/entities/chat/image_chat_file.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 class GridImages extends StatefulWidget {

@@ -1,5 +1,5 @@
-import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/proto/users/users.pbgrpc.dart';
+import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/proto/users/users.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 

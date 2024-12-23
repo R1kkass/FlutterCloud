@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/pages/home.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/shared/toast.dart';
+import 'package:TalkSpace/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 

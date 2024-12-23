@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/count_bloc.dart';
+import 'package:TalkSpace/cubit/count_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CountBadge extends StatefulWidget {

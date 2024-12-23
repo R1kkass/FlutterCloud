@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart' as user;
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/proto/users/users.pb.dart' as user;
 import 'package:grpc/grpc.dart';
 
 class GetData {

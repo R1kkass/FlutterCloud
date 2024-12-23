@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/services/message_date.dart';
+import 'package:TalkSpace/services/message_date.dart';
 import 'package:video_player/video_player.dart' as video_player;
 
 class VideoPlayer extends StatefulWidget {

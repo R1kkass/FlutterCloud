@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
-import 'package:flutter_application_2/entities/chat/animated_chat_list.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/entities/chat/chat_float_button.dart';
-import 'package:flutter_application_2/entities/chat/chat_input.dart';
-import 'package:flutter_application_2/features/chat/upload_files.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:TalkSpace/cubit/upload_file_bloc.dart';
+import 'package:TalkSpace/entities/chat/animated_chat_list.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/entities/chat/chat_float_button.dart';
+import 'package:TalkSpace/entities/chat/chat_input.dart';
+import 'package:TalkSpace/features/chat/upload_files.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

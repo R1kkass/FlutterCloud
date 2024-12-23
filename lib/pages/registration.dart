@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/my_input.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_application_2/components/dialog_loading.dart';
-import 'package:flutter_application_2/grpc/auth_grpc.dart';
-import 'package:flutter_application_2/grpc/keys_grpc.dart';
-import 'package:flutter_application_2/proto/auth/auth.pb.dart';
-import 'package:flutter_application_2/proto/keys/keys.pb.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:TalkSpace/components/dialog_loading.dart';
+import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/grpc/keys_grpc.dart';
+import 'package:TalkSpace/proto/auth/auth.pb.dart';
+import 'package:TalkSpace/proto/keys/keys.pb.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Registration extends StatefulWidget {

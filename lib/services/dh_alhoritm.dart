@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:hive/hive.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';

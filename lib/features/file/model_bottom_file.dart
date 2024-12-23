@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/features/access/dialog_access.dart';
-import 'package:flutter_application_2/entities/folder/dialog_create_folder.dart';
-import 'package:flutter_application_2/features/file/file.dart';
-import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/features/file/download_button.dart';
-import 'package:flutter_application_2/pages/home.dart';
+import 'package:TalkSpace/api/file_api.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/features/access/dialog_access.dart';
+import 'package:TalkSpace/entities/folder/dialog_create_folder.dart';
+import 'package:TalkSpace/features/file/file.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/shared/toast.dart';
+import 'package:TalkSpace/features/file/download_button.dart';
+import 'package:TalkSpace/pages/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Null showModalFolder(context, FileComponent widget) {

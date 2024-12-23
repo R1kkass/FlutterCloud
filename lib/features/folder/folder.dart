@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/api/folder_api.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/features/access/dialog_access.dart';
-import 'package:flutter_application_2/entities/folder/dialog_create_folder.dart';
-import 'package:flutter_application_2/components/text_content.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/widget/folder/folder_builder.dart';
-import 'package:flutter_application_2/pages/home.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/api/file_api.dart';
+import 'package:TalkSpace/api/folder_api.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/features/access/dialog_access.dart';
+import 'package:TalkSpace/entities/folder/dialog_create_folder.dart';
+import 'package:TalkSpace/components/text_content.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/widget/folder/folder_builder.dart';
+import 'package:TalkSpace/pages/home.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FolderComponent extends StatefulWidget {

@@ -1,5 +1,5 @@
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 
@@ -9,7 +9,6 @@ class BlocEvent {
 
 class DownloadFileState {
   Map<int, FileDownload?> downloadFile = {};
-
 
   DownloadFileState({
     required this.downloadFile,
@@ -44,7 +43,8 @@ class DownloadFileBloc extends Bloc<BlocEvent, DownloadFileState> {
     emit(DownloadFileState(downloadFile: state.downloadFile));
   }
 
-  void _setStatusDownload(FolderSetStatus event, Emitter<DownloadFileState> emit) {
+  void _setStatusDownload(
+      FolderSetStatus event, Emitter<DownloadFileState> emit) {
     state.downloadFile[event.id]?.status = event.status;
     emit(DownloadFileState(downloadFile: state.downloadFile));
   }

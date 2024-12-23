@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/components/bottom_sheeet.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/cubit/current_page_bloc.dart';
-import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/widget/file/search_file.dart';
-import 'package:flutter_application_2/widget/folder/folder_builder.dart';
-import 'package:flutter_application_2/main.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/components/bottom_sheeet.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/cubit/current_page_bloc.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/widget/file/search_file.dart';
+import 'package:TalkSpace/widget/folder/folder_builder.dart';
+import 'package:TalkSpace/main.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeArgs {

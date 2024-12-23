@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 class Areas {
@@ -69,12 +69,12 @@ class GridImagesGeneral {
           countRows: 2,
           size: [
             MediaQuery.of(context).size.width / 1,
-            (MediaQuery.of(context).size.width / 3),
-            (MediaQuery.of(context).size.width / 3),
+            (MediaQuery.of(context).size.width / 3 - 2.28),
+            (MediaQuery.of(context).size.width / 3 - 2.28),
           ],
           columnSizes: [
-            (MediaQuery.of(context).size.width / 4 - 0).px,
-            (MediaQuery.of(context).size.width / 4 - 1.8).px,
+            (MediaQuery.of(context).size.width / 4 - 1.3).px,
+            (MediaQuery.of(context).size.width / 4 - 1.3).px,
             (MediaQuery.of(context).size.width / 2).px,
           ],
           rowsSizesTrackSize: defaultRowSizeTrackSize(2, 3)),

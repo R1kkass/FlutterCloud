@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/app/notification_service.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/grpc/auth_grpc.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/app/notification_service.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/grpc/auth_grpc.dart';
 
 class Splash extends StatefulWidget {
   final String title;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/cubit/current_page_bloc.dart';
-import 'package:flutter_application_2/entities/chat/count_badge.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/cubit/current_page_bloc.dart';
+import 'package:TalkSpace/entities/chat/count_badge.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BottomNavigation extends StatefulWidget {

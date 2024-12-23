@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UploadFile extends StatefulWidget {

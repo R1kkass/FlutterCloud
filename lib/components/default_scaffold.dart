@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/components/drawer.dart';
-import 'package:flutter_application_2/shared/bottom_navigation.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/components/drawer.dart';
+import 'package:TalkSpace/shared/bottom_navigation.dart';
 
 class DefaultScaffold extends StatefulWidget {
   final String title;

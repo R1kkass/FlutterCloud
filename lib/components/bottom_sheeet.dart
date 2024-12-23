@@ -1,16 +1,16 @@
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/folder_api.dart';
+import 'package:TalkSpace/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/grpc/files_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/shared/toast.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 

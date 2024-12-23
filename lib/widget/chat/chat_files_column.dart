@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/chat_file.dart';
-import 'package:flutter_application_2/entities/chat/grid_images.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
+import 'package:TalkSpace/entities/chat/chat_file.dart';
+import 'package:TalkSpace/entities/chat/grid_images.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
 
 class ChatFilesColumn extends StatefulWidget {
   const ChatFilesColumn(
@@ -22,7 +22,6 @@ class ChatFilesColumn extends StatefulWidget {
 class _ChatFilesColumnState extends State<ChatFilesColumn> {
   var reImg = RegExp("gif|jpe?g|tiff?|png|webp|bmp");
   var reVideo = RegExp("mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*");
-
 
   @override
   Widget build(BuildContext context) {

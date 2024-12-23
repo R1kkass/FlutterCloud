@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/entities/chat/image_viewer_unit.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/entities/chat/image_viewer_unit.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 
 class ImageViewer extends StatefulWidget {
   const ImageViewer({super.key, required this.title});

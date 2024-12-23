@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/chat_input.dart';
-import 'package:flutter_application_2/entities/chat/file_gallery_type.dart';
-import 'package:flutter_application_2/widget/chat/file_gallery_files.dart';
-import 'package:flutter_application_2/widget/chat/file_gallery_images.dart';
+import 'package:TalkSpace/entities/chat/chat_input.dart';
+import 'package:TalkSpace/entities/chat/file_gallery_type.dart';
+import 'package:TalkSpace/widget/chat/file_gallery_files.dart';
+import 'package:TalkSpace/widget/chat/file_gallery_images.dart';
 import 'dart:io' as io;
 import 'package:keyboard_height_plugin/keyboard_height_plugin.dart';
 

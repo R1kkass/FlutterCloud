@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/grpc/keys_grpc.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/proto/keys/keys.pb.dart';
-import 'package:flutter_application_2/services/dh_alhoritm.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/grpc/keys_grpc.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/proto/keys/keys.pb.dart';
+import 'package:TalkSpace/services/dh_alhoritm.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:hive/hive.dart';
 
 class ChatAccept extends StatefulWidget {

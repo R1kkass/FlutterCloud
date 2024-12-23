@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
-import 'package:flutter_application_2/features/chat/file_gallery.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
+import 'package:TalkSpace/cubit/upload_file_bloc.dart';
+import 'package:TalkSpace/features/chat/file_gallery.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'dart:isolate';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MessageUploadFile extends StatefulWidget {

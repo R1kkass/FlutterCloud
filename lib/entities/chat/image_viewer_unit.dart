@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/video_player.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
+import 'package:TalkSpace/entities/chat/video_player.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 
 class ImageViewerUnit extends StatefulWidget {
   const ImageViewerUnit(

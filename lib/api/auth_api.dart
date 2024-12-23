@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/consts/domen.dart';
+import 'package:TalkSpace/consts/domen.dart';
 import 'package:http/http.dart' as http;
 
 class AuthParams {
