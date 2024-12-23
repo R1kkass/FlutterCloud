@@ -21,26 +21,30 @@ export 'access.pb.dart';
 
 @$pb.GrpcServiceName('access.AccessGreeter')
 class AccessGreeterClient extends $grpc.Client {
-  static final _$createAccess = $grpc.ClientMethod<$0.RequestAccess, $0.ResponseAccess>(
-      '/access.AccessGreeter/CreateAccess',
-      ($0.RequestAccess value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ResponseAccess.fromBuffer(value));
-  static final _$getAccesses = $grpc.ClientMethod<$0.Empty, $0.GetAccessesResponse>(
-      '/access.AccessGreeter/GetAccesses',
-      ($0.Empty value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.GetAccessesResponse.fromBuffer(value));
+  static final _$createAccess =
+      $grpc.ClientMethod<$0.RequestAccess, $0.ResponseAccess>(
+          '/access.AccessGreeter/CreateAccess',
+          ($0.RequestAccess value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) => $0.ResponseAccess.fromBuffer(value));
+  static final _$getAccesses =
+      $grpc.ClientMethod<$0.Empty, $0.GetAccessesResponse>(
+          '/access.AccessGreeter/GetAccesses',
+          ($0.Empty value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.GetAccessesResponse.fromBuffer(value));
 
   AccessGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
       $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options,
-        interceptors: interceptors);
+      : super(channel, options: options, interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.ResponseAccess> createAccess($0.RequestAccess request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.ResponseAccess> createAccess($0.RequestAccess request,
+      {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$createAccess, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.GetAccessesResponse> getAccesses($0.Empty request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.GetAccessesResponse> getAccesses($0.Empty request,
+      {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getAccesses, request, options: options);
   }
 }
@@ -66,14 +70,18 @@ abstract class AccessGreeterServiceBase extends $grpc.Service {
         ($0.GetAccessesResponse value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.ResponseAccess> createAccess_Pre($grpc.ServiceCall call, $async.Future<$0.RequestAccess> request) async {
+  $async.Future<$0.ResponseAccess> createAccess_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.RequestAccess> request) async {
     return createAccess(call, await request);
   }
 
-  $async.Future<$0.GetAccessesResponse> getAccesses_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+  $async.Future<$0.GetAccessesResponse> getAccesses_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return getAccesses(call, await request);
   }
 
-  $async.Future<$0.ResponseAccess> createAccess($grpc.ServiceCall call, $0.RequestAccess request);
-  $async.Future<$0.GetAccessesResponse> getAccesses($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.ResponseAccess> createAccess(
+      $grpc.ServiceCall call, $0.RequestAccess request);
+  $async.Future<$0.GetAccessesResponse> getAccesses(
+      $grpc.ServiceCall call, $0.Empty request);
 }

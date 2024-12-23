@@ -28,7 +28,7 @@ class _GridImagesState extends State<GridImages> {
 }
 
 class GeneralLayoutGrid extends GridImagesGeneralProps {
-  GeneralLayoutGrid({
+  const GeneralLayoutGrid({
     super.key,
     required super.images,
     required super.areas,

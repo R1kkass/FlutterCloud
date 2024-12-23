@@ -10,6 +10,7 @@ import 'package:TalkSpace/cubit/count_bloc.dart';
 import 'package:TalkSpace/cubit/current_page_bloc.dart';
 import 'package:TalkSpace/cubit/download_file_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/cubit/space_cubit.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/cubit/upload_file_bloc.dart';
@@ -66,6 +67,10 @@ void main() async {
     ),
     BlocProvider(
       create: (context) => CountBloc(state: CountState(count: 0)),
+    ),
+    BlocProvider(
+      create: (context) => RegistrationBloc(
+          state: RegistrationState(email: "", password: "", secretKey: "")),
     ),
     BlocProvider(
       create: (context) => CurrentPageBloc(state: CurrentPageState(page: 0)),

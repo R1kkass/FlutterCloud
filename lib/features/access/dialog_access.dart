@@ -8,8 +8,8 @@ const List<String> accesses = ["Закрытый", "Открытый", "По з�
 
 void showDialogAccess(
   Future<Response> Function(ChangeAccessListArgs) callback,
-  String? file_id,
-  String? folder_id,
+  String? fileId,
+  String? folderId,
   BuildContext context,
 ) {
   Navigator.of(context).pop();
@@ -21,8 +21,8 @@ void showDialogAccess(
 
     await callback(ChangeAccessListArgs(
             args: ChangeAccessRequest(
-                folder_id: folder_id.toString(),
-                file_id: file_id.toString(),
+                folder_id: folderId.toString(),
+                file_id: fileId.toString(),
                 access_id:
                     (accesses.indexOf(valueAccess as String) + 1).toString()),
             context: context))

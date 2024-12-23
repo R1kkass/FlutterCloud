@@ -7,25 +7,23 @@ class BlocEvent {
 class CurrentPageState {
   int page = 0;
 
-
   CurrentPageState({
     required this.page,
   });
 }
 
 class CurrentPageBloc extends Bloc<BlocEvent, CurrentPageState> {
-  CurrentPageBloc({required CurrentPageState state}) : super(CurrentPageState(page: state.page)) {
+  CurrentPageBloc({required CurrentPageState state})
+      : super(CurrentPageState(page: state.page)) {
     on<ChangePage>(setPage);
   }
 
-  void setPage(ChangePage event, Emitter<CurrentPageState>  emit) {
+  void setPage(ChangePage event, Emitter<CurrentPageState> emit) {
     emit(CurrentPageState(page: event.page));
   }
-
 }
 
-
-class ChangePage extends BlocEvent{
+class ChangePage extends BlocEvent {
   final int page;
   const ChangePage(this.page);
 }

@@ -41,6 +41,10 @@ class AuthGreetClient extends $grpc.Client {
       '/auth.AuthGreet/CheckAuth',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Empty.fromBuffer(value));
+  static final _$submitEmail = $grpc.ClientMethod<$0.SubmitEmailRequest, $0.SubmitEmailResponse>(
+      '/auth.AuthGreet/SubmitEmail',
+      ($0.SubmitEmailRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.SubmitEmailResponse.fromBuffer(value));
 
   AuthGreetClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -66,6 +70,10 @@ class AuthGreetClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.Empty> checkAuth($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$checkAuth, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.SubmitEmailResponse> submitEmail($0.SubmitEmailRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$submitEmail, request, options: options);
   }
 }
 
@@ -109,6 +117,13 @@ abstract class AuthGreetServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SubmitEmailRequest, $0.SubmitEmailResponse>(
+        'SubmitEmail',
+        submitEmail_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.SubmitEmailRequest.fromBuffer(value),
+        ($0.SubmitEmailResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall call, $async.Future<$0.LoginRequest> request) async {
@@ -131,9 +146,14 @@ abstract class AuthGreetServiceBase extends $grpc.Service {
     return checkAuth(call, await request);
   }
 
+  $async.Future<$0.SubmitEmailResponse> submitEmail_Pre($grpc.ServiceCall call, $async.Future<$0.SubmitEmailRequest> request) async {
+    return submitEmail(call, await request);
+  }
+
   $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
   $async.Future<$0.RegistrationResponse> registration($grpc.ServiceCall call, $0.RegistrationRequest request);
   $async.Future<$0.DHConnectResponse> dHConnect($grpc.ServiceCall call, $0.DHConnectRequest request);
   $async.Future<$0.DHSecondConnectResponse> dHSecondConnect($grpc.ServiceCall call, $0.DHSecondConnectRequest request);
   $async.Future<$0.Empty> checkAuth($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.SubmitEmailResponse> submitEmail($grpc.ServiceCall call, $0.SubmitEmailRequest request);
 }

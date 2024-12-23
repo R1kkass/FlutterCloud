@@ -29,7 +29,7 @@ class _GridImagesUploadState extends State<GridImagesUpload> {
 }
 
 class GeneralLayoutGrid extends GridImagesGeneralProps {
-  GeneralLayoutGrid(
+  const GeneralLayoutGrid(
       {super.key,
       required super.images,
       required super.areas,

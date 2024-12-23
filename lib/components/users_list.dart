@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/pages/files_users.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:TalkSpace/proto/users/users.pb.dart';
 import 'package:grpc/grpc.dart';
@@ -60,10 +58,7 @@ class _UsersListState extends State<UsersList> {
                   ),
                 ],
               ),
-              onPressed: () {
-                // Navigator.pushNamed(context, AppRouter.FILES_USERS,
-                //     arguments: ArgsFilesUsers(user: users[index]));
-              },
+              onPressed: () {},
             ),
           );
         });

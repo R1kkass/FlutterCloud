@@ -37,14 +37,21 @@ const ResponseAccess$json = {
 };
 
 /// Descriptor for `ResponseAccess`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List responseAccessDescriptor = $convert.base64Decode(
-    'Cg5SZXNwb25zZUFjY2VzcxIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+final $typed_data.Uint8List responseAccessDescriptor = $convert
+    .base64Decode('Cg5SZXNwb25zZUFjY2VzcxIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
 
 @$core.Deprecated('Use getAccessesResponseDescriptor instead')
 const GetAccessesResponse$json = {
   '1': 'GetAccessesResponse',
   '2': [
-    {'1': 'accesses', '3': 1, '4': 3, '5': 11, '6': '.access.RequestAccessData', '10': 'accesses'},
+    {
+      '1': 'accesses',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.access.RequestAccessData',
+      '10': 'accesses'
+    },
   ],
 };
 
@@ -64,7 +71,14 @@ const RequestAccessData$json = {
     {'1': 'folder_id', '3': 5, '4': 1, '5': 5, '10': 'folderId'},
     {'1': 'status_id', '3': 6, '4': 1, '5': 5, '10': 'statusId'},
     {'1': 'user', '3': 7, '4': 1, '5': 11, '6': '.access.User', '10': 'user'},
-    {'1': 'curent_user', '3': 8, '4': 1, '5': 11, '6': '.access.User', '10': 'curentUser'},
+    {
+      '1': 'curent_user',
+      '3': 8,
+      '4': 1,
+      '5': 11,
+      '6': '.access.User',
+      '10': 'curentUser'
+    },
   ],
 };
 
@@ -97,6 +111,5 @@ const Empty$json = {
 };
 
 /// Descriptor for `Empty`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List emptyDescriptor = $convert.base64Decode(
-    'CgVFbXB0eQ==');
-
+final $typed_data.Uint8List emptyDescriptor =
+    $convert.base64Decode('CgVFbXB0eQ==');

@@ -30,4 +30,8 @@ class AuthGrpc {
   Future<Empty> checkAuth() {
     return _stub.checkAuth(Empty(), options: _options);
   }
+
+  Future<SubmitEmailResponse> submitEmail(SubmitEmailRequest request) {
+    return _stub.submitEmail(request);
+  }
 }

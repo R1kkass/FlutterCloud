@@ -10,6 +10,6 @@ class JwtPayload {
 JwtPayload jwtDecode() {
   var token = Hive.box('token').get('access_token');
   var jwtDecode = Jwt.parseJwt(token);
-  
+
   return JwtPayload(email: jwtDecode["email"]);
 }
