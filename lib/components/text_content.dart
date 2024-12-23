@@ -11,7 +11,7 @@ class TextContent extends StatefulWidget {
 class _TextContentState extends State<TextContent> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width - 140,
       child: Text(widget.text,
           overflow: TextOverflow.ellipsis,

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/gallery_file.dart';
-import 'package:flutter_application_2/shared/text_button_gallery.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/entities/chat/gallery_file.dart';
+import 'package:TalkSpace/shared/text_button_gallery.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 

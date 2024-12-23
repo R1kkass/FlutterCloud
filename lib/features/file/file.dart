@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/components/text_content.dart';
-import 'package:flutter_application_2/features/file/model_bottom_file.dart';
-import 'package:flutter_application_2/pages/open_file.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/services/file_size.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/components/text_content.dart';
+import 'package:TalkSpace/features/file/model_bottom_file.dart';
+import 'package:TalkSpace/pages/open_file.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/services/file_size.dart';
 
 class FileComponent extends StatefulWidget {
   final FileFind file;
@@ -64,6 +64,4 @@ class _FileComponentState extends State<FileComponent>
       ),
     );
   }
-
-  
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/grpc/user_grpc.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
-import 'package:flutter_application_2/proto/users/users.pbgrpc.dart';
-import 'package:flutter_application_2/features/file/file.dart';
-import 'package:flutter_application_2/features/folder/folder.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/grpc/user_grpc.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/proto/users/users.pb.dart';
+import 'package:TalkSpace/proto/users/users.pbgrpc.dart';
+import 'package:TalkSpace/features/file/file.dart';
+import 'package:TalkSpace/features/folder/folder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArgsFilesUsers {

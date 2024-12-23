@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/components/dialog_loading.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/api/file_api.dart';
+import 'package:TalkSpace/components/dialog_loading.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:http/http.dart';
 
 const List<String> accesses = ["Закрытый", "Открытый", "По запросу"];
 
 void showDialogAccess(
   Future<Response> Function(ChangeAccessListArgs) callback,
-  String? file_id,
-  String? folder_id,
+  String? fileId,
+  String? folderId,
   BuildContext context,
 ) {
   Navigator.of(context).pop();
@@ -21,8 +21,8 @@ void showDialogAccess(
 
     await callback(ChangeAccessListArgs(
             args: ChangeAccessRequest(
-                folder_id: folder_id.toString(),
-                file_id: file_id.toString(),
+                folder_id: folderId.toString(),
+                file_id: fileId.toString(),
                 access_id:
                     (accesses.indexOf(valueAccess as String) + 1).toString()),
             context: context))

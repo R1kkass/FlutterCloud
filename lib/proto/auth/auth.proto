@@ -10,6 +10,7 @@ service AuthGreet {
     rpc DHConnect(DHConnectRequest) returns (DHConnectResponse);
     rpc DHSecondConnect(DHSecondConnectRequest) returns (DHSecondConnectResponse);
     rpc CheckAuth(Empty) returns (Empty);
+    rpc SubmitEmail(SubmitEmailRequest) returns (SubmitEmailResponse);
 };
 
 message LoginRequest {
@@ -28,7 +29,7 @@ message RegistrationRequest {
 }
 
 message RegistrationResponse {
-    string access_token = 1;
+
 }
 
 message DHConnectRequest {
@@ -49,4 +50,14 @@ message DHSecondConnectRequest {
 
 message DHSecondConnectResponse {
     string message = 1;
+}
+
+message SubmitEmailRequest {
+    string email = 1;
+    string password = 2;
+    int32 key = 3;
+}
+
+message SubmitEmailResponse {
+    string access_token = 1;
 }

@@ -51,26 +51,20 @@ class _VideoChatFileState extends State<VideoChatFile> {
                         ),
                 );
               })),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
-                    child: const Icon(
-                      CupertinoIcons.play_arrow_solid,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                  ),
-                ),
-              )
+              const PlayButton()
             ],
           ));
     }
 
+    return const PlayButton();
+  }
+}
+
+class PlayButton extends StatelessWidget {
+  const PlayButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       width: 50,

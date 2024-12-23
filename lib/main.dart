@@ -2,19 +2,20 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/consts/domen.dart';
-import 'package:flutter_application_2/cubit/content_bloc.dart';
-import 'package:flutter_application_2/cubit/count_bloc.dart';
-import 'package:flutter_application_2/cubit/current_page_bloc.dart';
-import 'package:flutter_application_2/cubit/download_file_bloc.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/cubit/space_cubit.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
-import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/observers/observer.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/consts/domen.dart';
+import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/cubit/count_bloc.dart';
+import 'package:TalkSpace/cubit/current_page_bloc.dart';
+import 'package:TalkSpace/cubit/download_file_bloc.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/cubit/registration_bloc.dart';
+import 'package:TalkSpace/cubit/space_cubit.dart';
+import 'package:TalkSpace/cubit/token_cubit.dart';
+import 'package:TalkSpace/cubit/upload_file_bloc.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/observers/observer.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -65,6 +66,10 @@ void main() async {
     ),
     BlocProvider(
       create: (context) => CountBloc(state: CountState(count: 0)),
+    ),
+    BlocProvider(
+      create: (context) => RegistrationBloc(
+          state: RegistrationState(email: "", password: "", secretKey: "")),
     ),
     BlocProvider(
       create: (context) => CurrentPageBloc(state: CurrentPageState(page: 0)),

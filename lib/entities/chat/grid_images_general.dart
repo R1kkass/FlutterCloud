@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 class Areas {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/my_input.dart';
-import 'package:flutter_application_2/components/users_list.dart';
-import 'package:flutter_application_2/grpc/user_grpc.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/components/users_list.dart';
+import 'package:TalkSpace/grpc/user_grpc.dart';
+import 'package:TalkSpace/proto/users/users.pb.dart';
 
 class SearchUsers extends StatefulWidget {
   final String title;

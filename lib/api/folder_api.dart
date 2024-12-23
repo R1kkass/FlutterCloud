@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/consts/domen.dart';
-import 'package:flutter_application_2/proto/users/users.pb.dart';
+import 'package:TalkSpace/api/file_api.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/consts/domen.dart';
+import 'package:TalkSpace/proto/users/users.pb.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_application_2/api/my_http.dart' as my_http;
+import 'package:TalkSpace/api/my_http.dart' as my_http;
 
 class FolderParams {
   String? name_folder;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/shared/toast.dart';
+import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

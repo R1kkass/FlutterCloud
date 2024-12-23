@@ -3,15 +3,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
-import 'package:flutter_application_2/services/dh_alhoritm.dart';
-import 'package:flutter_application_2/services/encode_file.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
-import 'package:flutter_application_2/services/get_download_path.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/proto/chat/chat.pbgrpc.dart';
+import 'package:TalkSpace/services/dh_alhoritm.dart';
+import 'package:TalkSpace/services/encode_file.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
+import 'package:TalkSpace/services/get_download_path.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 

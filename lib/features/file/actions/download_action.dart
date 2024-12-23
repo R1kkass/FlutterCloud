@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/download_file_bloc.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/proto/files/files.pb.dart';
-import 'package:flutter_application_2/services/encode_file.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/cubit/download_file_bloc.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/services/encode_file.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 

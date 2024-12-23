@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/consts/month.dart';
-import 'package:flutter_application_2/entities/chat/message_badge.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/widget/chat/chat_files_column.dart';
+import 'package:TalkSpace/consts/month.dart';
+import 'package:TalkSpace/entities/chat/message_badge.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/widget/chat/chat_files_column.dart';
 
 class MessageComponent extends StatefulWidget {
   const MessageComponent(

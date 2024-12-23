@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encode_file.dart';
-import 'package:flutter_application_2/services/file_size.dart';
-import 'package:flutter_application_2/services/get_download_path.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
-import 'package:flutter_application_2/shared/toast.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encode_file.dart';
+import 'package:TalkSpace/services/file_size.dart';
+import 'package:TalkSpace/services/get_download_path.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
 class ChatFileComponent extends StatefulWidget {

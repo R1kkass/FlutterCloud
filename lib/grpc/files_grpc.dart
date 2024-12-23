@@ -3,9 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/proto/files/files.pbgrpc.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/proto/files/files.pbgrpc.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 
@@ -83,5 +83,5 @@ class FilesGrpc {
 
   Future<FindFileResponse> findFile(FindFileRequest request) {
     return _stub.findFile(request, options: _options);
-  } 
+  }
 }

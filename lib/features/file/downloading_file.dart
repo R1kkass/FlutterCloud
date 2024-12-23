@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/cubit/download_file_bloc.dart';
-import 'package:flutter_application_2/cubit/folder_cubit.dart';
-import 'package:flutter_application_2/entities/file/error_file.dart';
-import 'package:flutter_application_2/entities/file/open_file.dart';
-import 'package:flutter_application_2/main.dart';
-import 'package:flutter_application_2/shared/progress_bar.dart';
+import 'package:TalkSpace/cubit/download_file_bloc.dart';
+import 'package:TalkSpace/cubit/folder_cubit.dart';
+import 'package:TalkSpace/entities/file/error_file.dart';
+import 'package:TalkSpace/entities/file/open_file.dart';
+import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/shared/progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DownloadingFile extends StatefulWidget {

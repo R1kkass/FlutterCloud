@@ -57,15 +57,11 @@ final $typed_data.Uint8List registrationRequestDescriptor = $convert.base64Decod
 @$core.Deprecated('Use registrationResponseDescriptor instead')
 const RegistrationResponse$json = {
   '1': 'RegistrationResponse',
-  '2': [
-    {'1': 'access_token', '3': 1, '4': 1, '5': 9, '10': 'accessToken'},
-  ],
 };
 
 /// Descriptor for `RegistrationResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List registrationResponseDescriptor = $convert.base64Decode(
-    'ChRSZWdpc3RyYXRpb25SZXNwb25zZRIhCgxhY2Nlc3NfdG9rZW4YASABKAlSC2FjY2Vzc1Rva2'
-    'Vu');
+    'ChRSZWdpc3RyYXRpb25SZXNwb25zZQ==');
 
 @$core.Deprecated('Use dHConnectRequestDescriptor instead')
 const DHConnectRequest$json = {
@@ -123,4 +119,32 @@ const DHSecondConnectResponse$json = {
 /// Descriptor for `DHSecondConnectResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List dHSecondConnectResponseDescriptor = $convert.base64Decode(
     'ChdESFNlY29uZENvbm5lY3RSZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+
+@$core.Deprecated('Use submitEmailRequestDescriptor instead')
+const SubmitEmailRequest$json = {
+  '1': 'SubmitEmailRequest',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+    {'1': 'key', '3': 3, '4': 1, '5': 5, '10': 'key'},
+  ],
+};
+
+/// Descriptor for `SubmitEmailRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List submitEmailRequestDescriptor = $convert.base64Decode(
+    'ChJTdWJtaXRFbWFpbFJlcXVlc3QSFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGA'
+    'IgASgJUghwYXNzd29yZBIQCgNrZXkYAyABKAVSA2tleQ==');
+
+@$core.Deprecated('Use submitEmailResponseDescriptor instead')
+const SubmitEmailResponse$json = {
+  '1': 'SubmitEmailResponse',
+  '2': [
+    {'1': 'access_token', '3': 1, '4': 1, '5': 9, '10': 'accessToken'},
+  ],
+};
+
+/// Descriptor for `SubmitEmailResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List submitEmailResponseDescriptor = $convert.base64Decode(
+    'ChNTdWJtaXRFbWFpbFJlc3BvbnNlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW'
+    '4=');
 

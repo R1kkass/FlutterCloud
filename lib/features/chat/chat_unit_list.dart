@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/pages/chat.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/services/encrypt_message.dart';
-import 'package:flutter_application_2/services/hive_boxes.dart';
-import 'package:flutter_application_2/services/jwt_decode.dart';
-import 'package:flutter_application_2/services/message_date.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/pages/chat.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/services/message_date.dart';
 
 class ChatUnitList extends StatefulWidget {
   final ChatUsersCount chat;

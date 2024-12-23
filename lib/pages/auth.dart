@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/components/dialog_loading.dart';
-import 'package:flutter_application_2/components/my_input.dart';
-import 'package:flutter_application_2/shared/toast.dart';
-import 'package:flutter_application_2/grpc/auth_grpc.dart';
-import 'package:flutter_application_2/grpc/keys_grpc.dart';
-import 'package:flutter_application_2/proto/auth/auth.pb.dart';
-import 'package:flutter_application_2/proto/keys/keys.pb.dart';
-import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/components/dialog_loading.dart';
+import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/form_layout.dart';
+import 'package:TalkSpace/shared/toast.dart';
+import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/grpc/keys_grpc.dart';
+import 'package:TalkSpace/proto/auth/auth.pb.dart';
+import 'package:TalkSpace/proto/keys/keys.pb.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_application_2/cubit/token_cubit.dart';
+import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Authorization extends StatefulWidget {
@@ -40,94 +40,71 @@ class _AuthorizationState extends State<Authorization> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultScaffold(
-      title: widget.title,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(48.0),
-          child: ListView(
-            shrinkWrap: true,
+    return FormLayout(
+        title: widget.title,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const Text(
-                'Авторизация',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30),
+              MyInput(
+                  icon: Icons.mail,
+                  controller: sigUpController["email"],
+                  title: "Введите E-Mail",
+                  error: "Пожалуйста, заполните поле E-Mail"),
+              const SizedBox(
+                height: 10,
               ),
+              MyInput(
+                  icon: Icons.key,
+                  controller: sigUpController["password"],
+                  title: "Введите пароль",
+                  obscureText: true,
+                  error: "Пожалуйста, заполните поле пароль"),
               const SizedBox(
                 height: 25,
               ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    MyInput(
-                        icon: Icons.mail,
-                        controller: sigUpController["email"],
-                        title: "Введите E-Mail",
-                        error: "Пожалуйста, заполните поле E-Mail"),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    MyInput(
-                        icon: Icons.key,
-                        controller: sigUpController["password"],
-                        title: "Введите пароль",
-                        obscureText: true,
-                        error: "Пожалуйста, заполните поле пароль"),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            elevation: WidgetStateProperty.all(5.0),
-                            shape:
-                                WidgetStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(1.0),
-                            ))),
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _login(
-                                    LoginFields(
-                                      email: sigUpController["email"]?.text
-                                          as String,
-                                      password: sigUpController["password"]
-                                          ?.text as String,
-                                    ),
-                                    context)
-                                .then((e) async {
-                              if (e != null) {
-                                context
-                                    .read<TokenCubit>()
-                                    .updateToken(e.accessToken);
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/', (r) => false);
-                              }
-                            });
-                            return;
-                          }
-                        },
-                        child: const Text('Подтвердить'),
-                      ),
-                    ),
-                    Center(
-                        child: TextButton(
-                      child: const Text("Регистрация"),
-                      onPressed: () async {
-                        Navigator.pushNamed(context, AppRouter.REGISTRATION);
-                      },
-                    ))
-                  ],
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: WidgetStateProperty.all(5.0),
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.0),
+                      ))),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _login(
+                              LoginFields(
+                                email: sigUpController["email"]?.text as String,
+                                password:
+                                    sigUpController["password"]?.text as String,
+                              ),
+                              context)
+                          .then((e) async {
+                        if (e != null) {
+                          context.read<TokenCubit>().updateToken(e.accessToken);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/', (r) => false);
+                        }
+                      });
+                      return;
+                    }
+                  },
+                  child: const Text('Подтвердить'),
                 ),
-              )
+              ),
+              Center(
+                  child: TextButton(
+                child: const Text("Регистрация"),
+                onPressed: () async {
+                  Navigator.pushNamed(context, AppRouter.REGISTRATION);
+                },
+              ))
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

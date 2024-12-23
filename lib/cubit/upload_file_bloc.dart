@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocEvent {

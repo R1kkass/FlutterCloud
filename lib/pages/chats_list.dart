@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/cubit/current_page_bloc.dart';
-import 'package:flutter_application_2/components/default_scaffold.dart';
-import 'package:flutter_application_2/entities/chat/chat_accept.dart';
-import 'package:flutter_application_2/features/chat/chat_list_general.dart';
-import 'package:flutter_application_2/grpc/chat_grpc.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
-import 'package:flutter_application_2/proto/chat/chat.pbgrpc.dart';
-import 'package:flutter_application_2/widget/chat/chat_list_messages.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/cubit/current_page_bloc.dart';
+import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/entities/chat/chat_accept.dart';
+import 'package:TalkSpace/features/chat/chat_list_general.dart';
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/proto/chat/chat.pbgrpc.dart';
+import 'package:TalkSpace/widget/chat/chat_list_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatLists extends StatefulWidget {

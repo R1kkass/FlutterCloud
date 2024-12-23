@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/cubit/upload_file_bloc.dart';
-import 'package:flutter_application_2/entities/chat/video_chat_file.dart';
-import 'package:flutter_application_2/pages/image_viewer.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/cubit/upload_file_bloc.dart';
+import 'package:TalkSpace/entities/chat/video_chat_file.dart';
+import 'package:TalkSpace/pages/image_viewer.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImageChatFileUpload extends StatefulWidget {

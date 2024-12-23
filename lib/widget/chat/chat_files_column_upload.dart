@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/entities/chat/chat_file_upload.dart';
-import 'package:flutter_application_2/entities/chat/grid_images_upload.dart';
-import 'package:flutter_application_2/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/entities/chat/chat_file_upload.dart';
+import 'package:TalkSpace/entities/chat/grid_images_upload.dart';
+import 'package:TalkSpace/proto/chat/chat.pb.dart';
 
 class ChatFilesUploadColumn extends StatefulWidget {
   const ChatFilesUploadColumn(

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter_application_2/services/encrypt_auth.dart';
+import 'package:TalkSpace/services/encrypt_auth.dart';
 
 class EncodeFile {
   static void encrypt(path, pathExist, key) {

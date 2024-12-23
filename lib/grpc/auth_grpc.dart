@@ -1,5 +1,5 @@
-import 'package:flutter_application_2/proto/auth/auth.pbgrpc.dart';
-import 'package:flutter_application_2/main.dart';
+import 'package:TalkSpace/proto/auth/auth.pbgrpc.dart';
+import 'package:TalkSpace/main.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -29,5 +29,9 @@ class AuthGrpc {
 
   Future<Empty> checkAuth() {
     return _stub.checkAuth(Empty(), options: _options);
+  }
+
+  Future<SubmitEmailResponse> submitEmail(SubmitEmailRequest request) {
+    return _stub.submitEmail(request);
   }
 }

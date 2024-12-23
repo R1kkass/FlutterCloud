@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/services/message_date.dart';
+import 'package:TalkSpace/services/message_date.dart';
 import 'package:get_thumbnail_video/index.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';

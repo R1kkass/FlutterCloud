@@ -1,4 +1,4 @@
-name: flutter_application_2
+name: TalkSpace
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -49,7 +49,7 @@ dependencies:
   path_provider: ^2.1.4
   open_file_plus: ^3.4.1+1
   flutter_background_service_android: ^6.2.7
-  flutter_local_notifications: ^17.2.3
+  flutter_local_notifications: ^18.0.1
   flutter_background_service: ^5.0.10
   shared_preferences: ^2.3.2
   visibility_detector: ^0.4.0+2
@@ -69,7 +69,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

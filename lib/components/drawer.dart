@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/api/file_api.dart';
-import 'package:flutter_application_2/app/app_router.dart';
-import 'package:flutter_application_2/services/file_size.dart';
-import 'package:flutter_application_2/services/token_clear.dart';
+import 'package:TalkSpace/api/file_api.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/services/file_size.dart';
+import 'package:TalkSpace/services/token_clear.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
