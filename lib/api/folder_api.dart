@@ -31,7 +31,6 @@ Future<http.Response> createFolder(
   return await my_http.post(Uri.parse('$domain/folder/create'), context,
       body: editedBody,
       headers: {
-        "X-CSRF-token": csrf,
         "Access-Token": Hive.box('token').get('access_token'),
       });
 }
@@ -40,7 +39,6 @@ Future<GetData> getFolder(id, GetData state, BuildContext context) async {
   if (id == 0) id = "";
   var response = await my_http
       .get(Uri.parse('$domain/get/${id ?? ""}'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
   List<Folder?> folders = [];
@@ -68,7 +66,6 @@ Future<GetData> getFolder(id, GetData state, BuildContext context) async {
 Future<http.Response> deleteFolder(int id, BuildContext context) async {
   return await my_http
       .delete(Uri.parse('$domain/folder/delete/$id'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
@@ -79,7 +76,6 @@ Future<http.Response> updateFolder(
       .patch(Uri.parse('$domain/folder/update/$id'), context, body: {
     "name": body
   }, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }

@@ -34,7 +34,6 @@ Future createFile(
   );
   request.fields['file_name'] = "body.folder_id";
   request.fields['folder_id'] = body.folder_id.toString();
-  request.headers["X-CSRF-token"] = csrf;
   Map<String, String> headers = {
     "Access-Token": Hive.box('token').get('access_token').toString()
   };
@@ -59,7 +58,6 @@ Future createFile(
 Future<http.Response> deleteFile(int id, BuildContext context) async {
   return await my_http
       .delete(Uri.parse('$domain/file/delete/$id'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
@@ -68,7 +66,6 @@ Future<http.Response> getFile(String? id, BuildContext context) async {
   id ??= "";
   return await my_http
       .get(Uri.parse('$domain/get/open/$id'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
@@ -81,7 +78,6 @@ Future<http.Response> downloadFile(
 
   var res =
       await my_http.get(Uri.parse('$domain/get/open/$id'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
   EncodeFile.decryptByte(res.bodyBytes, path, key);
@@ -91,7 +87,6 @@ Future<http.Response> downloadFile(
 
 Future getSpace(BuildContext context) async {
   return await my_http.get(Uri.parse('$domain/get/space'), context, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }
@@ -102,7 +97,6 @@ Future<http.Response> updateFile(
       .patch(Uri.parse('$domain/file/update/$id'), context, body: {
     "name": name
   }, headers: {
-    "X-CSRF-token": csrf,
     "Access-Token": Hive.box('token').get('access_token').toString(),
   });
 }

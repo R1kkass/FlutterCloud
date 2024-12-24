@@ -33,7 +33,7 @@ String? token;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  channel = await chan();
+  // channel = await chan();
 
   await Hive.initFlutter();
   await Hive.openBox('token');

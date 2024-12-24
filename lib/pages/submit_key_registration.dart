@@ -39,6 +39,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
     return FormLayout(
         title: widget.title,
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               MyInput(
@@ -81,10 +82,12 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
   Future<SubmitEmailResponse?> _submitEmail() async {
     try {
       var data = context.read<RegistrationBloc>().state;
+      String key = encrypt(sigUpController["key"]!.text, data.secretKey!);
+
       var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
           email: data.email,
           password: data.password,
-          key: int.parse(sigUpController["key"]!.text)));
+          key: key));
       var token = decrypt(submitResponse.accessToken, data.secretKey!);
       KeysGrpc().uploadFile(KeysUploadRequest());
 

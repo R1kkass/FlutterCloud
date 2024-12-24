@@ -1,3 +1,2 @@
 const domain = "http://$ipServer:8887";
-const ipServer = "talkspace.space";
-const csrf = "";
+const ipServer = "192.168.0.110";

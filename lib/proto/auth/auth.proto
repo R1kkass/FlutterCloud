@@ -55,7 +55,7 @@ message DHSecondConnectResponse {
 message SubmitEmailRequest {
     string email = 1;
     string password = 2;
-    int32 key = 3;
+    string key = 3;
 }
 
 message SubmitEmailResponse {
