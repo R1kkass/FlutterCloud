@@ -34,4 +34,8 @@ class AuthGrpc {
   Future<SubmitEmailResponse> submitEmail(SubmitEmailRequest request) {
     return _stub.submitEmail(request);
   }
+
+  Future<SendNewMailKeyResponse> sendNewMailKeyResponse(SendNewMailKeyRequest request) {
+    return _stub.sendNewMailKey(request);
+  }
 }

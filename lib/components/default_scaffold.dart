@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/components/drawer.dart';
 import 'package:TalkSpace/shared/bottom_navigation.dart';
+import 'package:flutter/cupertino.dart';
 
 class DefaultScaffold extends StatefulWidget {
   final String title;
@@ -73,7 +74,7 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
                 IconButton(
                   onPressed: () => Scaffold.of(context).openEndDrawer(),
                   iconSize: 30,
-                  icon: const Icon(Icons.menu),
+                  icon: const Icon(CupertinoIcons.bars),
                 ),
               ],
             );

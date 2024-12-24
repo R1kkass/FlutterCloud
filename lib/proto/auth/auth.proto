@@ -11,6 +11,7 @@ service AuthGreet {
     rpc DHSecondConnect(DHSecondConnectRequest) returns (DHSecondConnectResponse);
     rpc CheckAuth(Empty) returns (Empty);
     rpc SubmitEmail(SubmitEmailRequest) returns (SubmitEmailResponse);
+    rpc SendNewMailKey(SendNewMailKeyRequest) returns (SendNewMailKeyResponse);
 };
 
 message LoginRequest {
@@ -60,4 +61,13 @@ message SubmitEmailRequest {
 
 message SubmitEmailResponse {
     string access_token = 1;
+}
+
+message SendNewMailKeyRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message SendNewMailKeyResponse {
+
 }

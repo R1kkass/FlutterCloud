@@ -148,3 +148,26 @@ final $typed_data.Uint8List submitEmailResponseDescriptor = $convert.base64Decod
     'ChNTdWJtaXRFbWFpbFJlc3BvbnNlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW'
     '4=');
 
+@$core.Deprecated('Use sendNewMailKeyRequestDescriptor instead')
+const SendNewMailKeyRequest$json = {
+  '1': 'SendNewMailKeyRequest',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+  ],
+};
+
+/// Descriptor for `SendNewMailKeyRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendNewMailKeyRequestDescriptor = $convert.base64Decode(
+    'ChVTZW5kTmV3TWFpbEtleVJlcXVlc3QSFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3'
+    'JkGAIgASgJUghwYXNzd29yZA==');
+
+@$core.Deprecated('Use sendNewMailKeyResponseDescriptor instead')
+const SendNewMailKeyResponse$json = {
+  '1': 'SendNewMailKeyResponse',
+};
+
+/// Descriptor for `SendNewMailKeyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List sendNewMailKeyResponseDescriptor = $convert.base64Decode(
+    'ChZTZW5kTmV3TWFpbEtleVJlc3BvbnNl');
+

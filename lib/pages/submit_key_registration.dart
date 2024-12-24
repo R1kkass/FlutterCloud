@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:TalkSpace/components/dialog_loading.dart';
+import 'package:TalkSpace/widget/user/send_registration_mail_key.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/my_input.dart';
@@ -10,7 +12,6 @@ import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/auth/auth.pb.dart';
 import 'package:TalkSpace/proto/keys/keys.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -43,7 +44,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
           child: Column(
             children: [
               MyInput(
-                  icon: Icons.face,
+                  icon: Icons.key,
                   controller: sigUpController["key"],
                   title: "Введите код из письма",
                   error: "Пожалуйста, заполните поле"),
@@ -74,6 +75,10 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
                   child: const Text('Подтвердить'),
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              SendRegistrationMailKey()
             ],
           ),
         ));
@@ -81,17 +86,16 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
 
   Future<SubmitEmailResponse?> _submitEmail() async {
     try {
+      showLoaderDialog(context);
       var data = context.read<RegistrationBloc>().state;
       String key = encrypt(sigUpController["key"]!.text, data.secretKey!);
 
       var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
-          email: data.email,
-          password: data.password,
-          key: key));
+          email: data.email, password: data.password, key: key));
       var token = decrypt(submitResponse.accessToken, data.secretKey!);
       KeysGrpc().uploadFile(KeysUploadRequest());
 
-      var box = HiveBoxes().token;
+      var box = Hive.box('token');
       var boxTokens = Hive.box('list_token');
 
       await box.put('access_token', token);
@@ -104,6 +108,8 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
     } catch (e) {
       showToast(context, "Ошибка при подтверждении");
       return null;
+    } finally {
+      Navigator.pop(context);
     }
   }
 }

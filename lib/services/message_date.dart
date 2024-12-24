@@ -23,7 +23,7 @@ class MessageDate {
     }
   }
 
-  addZero(int number) {
+  String addZero(int number) {
     return "${number < 10 ? "0$number" : number}";
   }
 

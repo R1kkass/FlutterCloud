@@ -129,7 +129,7 @@ class _RegistrationState extends State<Registration> {
                               password: password,
                               secretKey: secretKey);
     } catch (e) {
-      showToast(context, "Ошибка при регистрации");
+      showToast(context, "Пользователь с такой почтой уже зарегистрирован");
       return null;
     } finally {
       Navigator.pop(context);
