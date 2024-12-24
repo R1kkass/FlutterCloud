@@ -126,14 +126,14 @@ const SubmitEmailRequest$json = {
   '2': [
     {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
     {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
-    {'1': 'key', '3': 3, '4': 1, '5': 5, '10': 'key'},
+    {'1': 'key', '3': 3, '4': 1, '5': 9, '10': 'key'},
   ],
 };
 
 /// Descriptor for `SubmitEmailRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List submitEmailRequestDescriptor = $convert.base64Decode(
     'ChJTdWJtaXRFbWFpbFJlcXVlc3QSFAoFZW1haWwYASABKAlSBWVtYWlsEhoKCHBhc3N3b3JkGA'
-    'IgASgJUghwYXNzd29yZBIQCgNrZXkYAyABKAVSA2tleQ==');
+    'IgASgJUghwYXNzd29yZBIQCgNrZXkYAyABKAlSA2tleQ==');
 
 @$core.Deprecated('Use submitEmailResponseDescriptor instead')
 const SubmitEmailResponse$json = {

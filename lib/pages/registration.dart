@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/components/my_input.dart';
-import 'package:TalkSpace/cubit/registration_bloc.dart';
-import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
 import 'package:TalkSpace/proto/auth/auth.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/cubit/registration_bloc.dart';
+import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Registration extends StatefulWidget {
@@ -88,13 +88,12 @@ class _RegistrationState extends State<Registration> {
                               RegistrationRequest(
                                   email: email, password: password, name: name),
                               context)
-                          .then((secretKey) {
-                        context.read<RegistrationBloc>().add(AddFields(
-                            email: email,
-                            password: password,
-                            secretKey: secretKey));
-                        Navigator.pushNamed(
-                            context, AppRouter.SUBMIT_KEY_REGISTRATION);
+                          .then((addFields) {
+                        if (addFields != null) {
+                          context.read<RegistrationBloc>().add(addFields);
+                          Navigator.pushNamed(
+                              context, AppRouter.SUBMIT_KEY_REGISTRATION);
+                        }
                       });
                       return;
                     }
@@ -107,7 +106,7 @@ class _RegistrationState extends State<Registration> {
         ));
   }
 
-  Future<String?> _registration(
+  Future<AddFields?> _registration(
       RegistrationRequest request, BuildContext context) async {
     try {
       showLoaderDialog(context);
@@ -125,7 +124,10 @@ class _RegistrationState extends State<Registration> {
 
       await authGprc.registration(
           RegistrationRequest(email: email, password: password, name: name));
-      return secretKey;
+      return AddFields(
+                              email: email,
+                              password: password,
+                              secretKey: secretKey);
     } catch (e) {
       showToast(context, "Ошибка при регистрации");
       return null;

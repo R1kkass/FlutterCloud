@@ -18,7 +18,6 @@ Future<http.Response> registration(RegisterParams body) async {
     "password": body.password,
     "name": body.name,
   }, headers: {
-    "X-CSRF-token": csrf,
   });
 }
 

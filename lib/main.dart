@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -195,8 +196,10 @@ Future<ClientChannel> chan() async {
     port: 50051,
     options: ChannelOptions(
         credentials: ChannelCredentials.secure(
-      certificates: trustedRootsbuffer.asUint8List(
-          trustedRoots.offsetInBytes, trustedRoots.lengthInBytes),
+      certificates: trustedRootsbuffer
+          .asUint8List(trustedRoots.offsetInBytes, trustedRoots.lengthInBytes)
+          .map((uint8) => uint8.toInt())
+          .toList(),
     )),
   );
 }
