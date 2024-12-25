@@ -4,6 +4,7 @@ import 'package:TalkSpace/main.dart';
 
 import 'package:TalkSpace/proto/keys/keys.pbgrpc.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 
@@ -27,5 +28,16 @@ class KeysGrpc {
       listChunk = [...listChunk, ...item.chunk];
     }
     return utf8.decode(crypt(false, Uint8List.fromList(listChunk), password));
+  }
+
+  getKeys(Function callback) async {
+    var secretBox = HiveBoxes().secretKey;
+
+    var y = await KeysGrpc().downloadKeys;
+    Map<String, dynamic> data = jsonDecode(y);
+    for (var item in data.keys) {
+      await secretBox.put(item, data[item]);
+    }
+    callback();
   }
 }

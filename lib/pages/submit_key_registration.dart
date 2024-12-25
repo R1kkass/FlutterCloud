@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:TalkSpace/components/dialog_loading.dart';
+import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/widget/user/send_registration_mail_key.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,7 @@ import 'package:TalkSpace/components/my_input.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
-import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/auth/auth.pb.dart';
-import 'package:TalkSpace/proto/keys/keys.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
@@ -62,14 +61,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
                       ))),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      _submitEmail().then((e) {
-                        if (e != null) {
-                          context.read<TokenCubit>().updateToken(e.accessToken);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (r) => false);
-                        }
-                      });
-                      return;
+                      await _submit();
                     }
                   },
                   child: const Text('Подтвердить'),
@@ -84,32 +76,37 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
         ));
   }
 
-  Future<SubmitEmailResponse?> _submitEmail() async {
+  Future _submit() async {
     try {
-      showLoaderDialog(context);
-      var data = context.read<RegistrationBloc>().state;
-      String key = encrypt(sigUpController["key"]!.text, data.secretKey!);
-
-      var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
-          email: data.email, password: data.password, key: key));
-      var token = decrypt(submitResponse.accessToken, data.secretKey!);
-      KeysGrpc().uploadFile(KeysUploadRequest());
-
-      var box = Hive.box('token');
-      var boxTokens = Hive.box('list_token');
-
-      await box.put('access_token', token);
-      await boxTokens.put(data.email, token);
-
-      List<int> bytes = utf8.encode(data.password!);
-      String hash = sha256.convert(bytes).toString();
-      await box.put('password', hash.substring(0, 32));
-      return SubmitEmailResponse(accessToken: token);
+      _submitEmail();
     } catch (e) {
       showToast(context, "Ошибка при подтверждении");
-      return null;
-    } finally {
       Navigator.pop(context);
     }
+  }
+
+  Future _submitEmail() async {
+    showLoaderDialog(context);
+    var data = context.read<RegistrationBloc>().state;
+    String key = encrypt(sigUpController["key"]!.text, data.secretKey!);
+
+    var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
+        email: data.email, password: data.password, key: key));
+    var accessToken = decrypt(submitResponse.accessToken, data.secretKey!);
+
+    var box = Hive.box('token');
+    var boxTokens = Hive.box('list_token');
+
+    await box.put('access_token', accessToken);
+    await boxTokens.put(data.email, accessToken);
+
+    List<int> bytes = utf8.encode(data.password!);
+    String hash = sha256.convert(bytes).toString();
+    await box.put('password', hash.substring(0, 32));
+    context.read<TokenCubit>().updateToken(accessToken);
+    KeysGrpc().getKeys(() {});
+    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+    return SubmitEmailResponse(accessToken: accessToken);
   }
 }

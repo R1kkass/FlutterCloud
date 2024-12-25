@@ -51,7 +51,7 @@ message AcceptChatRequest {
 }
 
 message AcceptChatResponse {
-    string message = 1;
+    repeated ChatUser chats = 1;
 }
 
 message DissalowChatRequest {
@@ -59,7 +59,7 @@ message DissalowChatRequest {
 }
 
 message DissalowChatResponse {
-    string message = 1;
+    repeated ChatUser chats = 1;
 }
 
 message CreateRequestChat {
@@ -82,10 +82,10 @@ message StreamGetResponseChat {
 }
 
 message GetUnSuccessChatsResponse {
-    repeated ChatUsers chats = 1;
+    repeated ChatUser chats = 1;
 }
 
-message ChatUsers {
+message ChatUser {
     uint32 id = 1;
     uint32 chat_id = 2;
     uint32 user_id = 3;
@@ -112,7 +112,7 @@ message Chat {
     uint32 id = 1;
     Message message = 2;
     string name_chat = 3;
-    repeated ChatUsers chat_users = 4;
+    repeated ChatUser chat_users = 4;
 }
 
 message Message {

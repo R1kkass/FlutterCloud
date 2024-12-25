@@ -304,11 +304,11 @@ class AcceptChatRequest extends $pb.GeneratedMessage {
 
 class AcceptChatResponse extends $pb.GeneratedMessage {
   factory AcceptChatResponse({
-    $core.String? message,
+    $core.Iterable<ChatUser>? chats,
   }) {
     final $result = create();
-    if (message != null) {
-      $result.message = message;
+    if (chats != null) {
+      $result.chats.addAll(chats);
     }
     return $result;
   }
@@ -317,7 +317,7 @@ class AcceptChatResponse extends $pb.GeneratedMessage {
   factory AcceptChatResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AcceptChatResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..pc<ChatUser>(1, _omitFieldNames ? '' : 'chats', $pb.PbFieldType.PM, subBuilder: ChatUser.create)
     ..hasRequiredFields = false
   ;
 
@@ -343,13 +343,7 @@ class AcceptChatResponse extends $pb.GeneratedMessage {
   static AcceptChatResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get message => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set message($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasMessage() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearMessage() => clearField(1);
+  $core.List<ChatUser> get chats => $_getList(0);
 }
 
 class DissalowChatRequest extends $pb.GeneratedMessage {
@@ -404,11 +398,11 @@ class DissalowChatRequest extends $pb.GeneratedMessage {
 
 class DissalowChatResponse extends $pb.GeneratedMessage {
   factory DissalowChatResponse({
-    $core.String? message,
+    $core.Iterable<ChatUser>? chats,
   }) {
     final $result = create();
-    if (message != null) {
-      $result.message = message;
+    if (chats != null) {
+      $result.chats.addAll(chats);
     }
     return $result;
   }
@@ -417,7 +411,7 @@ class DissalowChatResponse extends $pb.GeneratedMessage {
   factory DissalowChatResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DissalowChatResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'message')
+    ..pc<ChatUser>(1, _omitFieldNames ? '' : 'chats', $pb.PbFieldType.PM, subBuilder: ChatUser.create)
     ..hasRequiredFields = false
   ;
 
@@ -443,13 +437,7 @@ class DissalowChatResponse extends $pb.GeneratedMessage {
   static DissalowChatResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get message => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set message($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasMessage() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearMessage() => clearField(1);
+  $core.List<ChatUser> get chats => $_getList(0);
 }
 
 class CreateRequestChat extends $pb.GeneratedMessage {
@@ -692,7 +680,7 @@ class StreamGetResponseChat extends $pb.GeneratedMessage {
 
 class GetUnSuccessChatsResponse extends $pb.GeneratedMessage {
   factory GetUnSuccessChatsResponse({
-    $core.Iterable<ChatUsers>? chats,
+    $core.Iterable<ChatUser>? chats,
   }) {
     final $result = create();
     if (chats != null) {
@@ -705,7 +693,7 @@ class GetUnSuccessChatsResponse extends $pb.GeneratedMessage {
   factory GetUnSuccessChatsResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetUnSuccessChatsResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
-    ..pc<ChatUsers>(1, _omitFieldNames ? '' : 'chats', $pb.PbFieldType.PM, subBuilder: ChatUsers.create)
+    ..pc<ChatUser>(1, _omitFieldNames ? '' : 'chats', $pb.PbFieldType.PM, subBuilder: ChatUser.create)
     ..hasRequiredFields = false
   ;
 
@@ -731,11 +719,11 @@ class GetUnSuccessChatsResponse extends $pb.GeneratedMessage {
   static GetUnSuccessChatsResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<ChatUsers> get chats => $_getList(0);
+  $core.List<ChatUser> get chats => $_getList(0);
 }
 
-class ChatUsers extends $pb.GeneratedMessage {
-  factory ChatUsers({
+class ChatUser extends $pb.GeneratedMessage {
+  factory ChatUser({
     $core.int? id,
     $core.int? chatId,
     $core.int? userId,
@@ -768,11 +756,11 @@ class ChatUsers extends $pb.GeneratedMessage {
     }
     return $result;
   }
-  ChatUsers._() : super();
-  factory ChatUsers.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory ChatUsers.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  ChatUser._() : super();
+  factory ChatUser.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChatUser.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChatUsers', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChatUser', package: const $pb.PackageName(_omitMessageNames ? '' : 'chat'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OU3)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
     ..a<$core.int>(3, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
@@ -787,22 +775,22 @@ class ChatUsers extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
   'Will be removed in next major version')
-  ChatUsers clone() => ChatUsers()..mergeFromMessage(this);
+  ChatUser clone() => ChatUser()..mergeFromMessage(this);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ChatUsers copyWith(void Function(ChatUsers) updates) => super.copyWith((message) => updates(message as ChatUsers)) as ChatUsers;
+  ChatUser copyWith(void Function(ChatUser) updates) => super.copyWith((message) => updates(message as ChatUser)) as ChatUser;
 
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
-  static ChatUsers create() => ChatUsers._();
-  ChatUsers createEmptyInstance() => create();
-  static $pb.PbList<ChatUsers> createRepeated() => $pb.PbList<ChatUsers>();
+  static ChatUser create() => ChatUser._();
+  ChatUser createEmptyInstance() => create();
+  static $pb.PbList<ChatUser> createRepeated() => $pb.PbList<ChatUser>();
   @$core.pragma('dart2js:noInline')
-  static ChatUsers getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChatUsers>(create);
-  static ChatUsers? _defaultInstance;
+  static ChatUser getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChatUser>(create);
+  static ChatUser? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get id => $_getIZ(0);
@@ -1057,7 +1045,7 @@ class Chat extends $pb.GeneratedMessage {
     $core.int? id,
     Message? message,
     $core.String? nameChat,
-    $core.Iterable<ChatUsers>? chatUsers,
+    $core.Iterable<ChatUser>? chatUsers,
   }) {
     final $result = create();
     if (id != null) {
@@ -1082,7 +1070,7 @@ class Chat extends $pb.GeneratedMessage {
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OU3)
     ..aOM<Message>(2, _omitFieldNames ? '' : 'message', subBuilder: Message.create)
     ..aOS(3, _omitFieldNames ? '' : 'nameChat')
-    ..pc<ChatUsers>(4, _omitFieldNames ? '' : 'chatUsers', $pb.PbFieldType.PM, subBuilder: ChatUsers.create)
+    ..pc<ChatUser>(4, _omitFieldNames ? '' : 'chatUsers', $pb.PbFieldType.PM, subBuilder: ChatUser.create)
     ..hasRequiredFields = false
   ;
 
@@ -1137,7 +1125,7 @@ class Chat extends $pb.GeneratedMessage {
   void clearNameChat() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.List<ChatUsers> get chatUsers => $_getList(3);
+  $core.List<ChatUser> get chatUsers => $_getList(3);
 }
 
 class Message extends $pb.GeneratedMessage {

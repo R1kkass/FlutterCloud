@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
@@ -8,9 +9,7 @@ import 'package:TalkSpace/components/my_input.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
-import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/auth/auth.pb.dart';
-import 'package:TalkSpace/proto/keys/keys.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
@@ -75,21 +74,7 @@ class _AuthorizationState extends State<Authorization> {
                       ))),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      _login(
-                              LoginFields(
-                                email: sigUpController["email"]?.text as String,
-                                password:
-                                    sigUpController["password"]?.text as String,
-                              ),
-                              context)
-                          .then((e) async {
-                        if (e != null) {
-                          context.read<TokenCubit>().updateToken(e.accessToken);
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (r) => false);
-                        }
-                      });
-                      return;
+                      await _login();
                     }
                   },
                   child: const Text('Подтвердить'),
@@ -106,41 +91,47 @@ class _AuthorizationState extends State<Authorization> {
           ),
         ));
   }
-}
 
-Future<LoginResponse?> _login(LoginFields request, BuildContext context) async {
-  try {
+  Future _login() async {
+    try {
+      _loginForm();
+    } catch (e) {
+      showToast(context, "Неверный логин или пароль");
+      Navigator.pop(context);
+    } finally {}
+    return null;
+  }
+
+  Future _loginForm() async {
     showLoaderDialog(context);
     var authGprc = AuthGrpc();
-
+    var email = sigUpController["email"]!.text;
+    var password = sigUpController["password"]!.text;
     DHConnectResponse keys = await authGprc.dHConnect(DHConnectRequest());
 
     var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
     var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
     await authGprc.dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
     secretKey = secretKey.substring(0, 32);
-    String password = encrypt(request.password, secretKey);
-    String email = encrypt(request.email, secretKey);
+    password = encrypt(password, secretKey);
+    email = encrypt(email, secretKey);
 
     var loginResp =
         await authGprc.login(LoginRequest(email: email, password: password));
-    var token = decrypt(loginResp.accessToken, secretKey);
-    KeysGrpc().uploadFile(KeysUploadRequest());
+    var accessToken = decrypt(loginResp.accessToken, secretKey);
 
     var box = Hive.box('token');
     var boxTokens = Hive.box('list_token');
 
-    box.put('access_token', token);
-    boxTokens.put(request.email, token);
+    await box.put('access_token', accessToken);
+    await boxTokens.put(email, accessToken);
 
-    List<int> bytes = utf8.encode(request.password);
+    List<int> bytes = utf8.encode(password);
     String hash = sha256.convert(bytes).toString();
-    box.put('password', hash.substring(0, 32));
-    return LoginResponse(accessToken: token);
-  } catch (e) {
-    showToast(context, "Неверный логин или пароль");
-    return null;
-  } finally {
+    await box.put('password', hash.substring(0, 32));
+    context.read<TokenCubit>().updateToken(accessToken);
+    KeysGrpc().getKeys(() {});
     Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
   }
 }

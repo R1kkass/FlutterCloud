@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/cubit/current_page_bloc.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
-import 'package:TalkSpace/entities/chat/chat_accept.dart';
+import 'package:TalkSpace/features/chat/chat_accept.dart';
 import 'package:TalkSpace/features/chat/chat_list_general.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
@@ -26,7 +26,7 @@ Map<int, String> titleTab = {
 
 class _ChatListsState extends State<ChatLists>
     with SingleTickerProviderStateMixin {
-  List<ChatUsers>? chats = [];
+  List<ChatUser>? chats = [];
   TabController? controller;
   String? title;
 
@@ -89,7 +89,15 @@ class _ChatListsState extends State<ChatLists>
     );
   }
 
-  Widget _paintChatAccept({required ChatUsers chat}) {
-    return ChatAccept(chat: chat);
+  setChats(List<ChatUser> chatsUser) {
+    chats = chatsUser;
+    setState(() {});
+  }
+
+  Widget _paintChatAccept({required ChatUser chat}) {
+    return ChatAccept(
+      chat: chat,
+      setChats: setChats,
+    );
   }
 }

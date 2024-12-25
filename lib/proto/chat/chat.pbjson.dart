@@ -99,13 +99,14 @@ final $typed_data.Uint8List acceptChatRequestDescriptor = $convert.base64Decode(
 const AcceptChatResponse$json = {
   '1': 'AcceptChatResponse',
   '2': [
-    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'chats', '3': 1, '4': 3, '5': 11, '6': '.chat.ChatUser', '10': 'chats'},
   ],
 };
 
 /// Descriptor for `AcceptChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List acceptChatResponseDescriptor = $convert.base64Decode(
-    'ChJBY2NlcHRDaGF0UmVzcG9uc2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZQ==');
+    'ChJBY2NlcHRDaGF0UmVzcG9uc2USJAoFY2hhdHMYASADKAsyDi5jaGF0LkNoYXRVc2VyUgVjaG'
+    'F0cw==');
 
 @$core.Deprecated('Use dissalowChatRequestDescriptor instead')
 const DissalowChatRequest$json = {
@@ -123,13 +124,14 @@ final $typed_data.Uint8List dissalowChatRequestDescriptor = $convert.base64Decod
 const DissalowChatResponse$json = {
   '1': 'DissalowChatResponse',
   '2': [
-    {'1': 'message', '3': 1, '4': 1, '5': 9, '10': 'message'},
+    {'1': 'chats', '3': 1, '4': 3, '5': 11, '6': '.chat.ChatUser', '10': 'chats'},
   ],
 };
 
 /// Descriptor for `DissalowChatResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List dissalowChatResponseDescriptor = $convert.base64Decode(
-    'ChREaXNzYWxvd0NoYXRSZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+    'ChREaXNzYWxvd0NoYXRSZXNwb25zZRIkCgVjaGF0cxgBIAMoCzIOLmNoYXQuQ2hhdFVzZXJSBW'
+    'NoYXRz');
 
 @$core.Deprecated('Use createRequestChatDescriptor instead')
 const CreateRequestChat$json = {
@@ -188,18 +190,18 @@ final $typed_data.Uint8List streamGetResponseChatDescriptor = $convert.base64Dec
 const GetUnSuccessChatsResponse$json = {
   '1': 'GetUnSuccessChatsResponse',
   '2': [
-    {'1': 'chats', '3': 1, '4': 3, '5': 11, '6': '.chat.ChatUsers', '10': 'chats'},
+    {'1': 'chats', '3': 1, '4': 3, '5': 11, '6': '.chat.ChatUser', '10': 'chats'},
   ],
 };
 
 /// Descriptor for `GetUnSuccessChatsResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getUnSuccessChatsResponseDescriptor = $convert.base64Decode(
-    'ChlHZXRVblN1Y2Nlc3NDaGF0c1Jlc3BvbnNlEiUKBWNoYXRzGAEgAygLMg8uY2hhdC5DaGF0VX'
-    'NlcnNSBWNoYXRz');
+    'ChlHZXRVblN1Y2Nlc3NDaGF0c1Jlc3BvbnNlEiQKBWNoYXRzGAEgAygLMg4uY2hhdC5DaGF0VX'
+    'NlclIFY2hhdHM=');
 
-@$core.Deprecated('Use chatUsersDescriptor instead')
-const ChatUsers$json = {
-  '1': 'ChatUsers',
+@$core.Deprecated('Use chatUserDescriptor instead')
+const ChatUser$json = {
+  '1': 'ChatUser',
   '2': [
     {'1': 'id', '3': 1, '4': 1, '5': 13, '10': 'id'},
     {'1': 'chat_id', '3': 2, '4': 1, '5': 13, '10': 'chatId'},
@@ -211,12 +213,12 @@ const ChatUsers$json = {
   ],
 };
 
-/// Descriptor for `ChatUsers`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List chatUsersDescriptor = $convert.base64Decode(
-    'CglDaGF0VXNlcnMSDgoCaWQYASABKA1SAmlkEhcKB2NoYXRfaWQYAiABKA1SBmNoYXRJZBIXCg'
-    'd1c2VyX2lkGAMgASgNUgZ1c2VySWQSHgoEdXNlchgEIAEoCzIKLmNoYXQuVXNlclIEdXNlchId'
-    'CgpjcmVhdGVkX2F0GAUgASgJUgljcmVhdGVkQXQSHQoKdXBkYXRlZF9hdBgGIAEoCVIJdXBkYX'
-    'RlZEF0Eh4KBGNoYXQYByABKAsyCi5jaGF0LkNoYXRSBGNoYXQ=');
+/// Descriptor for `ChatUser`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List chatUserDescriptor = $convert.base64Decode(
+    'CghDaGF0VXNlchIOCgJpZBgBIAEoDVICaWQSFwoHY2hhdF9pZBgCIAEoDVIGY2hhdElkEhcKB3'
+    'VzZXJfaWQYAyABKA1SBnVzZXJJZBIeCgR1c2VyGAQgASgLMgouY2hhdC5Vc2VyUgR1c2VyEh0K'
+    'CmNyZWF0ZWRfYXQYBSABKAlSCWNyZWF0ZWRBdBIdCgp1cGRhdGVkX2F0GAYgASgJUgl1cGRhdG'
+    'VkQXQSHgoEY2hhdBgHIAEoCzIKLmNoYXQuQ2hhdFIEY2hhdA==');
 
 @$core.Deprecated('Use chatUsersCountDescriptor instead')
 const ChatUsersCount$json = {
@@ -251,15 +253,15 @@ const Chat$json = {
     {'1': 'id', '3': 1, '4': 1, '5': 13, '10': 'id'},
     {'1': 'message', '3': 2, '4': 1, '5': 11, '6': '.chat.Message', '10': 'message'},
     {'1': 'name_chat', '3': 3, '4': 1, '5': 9, '10': 'nameChat'},
-    {'1': 'chat_users', '3': 4, '4': 3, '5': 11, '6': '.chat.ChatUsers', '10': 'chatUsers'},
+    {'1': 'chat_users', '3': 4, '4': 3, '5': 11, '6': '.chat.ChatUser', '10': 'chatUsers'},
   ],
 };
 
 /// Descriptor for `Chat`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List chatDescriptor = $convert.base64Decode(
     'CgRDaGF0Eg4KAmlkGAEgASgNUgJpZBInCgdtZXNzYWdlGAIgASgLMg0uY2hhdC5NZXNzYWdlUg'
-    'dtZXNzYWdlEhsKCW5hbWVfY2hhdBgDIAEoCVIIbmFtZUNoYXQSLgoKY2hhdF91c2VycxgEIAMo'
-    'CzIPLmNoYXQuQ2hhdFVzZXJzUgljaGF0VXNlcnM=');
+    'dtZXNzYWdlEhsKCW5hbWVfY2hhdBgDIAEoCVIIbmFtZUNoYXQSLQoKY2hhdF91c2VycxgEIAMo'
+    'CzIOLmNoYXQuQ2hhdFVzZXJSCWNoYXRVc2Vycw==');
 
 @$core.Deprecated('Use messageDescriptor instead')
 const Message$json = {

@@ -81,21 +81,7 @@ class _RegistrationState extends State<Registration> {
                       ))),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      var email = sigUpController["email"]?.text;
-                      var password = sigUpController["password"]?.text;
-                      var name = sigUpController["name"]?.text;
-                      _registration(
-                              RegistrationRequest(
-                                  email: email, password: password, name: name),
-                              context)
-                          .then((addFields) {
-                        if (addFields != null) {
-                          context.read<RegistrationBloc>().add(addFields);
-                          Navigator.pushNamed(
-                              context, AppRouter.SUBMIT_KEY_REGISTRATION);
-                        }
-                      });
-                      return;
+                      await _registration();
                     }
                   },
                   child: const Text('Подтвердить'),
@@ -106,33 +92,41 @@ class _RegistrationState extends State<Registration> {
         ));
   }
 
-  Future<AddFields?> _registration(
-      RegistrationRequest request, BuildContext context) async {
+  Future _registration() async {
     try {
-      showLoaderDialog(context);
-      var authGprc = AuthGrpc();
-
-      DHConnectResponse keys = await authGprc.dHConnect(DHConnectRequest());
-
-      var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
-      var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
-      await authGprc.dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
-      secretKey = secretKey.substring(0, 32);
-      String password = encrypt(request.password, secretKey);
-      String email = encrypt(request.email, secretKey);
-      String name = encrypt(request.name, secretKey);
-
-      await authGprc.registration(
-          RegistrationRequest(email: email, password: password, name: name));
-      return AddFields(
-                              email: email,
-                              password: password,
-                              secretKey: secretKey);
+      _registrationForm();
     } catch (e) {
       showToast(context, "Пользователь с такой почтой уже зарегистрирован");
-      return null;
-    } finally {
       Navigator.pop(context);
     }
+    return null;
+  }
+
+  Future _registrationForm() async {
+    showLoaderDialog(context);
+    var authGprc = AuthGrpc();
+    DHConnectResponse keys = await authGprc.dHConnect(DHConnectRequest());
+
+    var email = sigUpController["email"]!.text;
+    var password = sigUpController["password"]!.text;
+    var name = sigUpController["name"]!.text;
+
+    var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
+    var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
+
+    await authGprc.dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
+
+    secretKey = secretKey.substring(0, 32);
+    password = encrypt(password, secretKey);
+    email = encrypt(email, secretKey);
+    name = encrypt(name, secretKey);
+
+    await authGprc.registration(
+        RegistrationRequest(email: email, password: password, name: name));
+    context
+        .read<RegistrationBloc>()
+        .add(AddFields(email: email, password: password, secretKey: secretKey));
+    Navigator.pop(context);
+    Navigator.pushNamed(context, AppRouter.SUBMIT_KEY_REGISTRATION);
   }
 }
