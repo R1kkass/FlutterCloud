@@ -41,6 +41,7 @@ void main() async {
   await Hive.openBox('pubkey');
   await Hive.openBox<String>('secretkey');
   await Hive.openBox<String>('chatFileUploaded');
+  await Hive.openBox<String>('cryptToken');
 
   Bloc.observer = const MyBlocObserver();
 

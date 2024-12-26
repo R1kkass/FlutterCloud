@@ -81,10 +81,14 @@ class LoginRequest extends $pb.GeneratedMessage {
 class LoginResponse extends $pb.GeneratedMessage {
   factory LoginResponse({
     $core.String? accessToken,
+    $core.String? cryptToken,
   }) {
     final $result = create();
     if (accessToken != null) {
       $result.accessToken = accessToken;
+    }
+    if (cryptToken != null) {
+      $result.cryptToken = cryptToken;
     }
     return $result;
   }
@@ -94,6 +98,7 @@ class LoginResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'accessToken')
+    ..aOS(2, _omitFieldNames ? '' : 'cryptToken')
     ..hasRequiredFields = false
   ;
 
@@ -126,6 +131,15 @@ class LoginResponse extends $pb.GeneratedMessage {
   $core.bool hasAccessToken() => $_has(0);
   @$pb.TagNumber(1)
   void clearAccessToken() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get cryptToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set cryptToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCryptToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCryptToken() => clearField(2);
 }
 
 class RegistrationRequest extends $pb.GeneratedMessage {
@@ -561,10 +575,14 @@ class SubmitEmailRequest extends $pb.GeneratedMessage {
 class SubmitEmailResponse extends $pb.GeneratedMessage {
   factory SubmitEmailResponse({
     $core.String? accessToken,
+    $core.String? cryptToken,
   }) {
     final $result = create();
     if (accessToken != null) {
       $result.accessToken = accessToken;
+    }
+    if (cryptToken != null) {
+      $result.cryptToken = cryptToken;
     }
     return $result;
   }
@@ -574,6 +592,7 @@ class SubmitEmailResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SubmitEmailResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'auth'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'accessToken')
+    ..aOS(2, _omitFieldNames ? '' : 'cryptToken')
     ..hasRequiredFields = false
   ;
 
@@ -606,6 +625,15 @@ class SubmitEmailResponse extends $pb.GeneratedMessage {
   $core.bool hasAccessToken() => $_has(0);
   @$pb.TagNumber(1)
   void clearAccessToken() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get cryptToken => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set cryptToken($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCryptToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCryptToken() => clearField(2);
 }
 
 class SendNewMailKeyRequest extends $pb.GeneratedMessage {

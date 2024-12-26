@@ -21,6 +21,7 @@ message LoginRequest {
 
 message LoginResponse {
     string access_token = 1;
+    string crypt_token = 2;
 }
 
 message RegistrationRequest {
@@ -61,6 +62,7 @@ message SubmitEmailRequest {
 
 message SubmitEmailResponse {
     string access_token = 1;
+    string crypt_token = 2;
 }
 
 message SendNewMailKeyRequest {

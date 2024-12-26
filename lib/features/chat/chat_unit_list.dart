@@ -79,15 +79,20 @@ class _ChatUnitListState extends State<ChatUnitList> {
                               ? chat.chat.chatUsers[0].user.name
                               : chat.chat.chatUsers[1].user.name
                           : chat.chat.nameChat,
-                      style: const TextStyle(
-                          fontSize: 21, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.blueAccent.shade400),
                     ),
+                  ),
+                  SizedBox(
+                    height: 2,
                   ),
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
                       decryptMessage,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
                     ),
@@ -103,9 +108,9 @@ class _ChatUnitListState extends State<ChatUnitList> {
                       if (chat.chat.message.user.email == jwtDecode().email)
                         chat.chat.message.statusRead
                             ? const Icon(Icons.done_all,
-                                size: 17, color: Colors.blueAccent)
+                                size: 16, color: Colors.blueAccent)
                             : const Icon(Icons.done,
-                                size: 17, color: Colors.blueAccent),
+                                size: 14, color: Colors.blueAccent),
                       const SizedBox(
                         width: 5,
                       ),

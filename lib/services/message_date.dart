@@ -3,21 +3,20 @@ class MessageDate {
     try {
       DateTime timeParse = DateTime.parse(time).toLocal();
       var difference = DateTime.now().toLocal().difference(timeParse);
-      var day =
-          DateTime.now().subtract(Duration(days: difference.inDays)).toLocal();
+
       if (difference.inDays ~/ 365 > 0) {
-        return "${addZero(day.day)}.${addZero(day.month)}.${day.year.toString().substring(2)}";
+        return "${addZero(timeParse.day)}.${addZero(timeParse.month)}.${timeParse.year.toString().substring(2)}";
       }
 
       if (difference.inDays ~/ 7 > 0) {
-        return "${day.day} ${month[day.month]}";
+        return "${timeParse.day} ${month[timeParse.month]}";
       }
 
       if (difference.inDays > 0) {
-        return "${weekDay[day.weekday]}";
+        return "${weekDay[timeParse.weekday]}";
       }
 
-      return "${addZero(day.hour)}:${addZero(day.minute)}";
+      return "${addZero(timeParse.hour)}:${addZero(timeParse.minute)}";
     } catch (e) {
       return "";
     }

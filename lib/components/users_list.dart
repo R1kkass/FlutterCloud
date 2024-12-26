@@ -16,7 +16,7 @@ class UsersList extends StatefulWidget {
 class _UsersListState extends State<UsersList> {
   @override
   Widget build(BuildContext context) {
-    List users = widget.users;
+    var users = widget.users;
     return ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {
@@ -77,16 +77,7 @@ class _UsersListState extends State<UsersList> {
                 children: [
                   TextButton(
                       onPressed: () async {
-                        Navigator.pop(context);
-                        try {
-                          await ChatGrpc()
-                              .createChat(CreateRequestChat(otherId: otherId));
-                          showToast(context, "Запрос отправлен");
-                        } on GrpcError catch (e) {
-                          showToast(context, e.message as String);
-                        } catch (e) {
-                          showToast(context, "Запрос не отправлен");
-                        }
+                        await _create(otherId);
                       },
                       child: const Row(
                         children: [
@@ -105,5 +96,19 @@ class _UsersListState extends State<UsersList> {
             ),
           );
         });
+  }
+
+  Future _create(int otherId) async {
+    try {
+      await _createChat(otherId);
+    } catch (e) {
+      showToast(context, "Запрос не отправлен");
+    }
+  }
+
+  Future _createChat(int otherId) async {
+    Navigator.pop(context);
+    await ChatGrpc().createChat(CreateRequestChat(otherId: otherId));
+    showToast(context, "Запрос отправлен");
   }
 }

@@ -12,4 +12,8 @@ class HiveBoxes {
   Box<String> get secretKey {
     return Hive.box<String>("secretkey");
   }
+
+  Box<String> get cryptToken {
+    return Hive.box<String>("secretkey");
+  }
 }

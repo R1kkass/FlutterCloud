@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:TalkSpace/main.dart';
 
 import 'package:TalkSpace/proto/keys/keys.pbgrpc.dart';
@@ -21,22 +20,23 @@ class KeysGrpc {
   }
 
   Future<String> get downloadKeys async {
-    var password = Hive.box('token').get("password");
     var list = await _stub.downloadKeys(Empty(), options: _options).toList();
     List<int> listChunk = [];
     for (var item in list) {
       listChunk = [...listChunk, ...item.chunk];
     }
-    return utf8.decode(crypt(false, Uint8List.fromList(listChunk), password));
+    return utf8.decode(listChunk);
   }
 
   getKeys(Function callback) async {
     var secretBox = HiveBoxes().secretKey;
-
-    var y = await KeysGrpc().downloadKeys;
-    Map<String, dynamic> data = jsonDecode(y);
+    var password = Hive.box('token').get("password");
+    var chatKeys = await KeysGrpc().downloadKeys;
+    chatKeys = chatKeys != "" ? chatKeys : "{}";
+    Map<String, dynamic> data = jsonDecode(chatKeys);
     for (var item in data.keys) {
-      await secretBox.put(item, data[item]);
+      var decryptKey = crypt(false, utf8.encode(item), password).toString();
+      await secretBox.put(item, decryptKey);
     }
     callback();
   }

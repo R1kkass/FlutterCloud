@@ -27,7 +27,9 @@ class _ChatDissalowButtonState extends State<ChatDissalowButton> {
             ? SizedBox(
                 width: 10,
                 height: 10,
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
               )
             : const Icon(Icons.clear));
   }

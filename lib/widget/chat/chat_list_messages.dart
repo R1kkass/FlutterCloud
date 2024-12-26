@@ -24,6 +24,15 @@ class ChatListMessages extends StatefulWidget {
 class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   ResponseStream<StreamGetResponseChat>? stream;
   List<ChatUsersCount> chats = [];
+  var secretBox = HiveBoxes().secretKey;
+  var pubKeyBox = Hive.box("pubkey");
+  var tokenBox = Hive.box("token");
+
+  var email = jwtDecode().email;
+  var keyChanged = false;
+  var keyGeted = false;
+  var chatGrpc = ChatGrpc();
+
   @override
   void initState() {
     super.initState();
@@ -52,67 +61,78 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   }
 
   Future _checkPubKey(List<ChatUsersCount>? chats) async {
-    var secretBox = HiveBoxes().secretKey;
-    var box = await Hive.openBox("pubkey");
-    var token = await Hive.openBox("token");
-    var email = jwtDecode().email;
-    var keyChanged = false;
-    var keyGeted = false;
-    var chatGrpc = ChatGrpc();
     try {
       for (var chat in chats as List<ChatUsersCount>) {
-        var key = chat.chatId.toString() + email;
-        if (secretBox.get(key) == null && !keyGeted) {
-          try {
-            var y = await KeysGrpc().downloadKeys;
-            Map<String, dynamic> data = jsonDecode(y);
-            for (var item in data.keys) {
-              await secretBox.put(item, data[item]);
-            }
-            keyGeted = true;
-          } catch (e) {}
-        }
-
-        if (box.get(key) == null && secretBox.get(key) == null) {
-          try {
-            GetPublicKeyResponse keys = await chatGrpc
-                .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
-            var key =
-                await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
-            await chatGrpc.createSecondaryKey(CreateSecondaryKeyRequest(
-                chatId: chat.chat.id, key: key.toString()));
-          } catch (e) {}
-        }
-        if (secretBox.get(key) == null) {
-          try {
-            keyChanged = true;
-
-            await chatGrpc
-                .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
-                .then((keys) async {
-              await generateSecretKey(keys.key, keys.p, chat.chat.id);
-            });
-          } catch (e) {}
-        }
+        await _readDownloadKeys(chat);
+        await _createSecondaryKey(chat);
+        await _createSecretKey(chat);
       }
-      if (keyChanged) {
-        try {
-          var pass = token.get("password");
-          var values = secretBox.values.toList();
-          var keys = secretBox.keys.toList();
-          var resultObj = {};
-
-          for (var i = 0; i < keys.length; i++) {
-            resultObj[keys[i]] = values[i];
-          }
-          dynamic json = jsonEncode(resultObj).toString();
-          json = crypt(true, utf8.encode(json), pass);
-
-          await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
-        } catch (e) {}
-      }
+      await _sendNewKeys();
     } catch (e) {
       showToast(context, "Неизвестная ошибка");
     }
+  }
+
+  Future _readDownloadKeys(ChatUsersCount chat) async {
+    try {
+      var key = chat.chatId.toString() + email;
+
+      if (secretBox.get(key) == null && !keyGeted) {
+        var y = await KeysGrpc().downloadKeys;
+        Map<String, dynamic> data = jsonDecode(y);
+        for (var item in data.keys) {
+          await secretBox.put(item, data[item]);
+        }
+        keyGeted = true;
+      }
+    } catch (e) {}
+  }
+
+  Future _createSecondaryKey(ChatUsersCount chat) async {
+    try {
+      var key = chat.chatId.toString() + email;
+      if (pubKeyBox.get(key) == null && secretBox.get(key) == null) {
+        GetPublicKeyResponse keys = await chatGrpc
+            .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
+        var key = await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
+        await chatGrpc.createSecondaryKey(CreateSecondaryKeyRequest(
+            chatId: chat.chat.id, key: key.toString()));
+      }
+    } catch (e) {}
+  }
+
+  Future _createSecretKey(ChatUsersCount chat) async {
+    try {
+      var key = chat.chatId.toString() + email;
+
+      if (secretBox.get(key) == null) {
+        keyChanged = true;
+
+        await chatGrpc
+            .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
+            .then((keys) async {
+          await generateSecretKey(keys.key, keys.p, chat.chat.id);
+        });
+      }
+    } catch (e) {}
+  }
+
+  Future _sendNewKeys() async {
+    try {
+      if (keyChanged || true) {
+        var pass = tokenBox.get("password");
+        var values = secretBox.values.toList();
+        var keys = secretBox.keys.toList();
+        var resultObj = {};
+
+        for (var i = 0; i < keys.length; i++) {
+          resultObj[keys[i]] =
+              utf8.decode(crypt(true, utf8.encode(values[i]), pass));
+        }
+        List<int> json = utf8.encode(jsonEncode(resultObj).toString());
+
+        await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
+      }
+    } catch (e) {}
   }
 }

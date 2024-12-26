@@ -32,12 +32,14 @@ const LoginResponse$json = {
   '1': 'LoginResponse',
   '2': [
     {'1': 'access_token', '3': 1, '4': 1, '5': 9, '10': 'accessToken'},
+    {'1': 'crypt_token', '3': 2, '4': 1, '5': 9, '10': 'cryptToken'},
   ],
 };
 
 /// Descriptor for `LoginResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List loginResponseDescriptor = $convert.base64Decode(
-    'Cg1Mb2dpblJlc3BvbnNlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW4=');
+    'Cg1Mb2dpblJlc3BvbnNlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW4SHwoLY3'
+    'J5cHRfdG9rZW4YAiABKAlSCmNyeXB0VG9rZW4=');
 
 @$core.Deprecated('Use registrationRequestDescriptor instead')
 const RegistrationRequest$json = {
@@ -140,13 +142,14 @@ const SubmitEmailResponse$json = {
   '1': 'SubmitEmailResponse',
   '2': [
     {'1': 'access_token', '3': 1, '4': 1, '5': 9, '10': 'accessToken'},
+    {'1': 'crypt_token', '3': 2, '4': 1, '5': 9, '10': 'cryptToken'},
   ],
 };
 
 /// Descriptor for `SubmitEmailResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List submitEmailResponseDescriptor = $convert.base64Decode(
     'ChNTdWJtaXRFbWFpbFJlc3BvbnNlEiEKDGFjY2Vzc190b2tlbhgBIAEoCVILYWNjZXNzVG9rZW'
-    '4=');
+    '4SHwoLY3J5cHRfdG9rZW4YAiABKAlSCmNyeXB0VG9rZW4=');
 
 @$core.Deprecated('Use sendNewMailKeyRequestDescriptor instead')
 const SendNewMailKeyRequest$json = {

@@ -35,7 +35,9 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
             ? SizedBox(
                 width: 10,
                 height: 10,
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
               )
             : const Icon(Icons.done));
   }
