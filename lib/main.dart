@@ -37,7 +37,7 @@ void main() async {
   await Hive.openBox('token');
   await Hive.openBox<String>('listToken');
   await Hive.openBox('pubkey');
-  await Hive.openBox<String>('secretkey');
+  await Hive.openBox<Map<String, String>>('secretkey');
   await Hive.openBox<String>('chatFileUploaded');
   await Hive.openBox<String>('cryptToken');
 

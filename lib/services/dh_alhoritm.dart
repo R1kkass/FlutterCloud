@@ -26,16 +26,22 @@ Future<BigInt> generatePubKey(String p, int g, int chatId) async {
 
 Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   var box = await Hive.openBox('pubkey');
+  var email = jwtDecode().email;
 
-  int a = box.get(chatId.toString() + jwtDecode().email).toInt();
+  int a = box.get(chatId.toString() + email).toInt();
   BigInt secretKey = BigInt.parse(B);
   secretKey = secretKey.pow(a) % BigInt.parse(p);
 
-  box = HiveBoxes.secretKey;
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
 
-  await box.put(chatId.toString() + jwtDecode().email, hash);
+  var userSecretKeys = HiveBoxes.secretKey.get(email)!;
+
+  if (userSecretKeys[chatId.toString()] == null) {
+    userSecretKeys[chatId.toString()] = hash;
+  }
+
+  await HiveBoxes.secretKey.put(email, userSecretKeys);
 
   return secretKey;
 }

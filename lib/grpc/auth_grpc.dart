@@ -1,5 +1,7 @@
 import 'package:TalkSpace/proto/auth/auth.pbgrpc.dart';
 import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -37,5 +39,12 @@ class AuthGrpc {
 
   Future<SendNewMailKeyResponse> sendNewMailKeyResponse(SendNewMailKeyRequest request) {
     return _stub.sendNewMailKey(request);
+  }
+
+  Future createCryptKey(String cryptToken, String secretKey) async {
+    var email = jwtDecode().email;
+    await HiveBoxes.cryptToken
+        .put("${email}cryptToken", cryptToken);
+    await HiveBoxes.cryptToken.put(email, secretKey);
   }
 }

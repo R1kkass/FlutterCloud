@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/notification_grpc.dart';
 import 'package:TalkSpace/proto/notification/notification.pb.dart';
@@ -132,7 +133,8 @@ class NotificationServices {
   }
 
   static String decodeMessage(String message, String chatId) {
+    var secretKey = HiveBoxes.secretKey.get(jwtDecode().email)?[chatId] ?? "";
     return EncryptMessage().decrypt(
-        message, Hive.box("secretkey").get(chatId + jwtDecode().email));
+        message, secretKey);
   }
 }

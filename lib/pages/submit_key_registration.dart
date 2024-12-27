@@ -89,11 +89,12 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
   Future _submitEmail() async {
     showLoaderDialog(context);
     var data = context.read<RegistrationBloc>().state;
-    String key = encrypt(sigUpController["key"]!.text, data.secretKey!);
+    var secretKey = data.secretKey!;
+    String key = encrypt(sigUpController["key"]!.text, secretKey);
 
     var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
         email: data.email, password: data.password, key: key));
-    var accessToken = decrypt(submitResponse.accessToken, data.secretKey!);
+    var accessToken = decrypt(submitResponse.accessToken, secretKey);
 
     var box = Hive.box('token');
     var boxTokens = HiveBoxes.listToken;
@@ -105,9 +106,12 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
     String hash = sha256.convert(bytes).toString();
     await box.put('password', hash.substring(0, 32));
     context.read<TokenCubit>().updateToken(accessToken);
-    KeysGrpc().getKeys(() {});
+    await KeysGrpc().getKeys();
+    await HiveBoxes.cryptToken
+        .put("${data.email!}cryptToken", submitResponse.cryptToken);
+    await HiveBoxes.cryptToken.put(data.email!, secretKey);
+
     Navigator.pop(context);
     Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
-    return SubmitEmailResponse(accessToken: accessToken);
   }
 }

@@ -17,7 +17,7 @@ class ChatUnitList extends StatefulWidget {
 }
 
 class _ChatUnitListState extends State<ChatUnitList> {
-  JwtPayload? jwt;
+  String email = "";
   String decryptMessage = "";
 
   String number(int count) {
@@ -32,9 +32,9 @@ class _ChatUnitListState extends State<ChatUnitList> {
   }
 
   void decryptMessageFn(ChatUsersCount chat) async {
-    jwt = jwtDecode();
+    email = jwtDecode().email;
     var box = HiveBoxes.secretKey;
-    var hash = box.get(widget.chat.chatId.toString() + jwt?.email) ?? "";
+    var hash = box.get(email)?[widget.chat.chatId.toString()] ?? "";
     if (chat.chat.message.text != "") {
       decryptMessage = EncryptMessage().decrypt(chat.chat.message.text, hash);
     } else if (chat.chat.message.chatFiles.isNotEmpty) {
@@ -75,7 +75,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
                     width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
                       chat.chat.nameChat == ""
-                          ? jwt?.email != chat.chat.chatUsers[0].user.email
+                          ? email != chat.chat.chatUsers[0].user.email
                               ? chat.chat.chatUsers[0].user.name
                               : chat.chat.chatUsers[1].user.name
                           : chat.chat.nameChat,

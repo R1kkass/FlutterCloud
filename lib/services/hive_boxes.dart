@@ -9,8 +9,8 @@ class HiveBoxes {
     return Hive.box<String>("token");
   }
 
-  static Box<String> get secretKey {
-    return Hive.box<String>("secretkey");
+  static Box<Map<String, String>> get secretKey {
+    return Hive.box<Map<String, String>>("secretKey");
   }
 
   static Box<String> get cryptToken {

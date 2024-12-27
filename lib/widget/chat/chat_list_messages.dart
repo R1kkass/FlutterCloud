@@ -78,12 +78,15 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
       var key = chat.chatId.toString() + email;
 
       if (secretBox.get(key) == null && !keyGeted) {
-        var y = await KeysGrpc().downloadKeys;
-        Map<String, dynamic> data = jsonDecode(y);
+        var userKeys = await KeysGrpc().downloadKeys;
+        Map<String, dynamic> data = jsonDecode(userKeys);
         var pass = Hive.box("token").get("password");
+        Map<String, String> decryptKeys = {};
+
         for (var item in data.keys) {
-          await secretBox.put(item, decrypt(data[item], pass));
+          decryptKeys[item] = decrypt(data[item], pass);
         }
+        await secretBox.put(email, decryptKeys);
         keyGeted = true;
       }
     } catch (e) {}
@@ -104,9 +107,12 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
 
   Future _createSecretKey(ChatUsersCount chat) async {
     try {
-      var key = chat.chatId.toString() + email;
-
-      if (secretBox.get(key) == null) {
+      var chatId = chat.chatId.toString();
+      
+      if (secretBox.get(email) == null) {
+        secretBox.put(email, {});
+      }
+      if (secretBox.get(email)![chatId] == null) {
         keyChanged = true;
 
         await chatGrpc
@@ -120,18 +126,8 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
 
   Future _sendNewKeys() async {
     try {
-      if (keyChanged || true) {
-        var pass = tokenBox.get("password");
-        var values = secretBox.values.toList();
-        var keys = secretBox.keys.toList();
-        var resultObj = {};
-
-        for (var i = 0; i < keys.length; i++) {
-          resultObj[keys[i]] = encrypt(values[i], pass);
-        }
-        List<int> json = utf8.encode(jsonEncode(resultObj).toString());
-
-        await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
+      if (keyChanged) {
+        await KeysGrpc().uploadNewKeys();
       }
     } catch (e) {}
   }

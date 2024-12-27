@@ -47,7 +47,7 @@ class _SubmitLoginButtonState extends State<SubmitLoginButton> {
 
   Future _login() async {
     try {
-      _loginForm();
+      await _loginForm();
     } catch (e) {
       showToast(context, "Неверный логин или пароль");
       Navigator.pop(context);
@@ -82,7 +82,7 @@ class _SubmitLoginButtonState extends State<SubmitLoginButton> {
     String hash = sha256.convert(bytes).toString();
     await box.put('password', hash.substring(0, 32));
     context.read<TokenCubit>().updateToken(accessToken);
-    await KeysGrpc().getKeys(() {});
+    await KeysGrpc().getKeys();
     Navigator.pop(context);
     Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
   }
