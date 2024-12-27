@@ -27,7 +27,7 @@ class _ChatFileUploadComponentState extends State<ChatFileUploadComponent> {
   @override
   void initState() {
     super.initState();
-    downloaded = HiveBoxes()
+    downloaded = HiveBoxes
             .chatFileUploaded
             .get("${widget.chatFile.id}${jwtDecode().email}") !=
         null;

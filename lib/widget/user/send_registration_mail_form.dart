@@ -82,7 +82,7 @@ class _SendRegistrationMailFormState extends State<SendRegistrationMailForm> {
     var accessToken = decrypt(submitResponse.accessToken, secretKey);
 
     var box = Hive.box('token');
-    var boxTokens = Hive.box('list_token');
+    var boxTokens = HiveBoxes.listToken;
 
     await box.put('access_token', accessToken);
     await boxTokens.put(data.email, accessToken);
@@ -92,10 +92,10 @@ class _SendRegistrationMailFormState extends State<SendRegistrationMailForm> {
     await box.put('password', hash.substring(0, 32));
     await KeysGrpc().getKeys(() {});
     context.read<TokenCubit>().updateToken(accessToken);
-    await HiveBoxes()
+    await HiveBoxes
         .cryptToken
         .put("${data.email!}cryptToken", submitResponse.cryptToken);
-    await HiveBoxes().cryptToken.put("${data.email!}secretKey", secretKey);
+    await HiveBoxes.cryptToken.put("${data.email!}secretKey", secretKey);
     Navigator.pop(context);
     Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
   }

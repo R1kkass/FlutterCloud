@@ -38,7 +38,7 @@ class _ImageViewerUnitState extends State<ImageViewerUnit> {
   @override
   void initState() {
     super.initState();
-    var boxPath = HiveBoxes()
+    var boxPath = HiveBoxes
         .chatFileUploaded
         .get("${widget.image.id}${jwtDecode().email}");
     if (widget.decrypt) {

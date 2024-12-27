@@ -29,13 +29,13 @@ class KeysGrpc {
   }
 
   getKeys(Function callback) async {
-    var secretBox = HiveBoxes().secretKey;
+    var secretBox = HiveBoxes.secretKey;
     var password = Hive.box('token').get("password");
     var chatKeys = await KeysGrpc().downloadKeys;
     chatKeys = chatKeys != "" ? chatKeys : "{}";
     Map<String, dynamic> data = jsonDecode(chatKeys);
     for (var item in data.keys) {
-      var decryptKey = crypt(false, utf8.encode(item), password).toString();
+      var decryptKey = decrypt(data[item], password);
       await secretBox.put(item, decryptKey);
     }
     callback();

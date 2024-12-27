@@ -43,7 +43,7 @@ class _ImageChatFileState extends State<ImageChatFile> {
   @override
   void initState() {
     super.initState();
-    var boxPath = HiveBoxes()
+    var boxPath = HiveBoxes
         .chatFileUploaded
         .get("${widget.image.id}${jwtDecode().email}");
     if (boxPath == null) {

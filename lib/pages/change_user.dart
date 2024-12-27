@@ -1,3 +1,4 @@
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/shared/toast.dart';
@@ -14,7 +15,7 @@ class ChangeUser extends StatefulWidget {
 }
 
 class _ChangeUserState extends State<ChangeUser> {
-  var box = Hive.box('list_token');
+  var box = HiveBoxes.listToken;
 
   @override
   Widget build(BuildContext context) {

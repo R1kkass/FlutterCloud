@@ -31,7 +31,7 @@ Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   BigInt secretKey = BigInt.parse(B);
   secretKey = secretKey.pow(a) % BigInt.parse(p);
 
-  box = HiveBoxes().secretKey;
+  box = HiveBoxes.secretKey;
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
 

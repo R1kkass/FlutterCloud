@@ -189,7 +189,7 @@ class ChatGrpc {
             var file = EncodeFile.decryptByte(
                 Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
 
-            await HiveBoxes().chatFileUploaded.put(
+            await HiveBoxes.chatFileUploaded.put(
                   "$chatFileId${jwtDecode().email}",
                   file.path,
                 );

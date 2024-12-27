@@ -59,7 +59,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
       isLoading = true;
     });
     var chat = widget.chat;
-    var secretBox = HiveBoxes().secretKey;
+    var secretBox = HiveBoxes.secretKey;
     await _createSecretChatKey(chat, secretBox);
     await _uploadNewChatKeys(chat, secretBox);
   }
@@ -90,15 +90,16 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
     var keys = secretBox.keys.toList();
     var resultObj = {};
 
+    var pass = Hive.box("token").get("password");
+
     for (var i = 0; i < keys.length; i++) {
-      resultObj[keys[i]] = values[i];
+      resultObj[keys[i]] = encrypt(values[i], pass);
     }
-    var pass = (await Hive.openBox("token")).get("password");
-    dynamic json = jsonEncode(resultObj).toString();
-    json = crypt(true, utf8.encode(json), pass);
+    List<int> json = utf8.encode(jsonEncode(resultObj).toString());
+    await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
 
     widget.setChats(
-        (await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.chat.id))).chats);
-    await KeysGrpc().uploadFile(KeysUploadRequest(chunk: json));
+        (await ChatGrpc().acceptChat(AcceptChatRequest(chatId: chat.chat.id)))
+            .chats);
   }
 }

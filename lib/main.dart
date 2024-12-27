@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
@@ -37,7 +35,7 @@ void main() async {
 
   await Hive.initFlutter();
   await Hive.openBox('token');
-  await Hive.openBox('list_token');
+  await Hive.openBox<String>('listToken');
   await Hive.openBox('pubkey');
   await Hive.openBox<String>('secretkey');
   await Hive.openBox<String>('chatFileUploaded');

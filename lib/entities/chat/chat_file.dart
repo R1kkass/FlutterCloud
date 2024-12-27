@@ -34,7 +34,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
   @override
   void initState() {
     super.initState();
-    downloaded = HiveBoxes()
+    downloaded = HiveBoxes
             .chatFileUploaded
             .get("${widget.chatFile.id}${jwtDecode().email}") !=
         null;
@@ -60,7 +60,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
               var path = "$downloadPath/${widget.fileName}";
               var file = EncodeFile.decryptByte(Uint8List.fromList(chunks),
                   path, widget.secretKey.substring(0, 32));
-              HiveBoxes()
+              HiveBoxes
                   .chatFileUploaded
                   .put("${widget.chatFile.id}${jwtDecode().email}", file.path);
               downloaded = true;
@@ -77,7 +77,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
 
     openChatfile() async {
       await OpenFile.open(
-        HiveBoxes()
+        HiveBoxes
             .chatFileUploaded
             .get("${widget.chatFile.id}${jwtDecode().email}"),
       );

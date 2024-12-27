@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/grpc/keys_grpc.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/widget/user/send_registration_mail_key.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
     var accessToken = decrypt(submitResponse.accessToken, data.secretKey!);
 
     var box = Hive.box('token');
-    var boxTokens = Hive.box('list_token');
+    var boxTokens = HiveBoxes.listToken;
 
     await box.put('access_token', accessToken);
     await boxTokens.put(data.email, accessToken);

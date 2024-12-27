@@ -24,7 +24,7 @@ class ChatListMessages extends StatefulWidget {
 class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   ResponseStream<StreamGetResponseChat>? stream;
   List<ChatUsersCount> chats = [];
-  var secretBox = HiveBoxes().secretKey;
+  var secretBox = HiveBoxes.secretKey;
   var pubKeyBox = Hive.box("pubkey");
   var tokenBox = Hive.box("token");
 
@@ -37,10 +37,10 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   void initState() {
     super.initState();
     stream = ChatGrpc().streamGetChat();
-    stream?.listen((data) {
+    stream?.listen((data) async {
       chats = data.chats;
       setState(() {});
-      _checkPubKey(chats);
+      await _checkPubKey(chats);
     });
   }
 
@@ -80,8 +80,9 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
       if (secretBox.get(key) == null && !keyGeted) {
         var y = await KeysGrpc().downloadKeys;
         Map<String, dynamic> data = jsonDecode(y);
+        var pass = Hive.box("token").get("password");
         for (var item in data.keys) {
-          await secretBox.put(item, data[item]);
+          await secretBox.put(item, decrypt(data[item], pass));
         }
         keyGeted = true;
       }
@@ -126,8 +127,7 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
         var resultObj = {};
 
         for (var i = 0; i < keys.length; i++) {
-          resultObj[keys[i]] =
-              utf8.decode(crypt(true, utf8.encode(values[i]), pass));
+          resultObj[keys[i]] = encrypt(values[i], pass);
         }
         List<int> json = utf8.encode(jsonEncode(resultObj).toString());
 
