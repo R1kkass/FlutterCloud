@@ -14,7 +14,6 @@ import 'package:TalkSpace/proto/auth/auth.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubmitKeyRegistration extends StatefulWidget {
@@ -79,7 +78,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
 
   Future _submit() async {
     try {
-      _submitEmail();
+      await _submitEmail();
     } catch (e) {
       showToast(context, "Ошибка при подтверждении");
       Navigator.pop(context);
@@ -96,7 +95,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
         email: data.email, password: data.password, key: key));
     var accessToken = decrypt(submitResponse.accessToken, secretKey);
 
-    var box = Hive.box('token');
+    var box = HiveBoxes.token;
     var boxTokens = HiveBoxes.listToken;
 
     await box.put('access_token', accessToken);

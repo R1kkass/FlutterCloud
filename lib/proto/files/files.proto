@@ -8,6 +8,15 @@ service FilesGreeter {
     rpc UploadFile(stream FileUploadRequest) returns (FileUploadResponse);
     rpc DownloadFile(FileDownloadRequest) returns (stream FileDownloadResponse);
     rpc FindFile(FindFileRequest) returns (FindFileResponse);
+    rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+}
+
+message DeleteFileRequest {
+    uint32 fileId = 1;
+}
+
+message DeleteFileResponse {
+    
 }
 
 message FileUploadRequest {

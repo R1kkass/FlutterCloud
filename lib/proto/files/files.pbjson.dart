@@ -13,6 +13,27 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
+@$core.Deprecated('Use deleteFileRequestDescriptor instead')
+const DeleteFileRequest$json = {
+  '1': 'DeleteFileRequest',
+  '2': [
+    {'1': 'fileId', '3': 1, '4': 1, '5': 13, '10': 'fileId'},
+  ],
+};
+
+/// Descriptor for `DeleteFileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteFileRequestDescriptor = $convert.base64Decode(
+    'ChFEZWxldGVGaWxlUmVxdWVzdBIWCgZmaWxlSWQYASABKA1SBmZpbGVJZA==');
+
+@$core.Deprecated('Use deleteFileResponseDescriptor instead')
+const DeleteFileResponse$json = {
+  '1': 'DeleteFileResponse',
+};
+
+/// Descriptor for `DeleteFileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List deleteFileResponseDescriptor = $convert.base64Decode(
+    'ChJEZWxldGVGaWxlUmVzcG9uc2U=');
+
 @$core.Deprecated('Use fileUploadRequestDescriptor instead')
 const FileUploadRequest$json = {
   '1': 'FileUploadRequest',

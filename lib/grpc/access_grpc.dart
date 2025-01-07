@@ -1,13 +1,13 @@
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/proto/access/access.pbgrpc.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
 
 final stub = AccessGreeterClient(channel);
 
 Future<ResponseAccess> createAccess(RequestAccess args) async {
   var options = CallOptions(metadata: {
-    "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+    "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
   });
   ResponseAccess response = await stub.createAccess(args, options: options);
 
@@ -16,7 +16,7 @@ Future<ResponseAccess> createAccess(RequestAccess args) async {
 
 Future<GetAccessesResponse> getAccess(Empty args) async {
   var options = CallOptions(metadata: {
-    "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+    "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
   });
   GetAccessesResponse response = await stub.getAccesses(args, options: options);
 

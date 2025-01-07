@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/api/file_api.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
 interface class OpenFileArgs {
@@ -23,7 +23,7 @@ class Openfile extends StatefulWidget {
 
 class _OpenfileState extends State<Openfile> {
   String title = "";
-  String key = Hive.box('token').get("password");
+  String key = HiveBoxes.token.get("password")!;
   @override
   void initState() {
     super.initState();

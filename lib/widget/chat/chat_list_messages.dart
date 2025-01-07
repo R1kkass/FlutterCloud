@@ -5,14 +5,12 @@ import 'package:TalkSpace/features/chat/chat_unit_list.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
-import 'package:TalkSpace/proto/keys/keys.pb.dart';
 import 'package:TalkSpace/services/dh_alhoritm.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
 
 class ChatListMessages extends StatefulWidget {
   const ChatListMessages({super.key});
@@ -24,9 +22,9 @@ class ChatListMessages extends StatefulWidget {
 class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   ResponseStream<StreamGetResponseChat>? stream;
   List<ChatUsersCount> chats = [];
-  var secretBox = HiveBoxes.secretKey;
-  var pubKeyBox = Hive.box("pubkey");
-  var tokenBox = Hive.box("token");
+  var secretBox = HiveBoxes.chatsSecretKey;
+  var pubKeyBox = HiveBoxes.pubKey;
+  var tokenBox = HiveBoxes.token;
 
   var email = jwtDecode().email;
   var keyChanged = false;
@@ -80,7 +78,7 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
       if (secretBox.get(key) == null && !keyGeted) {
         var userKeys = await KeysGrpc().downloadKeys;
         Map<String, dynamic> data = jsonDecode(userKeys);
-        var pass = Hive.box("token").get("password");
+        var pass = HiveBoxes.token.get("password")!;
         Map<String, String> decryptKeys = {};
 
         for (var item in data.keys) {

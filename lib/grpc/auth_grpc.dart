@@ -3,13 +3,12 @@ import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthGrpc {
   final _stub = AuthGreetClient(channel);
 
   CallOptions get _options => CallOptions(metadata: {
-        "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+        "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
       });
 
   Future<RegistrationResponse> registration(RegistrationRequest request) {
@@ -37,14 +36,14 @@ class AuthGrpc {
     return _stub.submitEmail(request);
   }
 
-  Future<SendNewMailKeyResponse> sendNewMailKeyResponse(SendNewMailKeyRequest request) {
+  Future<SendNewMailKeyResponse> sendNewMailKeyResponse(
+      SendNewMailKeyRequest request) {
     return _stub.sendNewMailKey(request);
   }
 
   Future createCryptKey(String cryptToken, String secretKey) async {
     var email = jwtDecode().email;
-    await HiveBoxes.cryptToken
-        .put("${email}cryptToken", cryptToken);
-    await HiveBoxes.cryptToken.put(email, secretKey);
+    await HiveBoxes.cryptToken.put("${email}cryptToken", cryptToken);
+    await HiveBoxes.cryptToken.put("${email}secretKey", secretKey);
   }
 }

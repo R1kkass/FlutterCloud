@@ -157,7 +157,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _getBox() async {
-    var box = HiveBoxes.secretKey;
+    var box = HiveBoxes.chatsSecretKey;
     key = box.get(jwtDecode().email)?[widget.args.chatId.toString()] ?? "";
     setState(() {});
   }

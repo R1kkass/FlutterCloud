@@ -11,7 +11,6 @@ import 'package:TalkSpace/shared/toast.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
 class SubmitLoginButton extends StatefulWidget {
   const SubmitLoginButton(
@@ -72,7 +71,7 @@ class _SubmitLoginButtonState extends State<SubmitLoginButton> {
         .login(LoginRequest(email: emailHash, password: passwordHash));
     var accessToken = decrypt(loginResp.accessToken, secretKey);
 
-    var box = Hive.box('token');
+    var box = HiveBoxes.token;
     var boxTokens = HiveBoxes.listToken;
 
     await box.put('access_token', accessToken);

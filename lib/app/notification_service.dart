@@ -133,7 +133,7 @@ class NotificationServices {
   }
 
   static String decodeMessage(String message, String chatId) {
-    var secretKey = HiveBoxes.secretKey.get(jwtDecode().email)?[chatId] ?? "";
+    var secretKey = HiveBoxes.chatsSecretKey.get(jwtDecode().email)?[chatId] ?? "";
     return EncryptMessage().decrypt(
         message, secretKey);
   }

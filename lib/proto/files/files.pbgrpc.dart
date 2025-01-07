@@ -33,6 +33,10 @@ class FilesGreeterClient extends $grpc.Client {
       '/files.FilesGreeter/FindFile',
       ($0.FindFileRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.FindFileResponse.fromBuffer(value));
+  static final _$deleteFile = $grpc.ClientMethod<$0.DeleteFileRequest, $0.DeleteFileResponse>(
+      '/files.FilesGreeter/DeleteFile',
+      ($0.DeleteFileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.DeleteFileResponse.fromBuffer(value));
 
   FilesGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -50,6 +54,10 @@ class FilesGreeterClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.FindFileResponse> findFile($0.FindFileRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$findFile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.DeleteFileResponse> deleteFile($0.DeleteFileRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$deleteFile, request, options: options);
   }
 }
 
@@ -79,6 +87,13 @@ abstract class FilesGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.FindFileRequest.fromBuffer(value),
         ($0.FindFileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DeleteFileRequest, $0.DeleteFileResponse>(
+        'DeleteFile',
+        deleteFile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.DeleteFileRequest.fromBuffer(value),
+        ($0.DeleteFileResponse value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.FileDownloadResponse> downloadFile_Pre($grpc.ServiceCall call, $async.Future<$0.FileDownloadRequest> request) async* {
@@ -89,7 +104,12 @@ abstract class FilesGreeterServiceBase extends $grpc.Service {
     return findFile(call, await request);
   }
 
+  $async.Future<$0.DeleteFileResponse> deleteFile_Pre($grpc.ServiceCall call, $async.Future<$0.DeleteFileRequest> request) async {
+    return deleteFile(call, await request);
+  }
+
   $async.Future<$0.FileUploadResponse> uploadFile($grpc.ServiceCall call, $async.Stream<$0.FileUploadRequest> request);
   $async.Stream<$0.FileDownloadResponse> downloadFile($grpc.ServiceCall call, $0.FileDownloadRequest request);
   $async.Future<$0.FindFileResponse> findFile($grpc.ServiceCall call, $0.FindFileRequest request);
+  $async.Future<$0.DeleteFileResponse> deleteFile($grpc.ServiceCall call, $0.DeleteFileRequest request);
 }

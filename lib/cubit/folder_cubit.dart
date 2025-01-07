@@ -60,12 +60,6 @@ class FolderCubit extends Cubit<GetData> {
             status_code: 0,
             downloadFile: {}));
 
-  // void updateData(GetData data) => emit(data);
-  // Future<GetData> updateDataFetch(int? id, BuildContext context) async {
-  //   var data = await getFolder(id, state, context);
-  //   emit(data);
-  //   return data;
-  // }
 
   void setSizeUploadFile(int? folderId, int id, double size) {
     folderId = folderId ?? 0;

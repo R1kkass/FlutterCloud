@@ -13,7 +13,6 @@ import 'package:TalkSpace/shared/toast.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class SendRegistrationMailForm extends StatefulWidget {
   const SendRegistrationMailForm(
@@ -81,7 +80,7 @@ class _SendRegistrationMailFormState extends State<SendRegistrationMailForm> {
         email: data.email, password: data.password, key: key));
     var accessToken = decrypt(submitResponse.accessToken, secretKey);
 
-    var box = Hive.box('token');
+    var box = HiveBoxes.token;
 
     await box.put('access_token', accessToken);
     await HiveBoxes.listToken.put(data.email, accessToken);

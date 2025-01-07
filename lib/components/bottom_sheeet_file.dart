@@ -1,76 +1,40 @@
 import 'dart:isolate';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/widget/file/create_folder_modal.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/api/folder_api.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 
-class BottomSheetExample extends StatefulWidget {
+class BottomSheetFile extends StatefulWidget {
   final int? id;
   final ContentState state;
   final BuildContext context;
 
-  const BottomSheetExample(
+  const BottomSheetFile(
       {super.key,
       required this.id,
       required this.state,
       required this.context});
 
   @override
-  State<BottomSheetExample> createState() => _BottomSheetExample();
+  State<BottomSheetFile> createState() => _BottomSheetFile();
 }
 
-class _BottomSheetExample extends State<BottomSheetExample> {
-  TextEditingController nameFolder = TextEditingController();
+class _BottomSheetFile extends State<BottomSheetFile> {
   bool status = false;
-
-  Future<Response> createFolderApi(context) {
-    var id = widget.id;
-
-    id ??= 0;
-
-    return createFolder(FolderParams(nameFolder.text, id), context);
-  }
+  int idFileUpload = 0;
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void selectFile() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-      );
-      Navigator.of(context).pop();
-
-      if (result != null) {
-        for (var file in result.files) {
-          var idFileUpload = DateTime.now().microsecond;
-          context.read<ContentBloc>().add(UploadFileSet(
-              id: widget.id,
-              data: FileUpload(
-                  size: 0,
-                  id: idFileUpload,
-                  fileName: file.path!.split("/").last)));
-
-          _functionCreate(file, idFileUpload, widget.context);
-        }
-      } else {
-        showToast(widget.context, "Файл не выбран");
-      }
-    } catch (e) {
-      showToast(widget.context, "Файл не выбран");
-    }
   }
 
   @override
@@ -112,6 +76,7 @@ class _BottomSheetExample extends State<BottomSheetExample> {
                               width: 25,
                             ),
                             ElevatedButton(
+                              onPressed: selectFile,
                               child: const SizedBox(
                                 height: 50,
                                 child: Column(
@@ -121,7 +86,6 @@ class _BottomSheetExample extends State<BottomSheetExample> {
                                   ],
                                 ),
                               ),
-                              onPressed: () => {selectFile()},
                             ),
                           ],
                         ),
@@ -136,81 +100,89 @@ class _BottomSheetExample extends State<BottomSheetExample> {
   }
 
   Null showDialogBuilder(context) {
-    var mainContext =
-        NavigationService.navigatorKey.currentContext as BuildContext;
     showDialog<void>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Название папки'),
-          content: TextField(
-            controller: nameFolder,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 0.0),
-                ),
-                hintText: 'Новая папка'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Отмена'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Создать'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-
-                await createFolderApi(context).then((e) {
-                  e.statusCode == 201
-                      ? showToast(widget.context, "Папка создана")
-                      : showToast(widget.context, "Папка не была создана");
-                }).catchError((e) {
-                  showToast(widget.context, "Папка не была создана");
-                });
-                ContentBloc.defaultRequestFile(widget.id, mainContext);
-              },
-            ),
-          ],
+        return CreateFolderModal(
+          id: widget.id,
         );
       },
     );
   }
 
-  _functionCreate(PlatformFile result, int id, BuildContext myContext) async {
+  void selectFile() async {
+    try {
+      await _selectFile();
+    } catch (e) {
+      print(e);
+      _rejectUploadFile();
+    }
+  }
+
+  _rejectUploadFile() {
+    var mainContext =
+        NavigationService.navigatorKey.currentContext as BuildContext;
+    showToast(mainContext, "Неудалось загрузить файл");
+    var folderId = widget.id ?? 0;
+
+    mainContext
+        .read<ContentBloc>()
+        .add(UploadFileRemove(folderId: folderId, id: idFileUpload));
+  }
+
+  _selectFile() async {
+    FilePickerResult? selectedFiles = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+    );
+    Navigator.of(context).pop();
+
+    if (selectedFiles != null) {
+      for (var file in selectedFiles.files) {
+        idFileUpload = DateTime.now().microsecond;
+        context.read<ContentBloc>().add(UploadFileSet(
+            id: widget.id,
+            data: FileUpload(
+                size: 0,
+                id: idFileUpload,
+                fileName: file.path!.split("/").last)));
+
+        await _uploadFile(file);
+      }
+    } else {
+      showToast(widget.context, "Файл не выбран");
+    }
+  }
+
+  _uploadFile(PlatformFile result) async {
     var mainContext =
         NavigationService.navigatorKey.currentContext as BuildContext;
 
-    var box = Hive.box('token');
-    var password = box.get("password");
+    var password = HiveBoxes.token.get("password")!;
+
     var folderId = widget.id ?? 0;
     var fileName = result.path!.split("/").last;
-
     var filePath = result.path!;
+
     var argsStream = await Isolate.run(() => FilesGrpc().createStreamArg(
         ArgsForStream(
             file: filePath,
             key: password,
             request:
                 FileUploadRequest(fileName: fileName, folderId: folderId))));
-    if (mainContext.read<ContentBloc>().state.uploadFile[folderId]?[id] !=
-        null) {
+    var fileUploadAdded = mainContext
+        .read<ContentBloc>()
+        .state
+        .uploadFile[folderId]?[idFileUpload];
+
+    if (fileUploadAdded != null) {
       var callback = FilesGrpc().uploadFile(argsStream);
 
-      mainContext.read<ContentBloc>().add(
-          UploadSetCallback(id: id, folderId: folderId, callback: callback));
+      mainContext.read<ContentBloc>().add(UploadSetCallback(
+          id: idFileUpload, folderId: folderId, callback: callback));
       await callback;
       mainContext
           .read<ContentBloc>()
-          .add(UploadFileRemove(folderId: folderId, id: id));
+          .add(UploadFileRemove(folderId: folderId, id: idFileUpload));
       ContentBloc.defaultRequestFile(folderId, mainContext);
     }
   }

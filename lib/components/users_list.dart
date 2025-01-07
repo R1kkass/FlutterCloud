@@ -3,7 +3,6 @@ import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:TalkSpace/proto/users/users.pb.dart';
-import 'package:grpc/grpc.dart';
 
 class UsersList extends StatefulWidget {
   final List<Users> users;

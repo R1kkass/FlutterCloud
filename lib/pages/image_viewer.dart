@@ -21,7 +21,7 @@ class _ImageViewerState extends State<ImageViewer> {
     final args = ModalRoute.of(context)!.settings.arguments as ImageViewerArgs?;
     index = index ?? args!.index;
     var secretKey =
-        HiveBoxes.secretKey.get(jwtDecode().email)?[args!.chatId.toString()] ?? "";
+        HiveBoxes.chatsSecretKey.get(jwtDecode().email)?[args!.chatId.toString()] ?? "";
     PageController pageController = PageController(initialPage: args!.index);
 
     final appBar = AppBar(

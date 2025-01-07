@@ -14,6 +14,88 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class DeleteFileRequest extends $pb.GeneratedMessage {
+  factory DeleteFileRequest({
+    $core.int? fileId,
+  }) {
+    final $result = create();
+    if (fileId != null) {
+      $result.fileId = fileId;
+    }
+    return $result;
+  }
+  DeleteFileRequest._() : super();
+  factory DeleteFileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteFileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteFileRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'fileId', $pb.PbFieldType.OU3, protoName: 'fileId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteFileRequest clone() => DeleteFileRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteFileRequest copyWith(void Function(DeleteFileRequest) updates) => super.copyWith((message) => updates(message as DeleteFileRequest)) as DeleteFileRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteFileRequest create() => DeleteFileRequest._();
+  DeleteFileRequest createEmptyInstance() => create();
+  static $pb.PbList<DeleteFileRequest> createRepeated() => $pb.PbList<DeleteFileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteFileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteFileRequest>(create);
+  static DeleteFileRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get fileId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set fileId($core.int v) { $_setUnsignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasFileId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFileId() => clearField(1);
+}
+
+class DeleteFileResponse extends $pb.GeneratedMessage {
+  factory DeleteFileResponse() => create();
+  DeleteFileResponse._() : super();
+  factory DeleteFileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory DeleteFileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteFileResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  DeleteFileResponse clone() => DeleteFileResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  DeleteFileResponse copyWith(void Function(DeleteFileResponse) updates) => super.copyWith((message) => updates(message as DeleteFileResponse)) as DeleteFileResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static DeleteFileResponse create() => DeleteFileResponse._();
+  DeleteFileResponse createEmptyInstance() => create();
+  static $pb.PbList<DeleteFileResponse> createRepeated() => $pb.PbList<DeleteFileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static DeleteFileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeleteFileResponse>(create);
+  static DeleteFileResponse? _defaultInstance;
+}
+
 class FileUploadRequest extends $pb.GeneratedMessage {
   factory FileUploadRequest({
     $core.List<$core.int>? chunk,

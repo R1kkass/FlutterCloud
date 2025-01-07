@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 class JwtPayload {
@@ -8,7 +8,7 @@ class JwtPayload {
 }
 
 JwtPayload jwtDecode() {
-  var token = Hive.box('token').get('access_token');
+  var token = HiveBoxes.token.get('access_token')!;
   var jwtDecode = Jwt.parseJwt(token);
 
   return JwtPayload(email: jwtDecode["email"]);

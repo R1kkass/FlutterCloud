@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:TalkSpace/features/chat/chat_accept.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
-import 'package:TalkSpace/proto/keys/keys.pb.dart';
 import 'package:TalkSpace/services/dh_alhoritm.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:hive/hive.dart';
 
 class ChatAcceptButton extends ChatAcceptImpl {
   const ChatAcceptButton(
@@ -54,7 +49,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
     }
   }
 
-  var secretBox = HiveBoxes.secretKey;
+  var secretBox = HiveBoxes.chatsSecretKey;
 
   Future _acceptChat() async {
     setState(() {
@@ -67,7 +62,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
 
   Future _createSecretChatKey(ChatUser chat) async {
     var email = jwtDecode().email;
-    var box = Hive.box("pubkey");
+    var box = HiveBoxes.pubKey;
 
     var key = chat.chatId.toString() + email;
     if (box.get(key) == null) {

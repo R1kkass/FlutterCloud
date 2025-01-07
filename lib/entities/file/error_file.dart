@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/download_file_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:TalkSpace/services/get_download_path.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:TalkSpace/services/encode_file.dart';
 import 'package:TalkSpace/shared/toast.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ErrorFile extends StatefulWidget {
@@ -70,7 +70,7 @@ class _ErrorFileState extends State<ErrorFile> {
     void changeState(FileDownloadResponse e) async {
       try {
         if (e.progress >= 100) {
-          String key = Hive.box("token").get("password");
+          String key = HiveBoxes.token.get("password")!;
           path = "$downloadPath/${widget.file.fileName}";
           EncodeFile.decryptByte(Uint8List.fromList(fileBytes), path, key);
           mainContext.read<DownloadFileBloc>().add(FolderSetStatus(

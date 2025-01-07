@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:hive/hive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChangeUser extends StatefulWidget {
@@ -41,7 +40,7 @@ class _ChangeUserState extends State<ChangeUser> {
 }
 
 void changeToken(BuildContext context, String token, String name) {
-  var box = Hive.box('token');
+  var box = HiveBoxes.token;
   box.put('access_token', token);
   context.read<TokenCubit>().updateToken(token);
   Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);

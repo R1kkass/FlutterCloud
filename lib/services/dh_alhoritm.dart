@@ -1,12 +1,11 @@
 import 'dart:math';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:hive/hive.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
 Future<BigInt> generatePubKey(String p, int g, int chatId) async {
-  var box = await Hive.openBox('pubkey');
+  var box = HiveBoxes.pubKey;
 
   BigInt key = BigInt.parse(p);
 
@@ -25,23 +24,23 @@ Future<BigInt> generatePubKey(String p, int g, int chatId) async {
 }
 
 Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
-  var box = await Hive.openBox('pubkey');
+  var box = HiveBoxes.pubKey;
   var email = jwtDecode().email;
 
-  int a = box.get(chatId.toString() + email).toInt();
+  int a = box.get(chatId.toString() + email)!.toInt();
   BigInt secretKey = BigInt.parse(B);
   secretKey = secretKey.pow(a) % BigInt.parse(p);
 
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
 
-  var userSecretKeys = HiveBoxes.secretKey.get(email)!;
+  var userSecretKeys = HiveBoxes.chatsSecretKey.get(email)!;
 
   if (userSecretKeys[chatId.toString()] == null) {
     userSecretKeys[chatId.toString()] = hash;
   }
 
-  await HiveBoxes.secretKey.put(email, userSecretKeys);
+  await HiveBoxes.chatsSecretKey.put(email, userSecretKeys);
 
   return secretKey;
 }

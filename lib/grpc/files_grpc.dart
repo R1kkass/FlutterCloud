@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/proto/files/files.pbgrpc.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
 
 class ArgsForStream {
   final String key;
@@ -35,7 +35,7 @@ class FilesGrpc {
   final _stub = FilesGreeterClient(channel);
 
   CallOptions get _options => CallOptions(metadata: {
-        "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+        "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
       });
 
   ResponseStream<FileDownloadResponse> downloadFile(
@@ -63,7 +63,7 @@ class FilesGrpc {
     var request = some.request;
 
     List<ArrayStream> arrFUR = [];
-    var bufferSize = 256 * 1024;
+    var bufferSize = 5 * 1024 * 1024;
     var curItem = 0;
     RandomAccessFile raf = file.openSync(mode: FileMode.read);
     var bytesLength = raf.lengthSync();

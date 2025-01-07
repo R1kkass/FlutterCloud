@@ -33,7 +33,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
 
   void decryptMessageFn(ChatUsersCount chat) async {
     email = jwtDecode().email;
-    var box = HiveBoxes.secretKey;
+    var box = HiveBoxes.chatsSecretKey;
     var hash = box.get(email)?[widget.chat.chatId.toString()] ?? "";
     if (chat.chat.message.text != "") {
       decryptMessage = EncryptMessage().decrypt(chat.chat.message.text, hash);

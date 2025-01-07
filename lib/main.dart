@@ -1,23 +1,17 @@
 import 'dart:typed_data';
 
+import 'package:TalkSpace/app/block_providers.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/consts/domen.dart';
-import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/count_bloc.dart';
-import 'package:TalkSpace/cubit/current_page_bloc.dart';
-import 'package:TalkSpace/cubit/download_file_bloc.dart';
-import 'package:TalkSpace/cubit/folder_cubit.dart';
-import 'package:TalkSpace/cubit/registration_bloc.dart';
-import 'package:TalkSpace/cubit/space_cubit.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:TalkSpace/cubit/upload_file_bloc.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/observers/observer.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 
@@ -33,54 +27,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // channel = await chan();
 
-  await Hive.initFlutter();
-  await Hive.openBox('token');
-  await Hive.openBox<String>('listToken');
-  await Hive.openBox('pubkey');
-  await Hive.openBox<Map<String, String>>('secretkey');
-  await Hive.openBox<String>('chatFileUploaded');
-  await Hive.openBox<String>('cryptToken');
+  await HiveBoxes.initHiveBoxes();
 
   Bloc.observer = const MyBlocObserver();
 
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(
-      create: (context) => FolderCubit(),
-    ),
-    BlocProvider(
-      create: (context) => ContentBloc(
-          state: ContentState(
-              files: [],
-              folders: [],
-              error: false,
-              uploadFile: {},
-              search: "")),
-    ),
-    BlocProvider(
-      create: (context) =>
-          DownloadFileBloc(state: DownloadFileState(downloadFile: {})),
-    ),
-    BlocProvider(
-      create: (context) =>
-          UploadFileBloc(state: UploadFileState(chatUploadFiles: {})),
-    ),
-    BlocProvider(
-      create: (context) => CountBloc(state: CountState(count: 0)),
-    ),
-    BlocProvider(
-      create: (context) => RegistrationBloc(
-          state: RegistrationState(email: "", password: "", secretKey: "")),
-    ),
-    BlocProvider(
-      create: (context) => CurrentPageBloc(state: CurrentPageState(page: 0)),
-    ),
-    BlocProvider(
-      create: (context) => TokenCubit(),
-    ),
-    BlocProvider(
-      create: (context) => SpaceCubit(),
-    ),
-  ], child: const MyApp()));
+  runApp(MultiBlocProvider(providers: BlockProviders.blockProviders, child: const MyApp()));
 }
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -97,7 +48,7 @@ class NavigationService {
 }
 
 class _MyAppState extends State<MyApp> {
-  var access_token = Hive.box('token').get('access_token');
+  var access_token = HiveBoxes.token.get('access_token');
 
   void _token(String? token) {
     setState(() {
@@ -141,7 +92,7 @@ class _MyAppState extends State<MyApp> {
     if (token?.length == 0) {
       context.read<TokenCubit>().updateToken(access_token);
     }
-    _token(Hive.box('token').get('access_token'));
+    _token(HiveBoxes.token.get('access_token'));
     return MaterialApp(
         navigatorKey: NavigationService.navigatorKey,
         theme: ThemeData(

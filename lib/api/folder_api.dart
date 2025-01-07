@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/api/file_api.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/consts/domen.dart';
 import 'package:TalkSpace/proto/users/users.pb.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:TalkSpace/api/my_http.dart' as my_http;
 
@@ -31,7 +31,7 @@ Future<http.Response> createFolder(
   return await my_http.post(Uri.parse('$domain/folder/create'), context,
       body: editedBody,
       headers: {
-        "Access-Token": Hive.box('token').get('access_token'),
+        "Access-Token": HiveBoxes.token.get('access_token') ?? "",
       });
 }
 
@@ -39,7 +39,7 @@ Future<GetData> getFolder(id, GetData state, BuildContext context) async {
   if (id == 0) id = "";
   var response = await my_http
       .get(Uri.parse('$domain/get/${id ?? ""}'), context, headers: {
-    "Access-Token": Hive.box('token').get('access_token').toString(),
+    "Access-Token": HiveBoxes.token.get('access_token') ?? "",
   });
   List<Folder?> folders = [];
   List<File?> files = [];
@@ -66,7 +66,7 @@ Future<GetData> getFolder(id, GetData state, BuildContext context) async {
 Future<http.Response> deleteFolder(int id, BuildContext context) async {
   return await my_http
       .delete(Uri.parse('$domain/folder/delete/$id'), context, headers: {
-    "Access-Token": Hive.box('token').get('access_token').toString(),
+    "Access-Token": HiveBoxes.token.get('access_token').toString(),
   });
 }
 
@@ -76,7 +76,7 @@ Future<http.Response> updateFolder(
       .patch(Uri.parse('$domain/folder/update/$id'), context, body: {
     "name": body
   }, headers: {
-    "Access-Token": Hive.box('token').get('access_token').toString(),
+    "Access-Token": HiveBoxes.token.get('access_token').toString(),
   });
 }
 
@@ -86,7 +86,7 @@ Future<http.Response> moveFolder(
     "folder_to_id": folderToId,
     "folder_id": folderId
   }, headers: {
-    "Access-Token": Hive.box('token').get('access_token').toString(),
+    "Access-Token": HiveBoxes.token.get('access_token').toString(),
   });
 }
 
@@ -97,6 +97,6 @@ Future<http.Response> changeAccessFolder(ChangeAccessListArgs data) async {
     "folder_id": args.folder_id,
     "access_id": args.access_id.toString()
   }, headers: {
-    "Access-Token": Hive.box('token').get('access_token').toString(),
+    "Access-Token": HiveBoxes.token.get('access_token').toString(),
   });
 }

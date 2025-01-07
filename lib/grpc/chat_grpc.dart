@@ -13,7 +13,6 @@ import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
 
 class ArrayStream {
   final List<int> chunk;
@@ -43,7 +42,7 @@ class ChatGrpc {
   final _stub = ChatGreeterClient(channel);
 
   CallOptions get _options => CallOptions(metadata: {
-        "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+        "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
       });
 
   Future<CreateResponseChat> createChat(CreateRequestChat request) async {
@@ -115,7 +114,7 @@ class ChatGrpc {
       Stream<StreamGetMessagesRequest> request, String chatId) async {
     return _stub.streamGetMessages(request,
         options: CallOptions(metadata: {
-          "authorization": "Bearer ${Hive.box('token').get('access_token')}",
+          "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
           "chat_id": chatId
         }));
   }
@@ -190,9 +189,9 @@ class ChatGrpc {
                 Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
 
             await HiveBoxes.chatFileUploaded.put(
-                  "$chatFileId${jwtDecode().email}",
-                  file.path,
-                );
+              "$chatFileId${jwtDecode().email}",
+              file.path,
+            );
 
             await fn(
               path,

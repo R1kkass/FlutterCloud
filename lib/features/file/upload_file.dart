@@ -33,12 +33,15 @@ class _UploadFileState extends State<UploadFile> {
               const SizedBox(
                 width: 15,
               ),
-              Text(
-                widget.file.fileName,
-                style: TextStyle(
-                    color: Colors.deepOrange.shade800,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500),
+              Flexible(
+                child: Text(
+                  widget.file.fileName,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.deepOrange.shade800,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
             ],
           ),

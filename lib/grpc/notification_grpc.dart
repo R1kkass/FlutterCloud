@@ -1,13 +1,13 @@
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/proto/notification/notification.pbgrpc.dart';
+import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hive/hive.dart';
 
 class NotificationGrpc {
   final _stub = NotificationGreeterClient(channel);
   CallOptions get _options {
     return CallOptions(metadata: {
-      "authorization": "Bearer ${Hive.box("token").get("access_token")}",
+      "authorization": "Bearer ${HiveBoxes.token.get("access_token")}",
     });
   }
 
