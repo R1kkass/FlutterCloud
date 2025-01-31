@@ -58,7 +58,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
             if (e.progress >= 100) {
               var downloadPath = await getDownloadPath() ?? "";
               var path = "$downloadPath/${widget.fileName}";
-              var file = EncodeFile.decryptByte(Uint8List.fromList(chunks),
+              var file = EncodeFile.decryptByteCreateFile(Uint8List.fromList(chunks),
                   path, widget.secretKey.substring(0, 32));
               HiveBoxes
                   .chatFileUploaded
@@ -67,11 +67,11 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
               setState(() {});
             }
           } catch (_) {
-            showToast(context, 'Не удалось скачать файл: ${widget.fileName}');
+            showUnsuccessToast('Не удалось скачать файл: ${widget.fileName}');
           }
         });
       } catch (e) {
-        showToast(context, 'Не удалось скачать файл: ${widget.fileName}');
+        showUnsuccessToast('Не удалось скачать файл: ${widget.fileName}');
       }
     }
 

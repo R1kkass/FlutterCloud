@@ -806,6 +806,294 @@ class FolderFind extends $pb.GeneratedMessage {
   void clearNameFolder() => clearField(7);
 }
 
+class RenameFileRequest extends $pb.GeneratedMessage {
+  factory RenameFileRequest({
+    $core.int? folderId,
+    $core.int? fileId,
+    $core.String? name,
+  }) {
+    final $result = create();
+    if (folderId != null) {
+      $result.folderId = folderId;
+    }
+    if (fileId != null) {
+      $result.fileId = fileId;
+    }
+    if (name != null) {
+      $result.name = name;
+    }
+    return $result;
+  }
+  RenameFileRequest._() : super();
+  factory RenameFileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RenameFileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RenameFileRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'folderId', $pb.PbFieldType.O3, protoName: 'folderId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'fileId', $pb.PbFieldType.O3, protoName: 'fileId')
+    ..aOS(3, _omitFieldNames ? '' : 'name')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RenameFileRequest clone() => RenameFileRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RenameFileRequest copyWith(void Function(RenameFileRequest) updates) => super.copyWith((message) => updates(message as RenameFileRequest)) as RenameFileRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RenameFileRequest create() => RenameFileRequest._();
+  RenameFileRequest createEmptyInstance() => create();
+  static $pb.PbList<RenameFileRequest> createRepeated() => $pb.PbList<RenameFileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RenameFileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RenameFileRequest>(create);
+  static RenameFileRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get folderId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set folderId($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasFolderId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFolderId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get fileId => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set fileId($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFileId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFileId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get name => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set name($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearName() => clearField(3);
+}
+
+class RenameFileResponse extends $pb.GeneratedMessage {
+  factory RenameFileResponse() => create();
+  RenameFileResponse._() : super();
+  factory RenameFileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RenameFileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RenameFileResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RenameFileResponse clone() => RenameFileResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RenameFileResponse copyWith(void Function(RenameFileResponse) updates) => super.copyWith((message) => updates(message as RenameFileResponse)) as RenameFileResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RenameFileResponse create() => RenameFileResponse._();
+  RenameFileResponse createEmptyInstance() => create();
+  static $pb.PbList<RenameFileResponse> createRepeated() => $pb.PbList<RenameFileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static RenameFileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RenameFileResponse>(create);
+  static RenameFileResponse? _defaultInstance;
+}
+
+class MoveFileRequest extends $pb.GeneratedMessage {
+  factory MoveFileRequest({
+    $core.int? fileId,
+    $core.int? folderToId,
+  }) {
+    final $result = create();
+    if (fileId != null) {
+      $result.fileId = fileId;
+    }
+    if (folderToId != null) {
+      $result.folderToId = folderToId;
+    }
+    return $result;
+  }
+  MoveFileRequest._() : super();
+  factory MoveFileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MoveFileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MoveFileRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'fileId', $pb.PbFieldType.O3, protoName: 'fileId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'folderToId', $pb.PbFieldType.O3, protoName: 'folderToId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MoveFileRequest clone() => MoveFileRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MoveFileRequest copyWith(void Function(MoveFileRequest) updates) => super.copyWith((message) => updates(message as MoveFileRequest)) as MoveFileRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MoveFileRequest create() => MoveFileRequest._();
+  MoveFileRequest createEmptyInstance() => create();
+  static $pb.PbList<MoveFileRequest> createRepeated() => $pb.PbList<MoveFileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static MoveFileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MoveFileRequest>(create);
+  static MoveFileRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get fileId => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set fileId($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasFileId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFileId() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get folderToId => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set folderToId($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasFolderToId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFolderToId() => clearField(2);
+}
+
+class MoveFileResponse extends $pb.GeneratedMessage {
+  factory MoveFileResponse() => create();
+  MoveFileResponse._() : super();
+  factory MoveFileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MoveFileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MoveFileResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  MoveFileResponse clone() => MoveFileResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  MoveFileResponse copyWith(void Function(MoveFileResponse) updates) => super.copyWith((message) => updates(message as MoveFileResponse)) as MoveFileResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static MoveFileResponse create() => MoveFileResponse._();
+  MoveFileResponse createEmptyInstance() => create();
+  static $pb.PbList<MoveFileResponse> createRepeated() => $pb.PbList<MoveFileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MoveFileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MoveFileResponse>(create);
+  static MoveFileResponse? _defaultInstance;
+}
+
+class GetSpaceRequest extends $pb.GeneratedMessage {
+  factory GetSpaceRequest() => create();
+  GetSpaceRequest._() : super();
+  factory GetSpaceRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSpaceRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSpaceRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSpaceRequest clone() => GetSpaceRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSpaceRequest copyWith(void Function(GetSpaceRequest) updates) => super.copyWith((message) => updates(message as GetSpaceRequest)) as GetSpaceRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSpaceRequest create() => GetSpaceRequest._();
+  GetSpaceRequest createEmptyInstance() => create();
+  static $pb.PbList<GetSpaceRequest> createRepeated() => $pb.PbList<GetSpaceRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetSpaceRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSpaceRequest>(create);
+  static GetSpaceRequest? _defaultInstance;
+}
+
+class GetSpaceResponse extends $pb.GeneratedMessage {
+  factory GetSpaceResponse({
+    $core.int? space,
+  }) {
+    final $result = create();
+    if (space != null) {
+      $result.space = space;
+    }
+    return $result;
+  }
+  GetSpaceResponse._() : super();
+  factory GetSpaceResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSpaceResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSpaceResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'files'), createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'space', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSpaceResponse clone() => GetSpaceResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSpaceResponse copyWith(void Function(GetSpaceResponse) updates) => super.copyWith((message) => updates(message as GetSpaceResponse)) as GetSpaceResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSpaceResponse create() => GetSpaceResponse._();
+  GetSpaceResponse createEmptyInstance() => create();
+  static $pb.PbList<GetSpaceResponse> createRepeated() => $pb.PbList<GetSpaceResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetSpaceResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSpaceResponse>(create);
+  static GetSpaceResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get space => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set space($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSpace() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSpace() => clearField(1);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

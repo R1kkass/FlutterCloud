@@ -51,10 +51,8 @@ class FileGalleryImagesState extends State<FileGalleryImages> {
         files = Directory(directory).listSync();
         directory = '/storage/emulated/0/Movies';
         files = [...files, ...Directory(directory).listSync()];
-      }
-      if (files.isEmpty) {
         directory = '/storage/emulated/0/DCIM/Camera';
-        files = Directory(directory).listSync();
+        files = [...files, ...Directory(directory).listSync()];
       }
       setState(() {});
     });

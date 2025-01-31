@@ -7,6 +7,7 @@ import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:video_player/video_player.dart' as video_player;
 
 class ImageViewerUnit extends StatefulWidget {
   const ImageViewerUnit(
@@ -76,7 +77,7 @@ class _ImageViewerUnitState extends State<ImageViewerUnit> {
     if (reVideo.hasMatch(typeFile)) {
       return InteractiveViewer(
         child: VideoPlayer(
-          video: File(path),
+          controller: video_player.VideoPlayerController.file(File(path)),
         ),
       );
     }

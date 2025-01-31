@@ -101,13 +101,13 @@ class _UsersListState extends State<UsersList> {
     try {
       await _createChat(otherId);
     } catch (e) {
-      showToast(context, "Запрос не отправлен");
+      showUnsuccessToast("Запрос не отправлен");
     }
   }
 
   Future _createChat(int otherId) async {
     Navigator.pop(context);
     await ChatGrpc().createChat(CreateRequestChat(otherId: otherId));
-    showToast(context, "Запрос отправлен");
+    showSuccessToast("Запрос отправлен");
   }
 }

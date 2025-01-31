@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/components/text_content.dart';
-import 'package:TalkSpace/features/file/model_bottom_file.dart';
+import 'package:TalkSpace/shared/text_content.dart';
+import 'package:TalkSpace/widget/chat/model_bottom_file.dart';
 import 'package:TalkSpace/pages/open_file.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:TalkSpace/services/file_size.dart';

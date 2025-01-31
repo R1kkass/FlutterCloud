@@ -65,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
         globalKey.currentState?.setShow(true);
       }
       setState(() {});
-      await _grpc();
+      await _initChat();
     });
   }
 
@@ -80,7 +80,7 @@ class _ChatPageState extends State<ChatPage> {
 
   StreamController<StreamGetMessagesRequest>? controller;
 
-  _grpc() async {
+  _initChat() async {
     controller = StreamController<StreamGetMessagesRequest>();
     Stream<StreamGetMessagesRequest> onExit = controller!.stream;
 

@@ -166,3 +166,71 @@ final $typed_data.Uint8List folderFindDescriptor = $convert.base64Decode(
     'ZXJJZBIbCglmb2xkZXJfaWQYBSABKAVSCGZvbGRlcklkEhsKCWFjY2Vzc19pZBgGIAEoBVIIYW'
     'NjZXNzSWQSHwoLbmFtZV9mb2xkZXIYByABKAlSCm5hbWVGb2xkZXI=');
 
+@$core.Deprecated('Use renameFileRequestDescriptor instead')
+const RenameFileRequest$json = {
+  '1': 'RenameFileRequest',
+  '2': [
+    {'1': 'folderId', '3': 1, '4': 1, '5': 5, '10': 'folderId'},
+    {'1': 'fileId', '3': 2, '4': 1, '5': 5, '10': 'fileId'},
+    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
+  ],
+};
+
+/// Descriptor for `RenameFileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List renameFileRequestDescriptor = $convert.base64Decode(
+    'ChFSZW5hbWVGaWxlUmVxdWVzdBIaCghmb2xkZXJJZBgBIAEoBVIIZm9sZGVySWQSFgoGZmlsZU'
+    'lkGAIgASgFUgZmaWxlSWQSEgoEbmFtZRgDIAEoCVIEbmFtZQ==');
+
+@$core.Deprecated('Use renameFileResponseDescriptor instead')
+const RenameFileResponse$json = {
+  '1': 'RenameFileResponse',
+};
+
+/// Descriptor for `RenameFileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List renameFileResponseDescriptor = $convert.base64Decode(
+    'ChJSZW5hbWVGaWxlUmVzcG9uc2U=');
+
+@$core.Deprecated('Use moveFileRequestDescriptor instead')
+const MoveFileRequest$json = {
+  '1': 'MoveFileRequest',
+  '2': [
+    {'1': 'fileId', '3': 1, '4': 1, '5': 5, '10': 'fileId'},
+    {'1': 'folderToId', '3': 2, '4': 1, '5': 5, '10': 'folderToId'},
+  ],
+};
+
+/// Descriptor for `MoveFileRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List moveFileRequestDescriptor = $convert.base64Decode(
+    'Cg9Nb3ZlRmlsZVJlcXVlc3QSFgoGZmlsZUlkGAEgASgFUgZmaWxlSWQSHgoKZm9sZGVyVG9JZB'
+    'gCIAEoBVIKZm9sZGVyVG9JZA==');
+
+@$core.Deprecated('Use moveFileResponseDescriptor instead')
+const MoveFileResponse$json = {
+  '1': 'MoveFileResponse',
+};
+
+/// Descriptor for `MoveFileResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List moveFileResponseDescriptor = $convert.base64Decode(
+    'ChBNb3ZlRmlsZVJlc3BvbnNl');
+
+@$core.Deprecated('Use getSpaceRequestDescriptor instead')
+const GetSpaceRequest$json = {
+  '1': 'GetSpaceRequest',
+};
+
+/// Descriptor for `GetSpaceRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getSpaceRequestDescriptor = $convert.base64Decode(
+    'Cg9HZXRTcGFjZVJlcXVlc3Q=');
+
+@$core.Deprecated('Use getSpaceResponseDescriptor instead')
+const GetSpaceResponse$json = {
+  '1': 'GetSpaceResponse',
+  '2': [
+    {'1': 'space', '3': 1, '4': 1, '5': 5, '10': 'space'},
+  ],
+};
+
+/// Descriptor for `GetSpaceResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List getSpaceResponseDescriptor = $convert.base64Decode(
+    'ChBHZXRTcGFjZVJlc3BvbnNlEhQKBXNwYWNlGAEgASgFUgVzcGFjZQ==');
+

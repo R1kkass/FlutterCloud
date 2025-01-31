@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/proto/chat/chat.pbgrpc.dart';
-import 'package:TalkSpace/services/dh_alhoritm.dart';
+import 'package:TalkSpace/services/dh_algoritm.dart';
 import 'package:TalkSpace/services/encode_file.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/get_download_path.dart';
@@ -52,7 +52,7 @@ class ChatGrpc {
     var g = response.keys.g;
     var chatId = response.chatId;
 
-    var A = await generatePubKey(p, g.toInt(), chatId);
+    var A = await DHAlgorithm.generatePubKey(p, g.toInt(), chatId);
     String key = A.toString();
 
     await createSecondaryKey(
@@ -185,7 +185,7 @@ class ChatGrpc {
           if (e.progress >= 100) {
             var downloadPath = await getDownloadPath() ?? "";
             var path = "$downloadPath/$fileName";
-            var file = EncodeFile.decryptByte(
+            var file = EncodeFile.decryptByteCreateFile(
                 Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
 
             await HiveBoxes.chatFileUploaded.put(
@@ -198,11 +198,11 @@ class ChatGrpc {
             );
           }
         } catch (_) {
-          showToast(context, 'Не удалось скачать файл: $fileName');
+          showUnsuccessToast('Не удалось скачать файл: $fileName');
         }
       });
     } catch (e) {
-      showToast(context, 'Не удалось скачать файл: $fileName');
+      showUnsuccessToast('Не удалось скачать файл: $fileName');
     }
   }
 }

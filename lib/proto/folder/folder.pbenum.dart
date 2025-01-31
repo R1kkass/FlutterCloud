@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: access.proto
+//  source: folder/folder.proto
 //
 // @dart = 2.12
 

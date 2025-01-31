@@ -72,10 +72,10 @@ class _ErrorFileState extends State<ErrorFile> {
         if (e.progress >= 100) {
           String key = HiveBoxes.token.get("password")!;
           path = "$downloadPath/${widget.file.fileName}";
-          EncodeFile.decryptByte(Uint8List.fromList(fileBytes), path, key);
+          EncodeFile.decryptByteCreateFile(Uint8List.fromList(fileBytes), path, key);
           mainContext.read<DownloadFileBloc>().add(FolderSetStatus(
               id: widget.id, status: FileDownloadStatus.suceess));
-          showToast(context, 'Файл "${widget.file.fileName}" был скачан');
+          showSuccessToast('Файл "${widget.file.fileName}" был скачан');
           return;
         }
         mainContext
@@ -84,7 +84,7 @@ class _ErrorFileState extends State<ErrorFile> {
       } catch (e) {
         mainContext.read<DownloadFileBloc>().add(
             FolderSetStatus(id: widget.id, status: FileDownloadStatus.reject));
-        showToast(context, 'Не удалось скачать файл: ${widget.file.fileName}');
+        showUnsuccessToast('Не удалось скачать файл: ${widget.file.fileName}');
       }
     }
 
@@ -108,8 +108,8 @@ class _ErrorFileState extends State<ErrorFile> {
     }).onError((e) {
       mainContext.read<DownloadFileBloc>().add(
           FolderSetStatus(id: widget.id, status: FileDownloadStatus.reject));
-      showToast(
-          mainContext, 'Не удалось скачать файл: ${widget.file.fileName}');
+      showUnsuccessToast(
+          'Не удалось скачать файл: ${widget.file.fileName}');
     });
   }
 }

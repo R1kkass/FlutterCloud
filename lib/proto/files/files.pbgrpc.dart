@@ -37,6 +37,18 @@ class FilesGreeterClient extends $grpc.Client {
       '/files.FilesGreeter/DeleteFile',
       ($0.DeleteFileRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.DeleteFileResponse.fromBuffer(value));
+  static final _$renameFile = $grpc.ClientMethod<$0.RenameFileRequest, $0.RenameFileResponse>(
+      '/files.FilesGreeter/RenameFile',
+      ($0.RenameFileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.RenameFileResponse.fromBuffer(value));
+  static final _$moveFile = $grpc.ClientMethod<$0.MoveFileRequest, $0.MoveFileResponse>(
+      '/files.FilesGreeter/MoveFile',
+      ($0.MoveFileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.MoveFileResponse.fromBuffer(value));
+  static final _$getSpace = $grpc.ClientMethod<$0.GetSpaceRequest, $0.GetSpaceResponse>(
+      '/files.FilesGreeter/GetSpace',
+      ($0.GetSpaceRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetSpaceResponse.fromBuffer(value));
 
   FilesGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -58,6 +70,18 @@ class FilesGreeterClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.DeleteFileResponse> deleteFile($0.DeleteFileRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteFile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.RenameFileResponse> renameFile($0.RenameFileRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$renameFile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.MoveFileResponse> moveFile($0.MoveFileRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$moveFile, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetSpaceResponse> getSpace($0.GetSpaceRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getSpace, request, options: options);
   }
 }
 
@@ -94,6 +118,27 @@ abstract class FilesGreeterServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.DeleteFileRequest.fromBuffer(value),
         ($0.DeleteFileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.RenameFileRequest, $0.RenameFileResponse>(
+        'RenameFile',
+        renameFile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.RenameFileRequest.fromBuffer(value),
+        ($0.RenameFileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.MoveFileRequest, $0.MoveFileResponse>(
+        'MoveFile',
+        moveFile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.MoveFileRequest.fromBuffer(value),
+        ($0.MoveFileResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetSpaceRequest, $0.GetSpaceResponse>(
+        'GetSpace',
+        getSpace_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetSpaceRequest.fromBuffer(value),
+        ($0.GetSpaceResponse value) => value.writeToBuffer()));
   }
 
   $async.Stream<$0.FileDownloadResponse> downloadFile_Pre($grpc.ServiceCall call, $async.Future<$0.FileDownloadRequest> request) async* {
@@ -108,8 +153,23 @@ abstract class FilesGreeterServiceBase extends $grpc.Service {
     return deleteFile(call, await request);
   }
 
+  $async.Future<$0.RenameFileResponse> renameFile_Pre($grpc.ServiceCall call, $async.Future<$0.RenameFileRequest> request) async {
+    return renameFile(call, await request);
+  }
+
+  $async.Future<$0.MoveFileResponse> moveFile_Pre($grpc.ServiceCall call, $async.Future<$0.MoveFileRequest> request) async {
+    return moveFile(call, await request);
+  }
+
+  $async.Future<$0.GetSpaceResponse> getSpace_Pre($grpc.ServiceCall call, $async.Future<$0.GetSpaceRequest> request) async {
+    return getSpace(call, await request);
+  }
+
   $async.Future<$0.FileUploadResponse> uploadFile($grpc.ServiceCall call, $async.Stream<$0.FileUploadRequest> request);
   $async.Stream<$0.FileDownloadResponse> downloadFile($grpc.ServiceCall call, $0.FileDownloadRequest request);
   $async.Future<$0.FindFileResponse> findFile($grpc.ServiceCall call, $0.FindFileRequest request);
   $async.Future<$0.DeleteFileResponse> deleteFile($grpc.ServiceCall call, $0.DeleteFileRequest request);
+  $async.Future<$0.RenameFileResponse> renameFile($grpc.ServiceCall call, $0.RenameFileRequest request);
+  $async.Future<$0.MoveFileResponse> moveFile($grpc.ServiceCall call, $0.MoveFileRequest request);
+  $async.Future<$0.GetSpaceResponse> getSpace($grpc.ServiceCall call, $0.GetSpaceRequest request);
 }

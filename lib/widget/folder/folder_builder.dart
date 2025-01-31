@@ -3,8 +3,8 @@ import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/features/file/file.dart';
 import 'package:TalkSpace/features/file/upload_file.dart';
-import 'package:TalkSpace/features/folder/folder.dart';
-import 'package:TalkSpace/components/move_to_main.dart';
+import 'package:TalkSpace/widget/folder/folder.dart';
+import 'package:TalkSpace/features/file/move_to_main.dart';
 import 'package:TalkSpace/pages/home.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +18,7 @@ class FolderBuilder extends StatefulWidget {
 }
 
 class DragFields {
-  final String id;
+  final int id;
   final String type;
 
   const DragFields({required this.id, required this.type});
@@ -150,7 +150,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
       if (item.runtimeType == FolderFind) {
         children.add(LongPressDraggable<DragFields>(
             data: DragFields(
-                id: (item as FolderFind).id.toString(), type: "folder"),
+                id: (item as FolderFind).id, type: "folder"),
             feedback: FolderComponent(folder: item),
             key: Key(index.toString()),
             onDragStarted: () {
@@ -172,7 +172,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
           onDragEnd: (e) {
             callback(false);
           },
-          data: DragFields(id: (item as FileFind).id.toString(), type: "file"),
+          data: DragFields(id: (item as FileFind).id, type: "file"),
           dragAnchorStrategy: pointerDragAnchorStrategy,
           key: Key(index.toString()),
           feedback: FileComponent(file: item),

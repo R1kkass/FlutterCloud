@@ -23,26 +23,39 @@ class EncodeFile {
     fileExist.writeAsBytesSync(crypt(false, file.readAsBytesSync(), key));
   }
 
-  static File decryptByte(Uint8List byte, String pathExist, String key) {
+  static File decryptByteCreateFile(Uint8List byte, String pathExist, String key) {
     try {
-      var fileExist = File(pathExist);
-      var countFile = 1;
-      while (fileExist.existsSync()) {
-        var nameFileArr = pathExist.split(".");
-        if (nameFileArr.length > 1) {
-          nameFileArr[nameFileArr.length - 2] =
-              "${nameFileArr[nameFileArr.length - 2]} ($countFile)";
-          fileExist = File(nameFileArr.join("."));
-        } else {
-          fileExist = File("$pathExist ($countFile)");
-        }
-        countFile++;
-      }
-
+      var fileExist = _notCreatedFileName(pathExist);
       fileExist.writeAsBytesSync(crypt(false, byte, key));
       return fileExist;
     } catch (e) {
       rethrow;
     }
+  }
+
+    static Uint8List decryptByteReadFile(Uint8List byte, String key) {
+    try {
+      return crypt(false, byte, key);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static File _notCreatedFileName(String pathExist) {
+    var fileExist = File(pathExist);
+    var countFile = 1;
+    while (fileExist.existsSync()) {
+      var nameFileArr = pathExist.split(".");
+      if (nameFileArr.length > 1) {
+        nameFileArr[nameFileArr.length - 2] =
+            "${nameFileArr[nameFileArr.length - 2]} ($countFile)";
+        fileExist = File(nameFileArr.join("."));
+      } else {
+        fileExist = File("$pathExist ($countFile)");
+      }
+      countFile++;
+    }
+    
+    return fileExist;
   }
 }

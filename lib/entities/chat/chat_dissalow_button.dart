@@ -38,7 +38,7 @@ class _ChatDissalowButtonState extends State<ChatDissalowButton> {
     try {
       await _dissalowChat();
     } catch (e) {
-      showToast(context, "Не удалось отклонить");
+      showUnsuccessToast("Не удалось отклонить");
     } finally {
       setState(() {
         isLoading = false;

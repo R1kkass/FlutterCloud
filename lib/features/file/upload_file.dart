@@ -16,46 +16,44 @@ class UploadFile extends StatefulWidget {
 class _UploadFileState extends State<UploadFile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      height: 70,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  )),
-              const SizedBox(
-                width: 15,
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.only(left: 20, right: 10),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                )),
+            const SizedBox(
+              width: 15,
+            ),
+            Flexible(
+              child: Text(
+                widget.file.fileName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Colors.deepOrange.shade800,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500),
               ),
-              Flexible(
-                child: Text(
-                  widget.file.fileName,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: Colors.deepOrange.shade800,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-                onPressed: () {
-                  widget.file.callback?.cancel();
-                  context.read<ContentBloc>().add(UploadFileRemove(
-                      folderId: widget.folderId, id: widget.file.id));
-                },
-                child: const Text("Отменить")),
-          )
-        ],
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                  onPressed: () {
+                    widget.file.callback?.cancel();
+                    context.read<ContentBloc>().add(UploadFileRemove(
+                        folderId: widget.folderId, id: widget.file.id));
+                  },
+                  child: const Text("Отменить")),
+            )
+          ],
+        ),
       ),
     );
   }

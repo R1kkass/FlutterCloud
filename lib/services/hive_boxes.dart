@@ -9,8 +9,8 @@ class HiveBoxes {
     return Hive.box<String>("token");
   }
 
-  static Box<Map<String, String>> get chatsSecretKey {
-    return Hive.box<Map<String, String>>("chatsSecretKey");
+  static Box<Map<dynamic, dynamic>> get chatsSecretKey {
+    return Hive.box<Map<dynamic, dynamic>>("chatsSecretKey");
   }
 
   static Box<String> get cryptToken {
@@ -30,7 +30,7 @@ class HiveBoxes {
     await Hive.openBox<String>('token');
     await Hive.openBox<String>('listToken');
     await Hive.openBox<BigInt>('pubKey');
-    await Hive.openBox<Map<String, String>>('chatsSecretKey');
+    await Hive.openBox<Map<dynamic, dynamic>>('chatsSecretKey');
     await Hive.openBox<String>('chatFileUploaded');
     await Hive.openBox<String>('cryptToken');
   }

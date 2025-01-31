@@ -6,7 +6,7 @@ import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:TalkSpace/proto/users/users.pb.dart';
 import 'package:TalkSpace/proto/users/users.pbgrpc.dart';
 import 'package:TalkSpace/features/file/file.dart';
-import 'package:TalkSpace/features/folder/folder.dart';
+import 'package:TalkSpace/widget/folder/folder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArgsFilesUsers {

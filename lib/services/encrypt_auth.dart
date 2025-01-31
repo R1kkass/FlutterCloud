@@ -39,7 +39,6 @@ Future<AuthGenerateKeys> generatePubKeyAuth(String p, int g) async {
 
 String generateIV(String cryptoText) {
   final decodedData = base64Url.decode(cryptoText);
-  //Generate random key
   Uint8List ivBytes = decodedData.sublist(0, 16);
   return base64Encode(ivBytes);
 }

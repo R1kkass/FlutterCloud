@@ -38,7 +38,7 @@ class KeysGrpc {
     var chatKeys = await KeysGrpc().downloadKeys;
     chatKeys = chatKeys != "" ? chatKeys : "{}";
     Map<String, dynamic> data = jsonDecode(chatKeys);
-    Map<String, String> userKeys = secretBox.get(email) ?? {};
+    Map<dynamic, dynamic> userKeys = secretBox.get(email) ?? {};
     for (var item in data.keys) {
       var decryptKey = decrypt(data[item]!, password);
       userKeys[item] = decryptKey;

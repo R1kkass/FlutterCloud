@@ -57,7 +57,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
           .read<UploadFileBloc>()
           .add(SuccessUploadFile(filePath: filePath, id: message.messageId));
     } catch (e) {
-      showToast(context, "Не удалось загрузить файлы");
+      showUnsuccessToast("Не удалось загрузить файлы");
       context
           .read<UploadFileBloc>()
           .add(RemoveUploadFile(messageId: message.messageId));

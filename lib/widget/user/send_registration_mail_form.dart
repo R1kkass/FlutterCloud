@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:TalkSpace/components/dialog_loading.dart';
-import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
@@ -65,7 +65,7 @@ class _SendRegistrationMailFormState extends State<SendRegistrationMailForm> {
       _submitEmail();
     } catch (e) {
       Navigator.pop(context);
-      showToast(context, "Ошибка при подтверждении");
+      showUnsuccessToast("Ошибка при подтверждении");
     }
   }
 

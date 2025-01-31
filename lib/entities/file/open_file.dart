@@ -1,3 +1,4 @@
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file_plus/open_file_plus.dart';
 
@@ -42,7 +43,11 @@ class _OpenFileState extends State<OpenFileButton> {
             flex: 1,
             child: TextButton(
                 onPressed: () async {
-                  await OpenFile.open(widget.path);
+                  try {
+                    await OpenFile.open(widget.path);
+                  } catch (e) {
+                    showUnsuccessToast("Невозможно открыть файл");
+                  }
                 },
                 child: const Text("Открыть")),
           ),

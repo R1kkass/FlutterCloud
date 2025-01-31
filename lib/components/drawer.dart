@@ -1,10 +1,7 @@
-import 'dart:convert';
-
+import 'package:TalkSpace/features/file/get_space.dart';
+import 'package:TalkSpace/grpc/auth_grpc.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/api/file_api.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/services/file_size.dart';
-import 'package:TalkSpace/services/token_clear.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -14,31 +11,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  int space = 0;
-  String text = "Загрузка...";
-
-  @override
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
-
-  _asyncMethod() async {
-    getSpace(context).then((e) {
-      e.statusCode == 200
-          ? setState(() {
-              space = json.decode(e.body)["space"];
-              text = "Занято: ${fileSize(space)} из 1 Гб";
-            })
-          : setState(() {
-              text = "Ошибка";
-            });
-    });
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -47,25 +20,7 @@ class _MyDrawerState extends State<MyDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextButton(
-                onPressed: () {},
-                child: Column(children: [
-                  const Icon(Icons.cloud_outlined),
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                        thumbColor: Colors.transparent,
-                        thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 0.0)),
-                    child: Slider(
-                      value: space.toDouble(),
-                      onChanged: (e) {},
-                      min: 0,
-                      max: 536870912 * 2,
-                      inactiveColor: Colors.deepOrange.shade100,
-                    ),
-                  ),
-                  Text(text),
-                ])),
+            GetSpace(),
             Divider(
               color: Colors.deepOrange.shade100,
             ),
@@ -129,7 +84,7 @@ class _MyDrawerState extends State<MyDrawer> {
             const Spacer(),
             TextButton(
                 onPressed: () {
-                  tokenClear(context);
+                  AuthGrpc().tokenClear();
                   Navigator.pushNamed(context, AppRouter.AUTH);
                 },
                 child: const Row(

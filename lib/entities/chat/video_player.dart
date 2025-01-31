@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/services/message_date.dart';
 import 'package:video_player/video_player.dart' as video_player;
 
 class VideoPlayer extends StatefulWidget {
-  const VideoPlayer({super.key, required this.video});
+  const VideoPlayer({super.key, required this.controller});
 
-  final File video;
+  final video_player.VideoPlayerController controller;
 
   @override
   State<VideoPlayer> createState() => _VideoPlayerState();
@@ -20,7 +18,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = video_player.VideoPlayerController.file(widget.video)
+    _controller = widget.controller
       ..initialize().then((_) {
         setState(() {});
       });
@@ -57,13 +55,16 @@ class _VideoPlayerState extends State<VideoPlayer> {
               alignment: Alignment.center,
               children: [
                 Transform.scale(
-                  scale: 2,
+                  scale: 1,
                   child: FittedBox(
-                    fit: BoxFit.contain,
+                    fit: BoxFit.fill,
                     child: SizedBox(
-                        width: _controller.value.size.width,
-                        height: _controller.value.size.height,
-                        child: video_player.VideoPlayer(_controller)),
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
+                      child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: video_player.VideoPlayer(_controller)),
+                    ),
                   ),
                 ),
                 AnimatedOpacity(

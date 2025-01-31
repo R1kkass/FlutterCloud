@@ -25,6 +25,7 @@ class FileGalleryFiles extends StatefulWidget {
 
 class _FileGalleryFilesState extends State<FileGalleryFiles> {
   List<FileSystemEntity> files = [];
+  int countShow = 10;
 
   @override
   void initState() {
@@ -51,12 +52,10 @@ class _FileGalleryFilesState extends State<FileGalleryFiles> {
       } else {
         directory = '/storage/emulated/0/Pictures';
         files = Directory(directory).listSync();
+        directory = '/storage/emulated/0/DCIM/Camera';
+        files = [...files, ...Directory(directory).listSync()];
         directory = '/storage/emulated/0/Movies';
         files = [...files, ...Directory(directory).listSync()];
-      }
-      if (files.isEmpty) {
-        directory = '/storage/emulated/0/DCIM/Camera';
-        files = Directory(directory).listSync();
       }
       setState(() {});
     });
@@ -73,10 +72,10 @@ class _FileGalleryFilesState extends State<FileGalleryFiles> {
           widget.selectFile(file.path!);
         }
       } else {
-        showToast(context, "Файл не выбран");
+        showToast("Файл не выбран");
       }
     } catch (e) {
-      showToast(context, "Файл не выбран");
+      showToast("Файл не выбран");
     }
   }
 
@@ -103,7 +102,7 @@ class _FileGalleryFilesState extends State<FileGalleryFiles> {
           )
         else
           const Center(child: CircularProgressIndicator()),
-        for (var file in files.reversed)
+        for ( var file in files.reversed)
           if (File(file.path).statSync().type == FileSystemEntityType.file)
             GalleryFile(
               selectedFiles: widget.selectedFiles,

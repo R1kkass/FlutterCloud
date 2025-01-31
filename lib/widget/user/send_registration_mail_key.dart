@@ -46,10 +46,10 @@ class _SendRegistrationMailKeyState extends State<SendRegistrationMailKey> {
         password: data.password,
       ));
 
-      showToast(context, "Ключ отправлен");
+      showToast("Ключ отправлен");
       _counterSeconds();
     } catch (e) {
-      showToast(context, "Ошибка отправки ключа");
+      showUnsuccessToast("Ошибка отправки ключа");
     }
   }
 

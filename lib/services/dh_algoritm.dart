@@ -4,7 +4,8 @@ import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
-Future<BigInt> generatePubKey(String p, int g, int chatId) async {
+class DHAlgorithm {
+ static Future<BigInt> generatePubKey(String p, int g, int chatId) async {
   var box = HiveBoxes.pubKey;
 
   BigInt key = BigInt.parse(p);
@@ -23,7 +24,7 @@ Future<BigInt> generatePubKey(String p, int g, int chatId) async {
   return A;
 }
 
-Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
+static Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   var box = HiveBoxes.pubKey;
   var email = jwtDecode().email;
 
@@ -44,3 +45,6 @@ Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
 
   return secretKey;
 }
+
+}
+

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
@@ -96,7 +96,7 @@ class _RegistrationState extends State<Registration> {
     try {
       _registrationForm();
     } catch (e) {
-      showToast(context, "Пользователь с такой почтой уже зарегистрирован");
+      showUnsuccessToast("Пользователь с такой почтой уже зарегистрирован");
       Navigator.pop(context);
     }
     return null;

@@ -1,12 +1,8 @@
+import 'package:TalkSpace/grpc/folder_grpc.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/api/file_api.dart';
-import 'package:TalkSpace/api/folder_api.dart';
-import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
 import 'package:TalkSpace/widget/folder/folder_builder.dart';
 import 'package:TalkSpace/pages/home.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoveToMain extends StatefulWidget {
   const MoveToMain({super.key});
@@ -22,22 +18,11 @@ class _MoveToMainState extends State<MoveToMain> {
 
     return DragTarget<DragFields>(onWillAcceptWithDetails: (details) {
       return true;
-    }, onAcceptWithDetails: (details) {
+    }, onAcceptWithDetails: (details) async {
       if (details.data.type == "file") {
-        moveFile(details.data.id.toString(), "", context).then((e) async {
-          var response = await FilesGrpc().findFile(FindFileRequest(
-              search: "", folderId: args?.id, findEveryWhere: false));
-
-          context.read<ContentBloc>().add(
-              ContentInit(files: response.files, folders: response.folders));
-        });
+        await FilesGrpc().moveFile(details.data.id, 0, args?.id ?? 0);
       } else {
-        moveFolder(details.data.id, "", context).then((e) async {
-          ContentBloc.defaultRequestFile(args?.id, context);
-          // e.statusCode == 200
-          //     ? showToast(context, "Папка перемещена")
-          //     : showToast(context, "Папка не перемещена");
-        });
+        await FolderGrpc().moveFolder(details.data.id, 0, args?.id ?? 0);
       }
     }, builder: (context, candidateItems, rejectedItems) {
       return SizedBox(

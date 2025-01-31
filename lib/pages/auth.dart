@@ -1,7 +1,7 @@
 import 'package:TalkSpace/widget/user/submit_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 
 class Authorization extends StatefulWidget {

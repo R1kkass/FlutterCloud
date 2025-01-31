@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/components/bottom_sheeet_file.dart';
+import 'package:TalkSpace/features/file/bottom_sheeet_file.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/current_page_bloc.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/grpc/keys_grpc.dart';
 import 'package:TalkSpace/proto/chat/chat.pb.dart';
-import 'package:TalkSpace/services/dh_alhoritm.dart';
+import 'package:TalkSpace/services/dh_algoritm.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 
@@ -41,7 +41,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
     try {
       await _acceptChat();
     } catch (e) {
-      showToast(context, "Не удалось подтвердить");
+      showUnsuccessToast("Не удалось подтвердить");
     } finally {
       setState(() {
         isLoading = false;
@@ -68,7 +68,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
     if (box.get(key) == null) {
       GetPublicKeyResponse keys = await ChatGrpc()
           .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
-      var key = await generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
+      var key = await DHAlgorithm.generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
       await ChatGrpc().createSecondaryKey(
           CreateSecondaryKeyRequest(chatId: chat.chat.id, key: key.toString()));
     }
@@ -76,7 +76,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
       ChatGrpc()
           .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
           .then((keys) async {
-        await generateSecretKey(keys.key, keys.p, chat.chat.id);
+        await DHAlgorithm.generateSecretKey(keys.key, keys.p, chat.chat.id);
       });
     }
   }

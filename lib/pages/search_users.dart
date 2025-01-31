@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
-import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/components/users_list.dart';
 import 'package:TalkSpace/grpc/user_grpc.dart';
 import 'package:TalkSpace/proto/users/users.pb.dart';

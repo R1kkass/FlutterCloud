@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "./folder";
+
+package folder;
+
+service FolderGreeter {
+    rpc CreateFolder(CreateFolderRequest) returns (CreateFolderResponse);
+    rpc DeleteFolder(DeleteFolderRequest) returns (DeleteFolderResponse);
+    rpc RenameFolder(RenameFolderRequest) returns (RenameFolderResponse);
+    rpc MoveFolder(MoveFolderRequest) returns (MoveFolderResponse);
+}
+
+message CreateFolderRequest {
+    string name = 1;
+    int32 folderId = 2;
+}
+
+message CreateFolderResponse {
+    
+}
+
+message DeleteFolderRequest {
+    int32 folderId = 1;
+}
+
+message DeleteFolderResponse {
+
+}
+
+message RenameFolderRequest {
+    int32 folderId = 1;
+    string name = 2;
+}
+
+message RenameFolderResponse {
+    
+}
+
+message MoveFolderRequest {
+    int32 folderId = 1;
+    int32 folderToId = 2;
+}
+
+message MoveFolderResponse {
+    
+}

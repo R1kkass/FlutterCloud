@@ -48,7 +48,7 @@ class _SubmitLoginButtonState extends State<SubmitLoginButton> {
     try {
       await _loginForm();
     } catch (e) {
-      showToast(context, "Неверный логин или пароль");
+      showUnsuccessToast("Неверный логин или пароль");
       Navigator.pop(context);
     }
   }

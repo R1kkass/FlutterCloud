@@ -1,15 +1,17 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/entities/chat/image_viewer_unit_read.dart';
+import 'package:TalkSpace/features/file/actions/download_action.dart';
+import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/api/file_api.dart';
-import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/proto/files/files.pb.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:http/http.dart';
 
 interface class OpenFileArgs {
   final FileFind file;
+
   OpenFileArgs({required this.file});
 }
 
@@ -23,23 +25,62 @@ class Openfile extends StatefulWidget {
 
 class _OpenfileState extends State<Openfile> {
   String title = "";
-  String key = HiveBoxes.token.get("password")!;
+  bool loading = true;
+  Uint8List bytesFile = Uint8List(0);
+
   @override
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _asyncInit();
     });
   }
 
   Widget chilren = const CircularProgressIndicator();
+  OpenFileArgs? args;
 
-  _asyncMethod() async {
-    final args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
+  _asyncInit() async {
+    args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
 
     setState(() {
       title = args?.file.fileName ?? widget.title;
+    });
+    await openFile();
+  }
+
+  openFile() async {
+    try {
+      await _openFile();
+    } catch (e) {
+      showUnsuccessToast("Не удалось открыть файл");
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  _openFile() async {
+    var downloadFile = FilesGrpc().downloadFile(
+      FileDownloadRequest(
+        fileId: args?.file.id,
+        folderId: args?.file.folderId,
+      ),
+    );
+
+    var downloadAction = DownloadAction(
+        context: context,
+        fileName: args!.file.fileName,
+        fileId: args!.file.id,
+        downloadFile: downloadFile);
+
+    await downloadAction.listenReadFile(byteFiles);
+  }
+
+  byteFiles(Uint8List bytes) {
+    setState(() {
+      bytesFile = bytes;
+      loading = false;
     });
   }
 
@@ -47,48 +88,66 @@ class _OpenfileState extends State<Openfile> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
 
-    return DefaultScaffold(
-        title: title,
+    final appBar = AppBar(
+      backgroundColor: const Color.fromARGB(125, 0, 0, 0),
+      title: Text(args?.file.fileName ?? widget.title,
+          style: const TextStyle(color: Colors.white)),
+      leading: Navigator.canPop(context) ||
+              ModalRoute.of(context)!.settings.name != AppRouter.HOME
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.canPop(context)
+                    ? Navigator.of(context).pop()
+                    : ModalRoute.of(context)!.settings.name != AppRouter.HOME
+                        ? Navigator.pushNamedAndRemoveUntil(
+                            context, AppRouter.HOME, (r) => false)
+                        : null;
+              })
+          : null,
+    );
+
+    return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: appBar,
         body: Center(
-          child: FutureBuilder<Response>(
-              future: getFile(args?.file.id.toString(),
-                  context), // a previously-obtained Future<String> or null
-              builder:
-                  (BuildContext context, AsyncSnapshot<Response> snapshot) {
-                Widget children = const CircularProgressIndicator();
+          child: Builder(builder: (BuildContext context) {
+            String? type = args?.file.fileName.split(".").last;
+            var expText = RegExp("txt|js|ts|go|dart|proto|c|cpp|php|tsx|jsx|vue|css|html");
+            var expImage = RegExp(
+                "mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*|gif|jpe?g|tiff?|png|webp|bmp");
 
-                String? type = args?.file.fileName.split(".").last;
-                var exp = RegExp("txt|jpg");
-                var expText = RegExp("txt|js|ts");
-                var expImage = RegExp("png|jpg|jpeg");
+            if (type.runtimeType == String && bytesFile.isNotEmpty) {
+              if (expText.hasMatch(type!)) {
+                return Text(utf8.decode(bytesFile));
+              } else if (expImage.hasMatch(type)) {
+                return ImageViewerUnitRead(
+                  fileBytes: bytesFile,
+                  typeFile: type,
+                  height: appBar.preferredSize.height,
+                );
+              }
+            }
 
-                if (type.runtimeType == String &&
-                    exp.hasMatch(type as String) &&
-                    snapshot.data?.statusCode == 200) {
-                  if (expText.hasMatch(type)) {
-                    children = Text(utf8
-                        .decode(crypt(false, snapshot.data!.bodyBytes, key)));
-                  } else if (expImage.hasMatch(type) && key != "") {
-                    children = Image.memory(
-                        crypt(false, snapshot.data!.bodyBytes, key));
-                  }
-                } else {
-                  children = const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.sentiment_dissatisfied, size: 100),
-                      Text(
-                        "Не возможно открыть файл",
-                        style:
-                            TextStyle(fontSize: 24, color: Colors.deepOrange),
-                      ),
-                    ],
-                  );
-                }
+            if (loading) {
+              return CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 3,
+              );
+            }
 
-                return children;
-              }),
+            return const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.sentiment_dissatisfied, size: 100),
+                Text(
+                  "Не возможно открыть файл",
+                  style: TextStyle(fontSize: 24, color: Colors.deepOrange),
+                ),
+              ],
+            );
+          }),
         ));
   }
 }

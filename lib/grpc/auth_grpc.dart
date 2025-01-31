@@ -1,7 +1,9 @@
+import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/proto/auth/auth.pbgrpc.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 
 class AuthGrpc {
@@ -45,5 +47,13 @@ class AuthGrpc {
     var email = jwtDecode().email;
     await HiveBoxes.cryptToken.put("${email}cryptToken", cryptToken);
     await HiveBoxes.cryptToken.put("${email}secretKey", secretKey);
+  }
+
+  tokenClear() {
+    final context = NavigationService.navigatorKey.currentContext!;
+
+    HiveBoxes.token.clear();
+    HiveBoxes.listToken.delete(jwtDecode().email);
+    context.read<TokenCubit>().updateToken("");
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/cubit/download_file_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
-import 'package:TalkSpace/features/file/downloading_file.dart';
+import 'package:TalkSpace/widget/chat/downloading_file.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Downloadings extends StatefulWidget {

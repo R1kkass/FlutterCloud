@@ -28,7 +28,7 @@ class _ChangeUserState extends State<ChangeUser> {
             var token = context.read<TokenCubit>().state;
             if (tokens[index] != token) {
               return TextButton(
-                  onPressed: () {
+                onPressed: () {
                     changeToken(context, tokens[index], tokenKeys[index]);
                   },
                   child: Text(tokenKeys[index]));
@@ -44,5 +44,5 @@ void changeToken(BuildContext context, String token, String name) {
   box.put('access_token', token);
   context.read<TokenCubit>().updateToken(token);
   Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
-  showToast(context, 'Аккаунт сменен на: $name');
+  showToast('Аккаунт сменен на: $name');
 }

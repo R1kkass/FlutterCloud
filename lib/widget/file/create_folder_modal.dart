@@ -1,8 +1,8 @@
-import 'package:TalkSpace/api/folder_api.dart';
 import 'package:TalkSpace/cubit/content_bloc.dart';
+import 'package:TalkSpace/grpc/folder_grpc.dart';
+import 'package:TalkSpace/proto/folder/folder.pb.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class CreateFolderModal extends StatefulWidget {
   const CreateFolderModal({super.key, required this.id});
@@ -44,27 +44,26 @@ class _CreateFolderModalState extends State<CreateFolderModal> {
           ),
           child: const Text('Создать'),
           onPressed: () async {
-            Navigator.of(context).pop();
-
-            await createFolderApi(context).then((e) {
-              e.statusCode == 201
-                  ? showToast(context, "Папка создана")
-                  : showToast(context, "Папка не была создана");
-            }).catchError((e) {
-              showToast(context, "Папка не была создана");
-            });
-            ContentBloc.defaultRequestFile(widget.id, context);
+            await createFolder();
           },
         ),
       ],
     );
   }
 
-    Future<Response> createFolderApi(context) {
-    var id = widget.id;
+  createFolder() async {
+    try {
+      await _createFolder();
+    } catch (e) {
+      showUnsuccessToast("Папка не была создана");
+    }
+  }
 
-    id ??= 0;
-
-    return createFolder(FolderParams(nameFolder.text, id), context);
+  _createFolder() async {
+    Navigator.of(context).pop();
+    await FolderGrpc().createFolder(
+        CreateFolderRequest(name: nameFolder.text, folderId: widget.id));
+    showSuccessToast("Папка создана");
+    ContentBloc.defaultRequestFile(widget.id, context);
   }
 }

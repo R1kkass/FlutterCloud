@@ -6,7 +6,7 @@ import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/widget/user/send_registration_mail_key.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/components/my_input.dart';
+import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
@@ -80,7 +80,7 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
     try {
       await _submitEmail();
     } catch (e) {
-      showToast(context, "Ошибка при подтверждении");
+      showUnsuccessToast("Ошибка при подтверждении");
       Navigator.pop(context);
     }
   }
