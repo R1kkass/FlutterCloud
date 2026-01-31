@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:TalkSpace/app/block_providers.dart';
+import 'package:TalkSpace/app/fcm_init.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 ClientChannel channel = ClientChannel(
   ipServer,
@@ -30,6 +33,10 @@ void main() async {
   await HiveBoxes.initHiveBoxes();
 
   Bloc.observer = const MyBlocObserver();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MultiBlocProvider(providers: BlockProviders.blockProviders, child: const MyApp()));
 }
@@ -65,6 +72,7 @@ class _MyAppState extends State<MyApp> {
       context.read<CountBloc>().add(SetCount(e.count));
     });
     WidgetsBinding.instance.addPostFrameCallback((e) async {
+      await FcmInit.init();
       var permissionStatus = await Permission.storage.status;
       if (!permissionStatus.isGranted) {
         await Permission.storage.request();

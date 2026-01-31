@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712542107421",
+    "project_id": "talkspace-53083",
+    "storage_bucket": "talkspace-53083.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712542107421:android:282d6107de188a3d2193f4",
+        "android_client_info": {
+          "package_name": "com.example.TalkSpace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDybKQFYF-Sn6AlcOOJhBDshf_6PDj-tuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

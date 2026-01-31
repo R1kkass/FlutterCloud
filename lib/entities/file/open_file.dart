@@ -1,6 +1,6 @@
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_file/open_file.dart';
 
 class OpenFileButton extends StatefulWidget {
   final String path;

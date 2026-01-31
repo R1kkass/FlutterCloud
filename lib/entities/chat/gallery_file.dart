@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/services/file_size.dart';
 import 'package:TalkSpace/services/get_download_path.dart';
 import 'package:TalkSpace/shared/text_button_gallery.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_file/open_file.dart';
 
 class GalleryFile extends StatefulWidget {
   const GalleryFile(

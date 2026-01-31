@@ -9,7 +9,7 @@ import 'package:TalkSpace/services/get_download_path.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:TalkSpace/shared/toast.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_file/open_file.dart';
 
 class ChatFileComponent extends StatefulWidget {
   const ChatFileComponent(

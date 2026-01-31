@@ -3,7 +3,7 @@ import 'package:TalkSpace/proto/chat/chat.pb.dart';
 import 'package:TalkSpace/services/file_size.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:open_file_plus/open_file_plus.dart';
+import 'package:open_file/open_file.dart';
 
 class ChatFileUploadComponent extends StatefulWidget {
   const ChatFileUploadComponent(
