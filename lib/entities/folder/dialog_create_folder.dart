@@ -1,6 +1,6 @@
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

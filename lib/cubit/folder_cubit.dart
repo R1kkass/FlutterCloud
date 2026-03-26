@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
-import 'package:TalkSpace/proto/users/users.pb.dart' as user;
+import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:grpc/grpc.dart';
 
 class GetData {
-  List<user.Folder?> folders = [];
-  List<user.File?> files = [];
+  List<Folder?> folders = [];
+  List<File?> files = [];
   Map<int, Map<int, FileUpload?>> uploadFile = {};
   Map<int, FileDownload?> downloadFile = {};
   int status_code = 0;

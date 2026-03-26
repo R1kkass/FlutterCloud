@@ -1,8 +1,11 @@
 syntax = "proto3";
 
-option go_package = "./chat";
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/chat;chat";
 
 package chat;
+
+import "google/protobuf/timestamp.proto";
+import "user/user.proto";
 
 service ChatGreeter {
     rpc CreateChat(CreateRequestChat) returns (CreateResponseChat);
@@ -11,14 +14,11 @@ service ChatGreeter {
     rpc GetSecondaryKey(GetSecondaryKeyRequest) returns (GetSecondaryKeyResponse);
     rpc GetPublicKey(GetPublicKeyRequest) returns (GetPublicKeyResponse);
     rpc AcceptChat(AcceptChatRequest) returns (AcceptChatResponse);
-    rpc DissalowChat(DissalowChatRequest) returns (DissalowChatResponse);
+    rpc DisallowChat(DisallowChatRequest) returns (DisallowChatResponse);
     rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
     rpc StreamGetMessagesGeneral(Empty) returns (stream StreamGetMessagesGeneralResponse);
     rpc StreamGetMessages(stream StreamGetMessagesRequest) returns (stream StreamGetMessagesResponse);
     rpc GetUnSuccessChats(Empty) returns (GetUnSuccessChatsResponse);
-    rpc UploadChatFile(stream UploadFileChatRequest) returns (UploadFileChatResponse);
-    rpc DownloadChatFile(DownloadFileChatRequest) returns (stream DownloadFileChatResponse);
-    rpc CreateFileMessage(CreateFileMessageRequest) returns (CreateFileMessageResponse);
 }
 
 enum TypeMessage {
@@ -30,7 +30,7 @@ enum TypeMessage {
 
 message StreamGetMessagesRequest {
     TypeMessage type = 1;
-    string message = 2;
+    string text = 2;
     uint32 message_id = 3;
 }
 
@@ -50,24 +50,20 @@ message AcceptChatRequest {
     uint32 chat_id = 1;
 }
 
-message AcceptChatResponse {
-    repeated ChatUser chats = 1;
-}
+message AcceptChatResponse {}
 
-message DissalowChatRequest {
+message DisallowChatRequest {
     uint32 chat_id = 1;
 }
 
-message DissalowChatResponse {
-    repeated ChatUser chats = 1;
-}
+message DisallowChatResponse {}
 
 message CreateRequestChat {
-    uint32 other_id = 1;
+    string companionUuid = 1;
 }
 
 message CreateResponseChat {
-    string message = 1;
+    string text = 1;
     Keys keys = 2;
     uint32 chat_id = 3;
 }
@@ -78,69 +74,45 @@ message Keys {
 }
 
 message StreamGetResponseChat {
-    repeated ChatUsersCount chats = 1;
+    repeated ChatWithUnReadingMessagesCount chats = 1;
 }
 
 message GetUnSuccessChatsResponse {
-    repeated ChatUser chats = 1;
+    repeated Chat chats = 1;
 }
 
-message ChatUser {
+message ChatWithUnReadingMessagesCount  {
     uint32 id = 1;
-    uint32 chat_id = 2;
-    uint32 user_id = 3;
-    User user = 4;
-    string created_at = 5;
-    string updated_at = 6;
-    Chat chat = 7;
-}
-
-message ChatUsersCount  {
-    uint32 id = 1;
-    uint32 chat_id = 2;
-    uint32 user_id = 3;
-    User user = 4;
-    string created_at = 5;
-    string updated_at = 6;
-    Chat chat = 7;
-    int32 un_readed_messages_count = 8;
-    string text = 9;
-    string message_user_id = 10;
+    Message message = 2;
+    string name_chat = 3;
+    repeated user.User users = 4;
+    int32 un_reading_messages_count = 5;
 }
 
 message Chat {
     uint32 id = 1;
-    Message message = 2;
+    repeated Message messages = 2;
     string name_chat = 3;
-    repeated ChatUser chat_users = 4;
+    repeated user.User users = 4;
 }
 
 message Message {
     uint32 id = 1;
-    string created_at = 2;
-    string updated_at = 3;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
     uint32 user_id = 4;
     uint32 chat_id = 5;
     string text = 6;
-    User user = 7;
+    user.User user = 7;
     bool status_read = 8;
-    bool un_readed_message = 9;
-    repeated ChatFile chat_files = 10;
+    repeated MessageFile message_files = 9;
 }
 
-message ChatFile {
+message MessageFile {
     uint32 id = 1;
-    uint32 chat_id = 2;
-    uint32 user_id = 3;
+    int64 size = 2;
+    string file_name = 3;
     uint32 message_id = 4;
-    int64 size = 5;
-    string file_name = 6;
-}
-
-message User {
-    uint32 id = 1;
-    string name = 2;
-    string email = 3;
 }
 
 message CreateSecondaryKeyRequest {
@@ -149,7 +121,7 @@ message CreateSecondaryKeyRequest {
 }
 
 message CreateSecondaryKeyResponse {
-    string message = 1; 
+    string message = 1;
 }
 
 message GetSecondaryKeyRequest {
@@ -178,37 +150,6 @@ message GetMessagesRequest {
 
 message GetMessagesResponse {
     repeated Message messages = 1;
-    int32 page = 2; 
-    int32 count_not_read = 3; 
-}
-
-message UploadFileChatRequest {
-    bytes chunk = 1;
-    string fileName = 2;
-    uint32 messageId = 3;
-    string text = 4;
-}
-
-message UploadFileChatResponse {
-    string message = 1;
-}
-
-message DownloadFileChatResponse {
-    bytes chunk = 1;
-    float progress = 2;
-}
-
-message DownloadFileChatRequest {
-    uint32 chat_file_id = 1;
-}
-
-message CreateFileMessageRequest {
-    string text = 1;
-    uint32 chat_id = 2;
-}
-
-message CreateFileMessageResponse {
-    uint32 message_id = 1;
-    string created_at = 2;
-    string updated_at = 3;
+    int32 page = 2;
+    int32 count_not_read = 3;
 }

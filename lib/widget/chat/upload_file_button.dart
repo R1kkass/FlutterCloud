@@ -4,7 +4,7 @@ import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:file_picker/file_picker.dart';

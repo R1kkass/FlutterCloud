@@ -13,7 +13,7 @@ class AuthGenerateKeys {
 
 Future<String> generateSecretKeyAuth(String B, String p, BigInt a) async {
   BigInt secretKey = BigInt.parse(B);
-  secretKey = secretKey.pow(a.toInt()) % BigInt.parse(p);
+  secretKey = secretKey.modPow(a, BigInt.parse(p));
 
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();
@@ -24,15 +24,11 @@ Future<String> generateSecretKeyAuth(String B, String p, BigInt a) async {
 Future<AuthGenerateKeys> generatePubKeyAuth(String p, int g) async {
   BigInt key = BigInt.parse(p);
 
-  var pp = 18;
-  BigInt max = BigInt.two.pow(pp) - BigInt.one;
-  BigInt min = BigInt.two.pow(pp - 1) - BigInt.one;
-  Random random = Random();
-
-  BigInt a = BigInt.from(random.nextInt((max - min + key - min).toInt()));
+  var pp = 256;
+  BigInt a = generateRandomBigInt(pp);
 
   BigInt A = BigInt.from(g);
-  A = A.pow(a.toInt()) % key;
+  A = A.modPow(a, key);
 
   return AuthGenerateKeys(A: A, a: a);
 }
@@ -86,4 +82,23 @@ String decrypt(String data, String secretKey) {
   final ciphertext = base64Decode(data);
   final decrypted = crypt(false, ciphertext, secretKey);
   return utf8.decode(decrypted);
+}
+
+BigInt generateRandomBigInt(int bitLength) {
+  final random = Random.secure(); // Use Random.secure() for cryptographic purposes
+  BigInt result = BigInt.zero;
+  int remainingBits = bitLength;
+
+  while (remainingBits > 0) {
+    // Generate an int (up to 32 bits on most platforms)
+    int nextBits = remainingBits >= 32 ? 32 : remainingBits;
+    int mask = (1 << nextBits) - 1;
+    int randomPart = random.nextInt(1 << nextBits); // nextInt takes exclusive max value
+
+    // Combine the random part into the result
+    result = (result << nextBits) | BigInt.from(randomPart);
+    remainingBits -= nextBits;
+  }
+
+  return result;
 }

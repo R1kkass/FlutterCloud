@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:TalkSpace/gen/dart/message/message.pb.dart';
+import 'package:TalkSpace/grpc/message_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encode_file.dart';
 import 'package:TalkSpace/services/file_size.dart';
 import 'package:TalkSpace/services/get_download_path.dart';
@@ -15,13 +17,15 @@ class ChatFileComponent extends StatefulWidget {
   const ChatFileComponent(
       {super.key,
       required this.fileName,
-      required this.chatFile,
+      required this.messageFile,
+      required this.message,
       required this.secretKey,
       required this.color});
 
   final String fileName;
   final String secretKey;
-  final ChatFile chatFile;
+  final MessageFile messageFile;
+  final Message message;
   final Color? color;
 
   @override
@@ -36,7 +40,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
     super.initState();
     downloaded = HiveBoxes
             .chatFileUploaded
-            .get("${widget.chatFile.id}${jwtDecode().email}") !=
+            .get("${widget.messageFile.id}${jwtDecode().email}") !=
         null;
   }
 
@@ -46,9 +50,9 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
       List<int> chunks = [];
 
       try {
-        var downloadFile = ChatGrpc().downloadChatFile(
-          DownloadFileChatRequest(
-            chatFileId: widget.chatFile.id,
+        var downloadFile = MessageGrpc().downloadFile(
+          DownloadFileMessageRequest(
+            messageFileId: widget.messageFile.id,
           ),
         );
         downloadFile.listen((e) async {
@@ -62,7 +66,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
                   path, widget.secretKey.substring(0, 32));
               HiveBoxes
                   .chatFileUploaded
-                  .put("${widget.chatFile.id}${jwtDecode().email}", file.path);
+                  .put("${widget.messageFile.id}${jwtDecode().email}", file.path);
               downloaded = true;
               setState(() {});
             }
@@ -79,7 +83,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
       await OpenFile.open(
         HiveBoxes
             .chatFileUploaded
-            .get("${widget.chatFile.id}${jwtDecode().email}"),
+            .get("${widget.messageFile.id}${jwtDecode().email}"),
       );
     }
 
@@ -117,7 +121,7 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.bold)),
-            Text(fileSize(widget.chatFile.size.toInt()),
+            Text(fileSize(widget.messageFile.size.toInt()),
                 style: const TextStyle(color: Colors.white, fontSize: 12))
           ],
         ),

@@ -1,31 +1,25 @@
 import 'dart:math';
 
+import 'package:TalkSpace/gen/dart/google/protobuf/timestamp.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/consts/month.dart';
 import 'package:TalkSpace/entities/chat/message_badge.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/widget/chat/chat_files_column_upload.dart';
 
 class MessageUploadFileComponent extends StatefulWidget {
   const MessageUploadFileComponent(
       {super.key,
       required this.secretKey,
-      required this.text,
-      required this.createdAt,
-      required this.name,
-      required this.messageId,
       required this.controller,
-      required this.chatFiles,
+      required this.message,
       required this.dateChange});
 
   final DateTime? dateChange;
-  final List<ChatFile> chatFiles;
-  final String text;
-  final int messageId;
+  final Message message;
   final ScrollController controller;
-  final String createdAt;
   final String secretKey;
-  final String name;
 
   @override
   State<MessageUploadFileComponent> createState() => MessageUploadFileState();
@@ -35,7 +29,12 @@ class MessageUploadFileState extends State<MessageUploadFileComponent> {
   @override
   Widget build(BuildContext context) {
     DateTime? dateChange = widget.dateChange;
-    DateTime time = DateTime.parse(widget.createdAt).toLocal();
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.message.createdAt.seconds.toInt()).toLocal();
+    String text = (widget.message.text != ""
+        ? EncryptMessage()
+        .decrypt(widget.message.text, widget.secretKey)
+        : "");
+
     return Column(
       children: [
         dateChange != null
@@ -59,15 +58,15 @@ class MessageUploadFileState extends State<MessageUploadFileComponent> {
                   child: Column(
                     children: [
                       ChatFilesUploadColumn(
-                          messageId: widget.messageId,
-                          chatFiles: widget.chatFiles,
+                          message: widget.message,
+                          secretKey: widget.secretKey,
                           status: true),
-                      if (widget.text != "")
+                      if (text != "")
                         Container(
                           padding: const EdgeInsets.only(left: 15, right: 15),
                           alignment: Alignment.topLeft,
                           child: Text(
-                            widget.text,
+                            text,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

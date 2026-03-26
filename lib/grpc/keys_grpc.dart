@@ -1,28 +1,22 @@
 import 'dart:convert';
-import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/grpc/base_grpc.dart';
 
-import 'package:TalkSpace/proto/keys/keys.pbgrpc.dart';
+import 'package:TalkSpace/gen/dart/keys/keys.pbgrpc.dart';
+import 'package:TalkSpace/grpc/interceptors/auth_interceptor.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:grpc/grpc.dart';
 
-class KeysGrpc {
-  final _stub = KeysGreeterClient(channel);
+class KeysGrpc extends BaseGrpc {
+  late final _stub = KeysGreeterClient(channel, interceptors: [AuthInterceptor()]);
   final secretBox = HiveBoxes.chatsSecretKey;
 
-  CallOptions get _options {
-    return CallOptions(metadata: {
-      "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
-    });
-  }
-
   Future<KeysUploadResponse> uploadFile(KeysUploadRequest request) {
-    return _stub.uploadKeys(request, options: _options);
+    return _stub.uploadKeys(request, options: options);
   }
 
   Future<String> get downloadKeys async {
-    var list = await _stub.downloadKeys(Empty(), options: _options).toList();
+    var list = await _stub.downloadKeys(Empty(), options: options).toList();
     List<int> listChunk = [];
     for (var item in list) {
       listChunk = [...listChunk, ...item.chunk];

@@ -2,7 +2,7 @@ import 'package:TalkSpace/grpc/folder_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/widget/folder/folder_builder.dart';
-import 'package:TalkSpace/pages/home.dart';
+import 'package:TalkSpace/pages/cloud.dart';
 
 class MoveToMain extends StatefulWidget {
   const MoveToMain({super.key});
@@ -14,7 +14,7 @@ class MoveToMain extends StatefulWidget {
 class _MoveToMainState extends State<MoveToMain> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
+    final args = ModalRoute.of(context)!.settings.arguments as CloudArgs?;
 
     return DragTarget<DragFields>(onWillAcceptWithDetails: (details) {
       return true;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 class Areas {
@@ -197,8 +197,8 @@ class GridImagesGeneral {
 
 abstract class GridImagesGeneralProps extends StatefulWidget {
   const GridImagesGeneralProps(
-      {required this.images, required this.areas, super.key});
+      {required this.message, required this.areas, super.key});
 
-  final List<ChatFile> images;
+  final Message message;
   final Areas areas;
 }

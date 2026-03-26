@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocEvent {
@@ -9,8 +9,8 @@ class BlocEvent {
 }
 
 class ContentState {
-  List<FolderFind?> folders;
-  List<FileFind?> files;
+  List<Folder?> folders;
+  List<File?> files;
   bool error;
   String search;
   Map<int, Map<int, FileUpload?>> uploadFile;
@@ -51,17 +51,20 @@ class ContentBloc extends Bloc<BlocEvent, ContentState> {
   }
 
   static void defaultRequestFile(int? id, BuildContext context) async {
-    var state = context.read<ContentBloc>().state;
-    await FilesGrpc()
+    try {
+      var state = context.read<ContentBloc>().state;
+
+      final response = await FilesGrpc()
         .findFile(FindFileRequest(
-            search: state.search, folderId: id, findEveryWhere: false, page: 1))
-        .then((response) {
+        search: state.search, folderId: id, findEveryWhere: false, page: 1));
+      final z = response.folders;
+      print(z);
       context
-          .read<ContentBloc>()
-          .add(ContentInit(files: response.files, folders: response.folders));
-    }).catchError((e) {
+        .read<ContentBloc>()
+        .add(ContentInit(files: response.files, folders: response.folders));
+    } catch(e) {
       context.read<ContentBloc>().add(SetError(error: true));
-    });
+    }
   }
 
   static void paginationRequestFile(
@@ -126,15 +129,15 @@ class ContentBloc extends Bloc<BlocEvent, ContentState> {
 }
 
 class ContentInit extends BlocEvent {
-  final List<FileFind> files;
-  final List<FolderFind> folders;
+  final List<File> files;
+  final List<Folder> folders;
 
   const ContentInit({required this.files, required this.folders});
 }
 
 class ContentPush extends BlocEvent {
-  final List<FileFind> files;
-  final List<FolderFind> folders;
+  final List<File> files;
+  final List<Folder> folders;
 
   const ContentPush({required this.files, required this.folders});
 }

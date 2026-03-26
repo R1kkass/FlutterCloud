@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/entities/chat/chat_file_upload.dart';
 import 'package:TalkSpace/entities/chat/grid_images_upload.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 
 class ChatFilesUploadColumn extends StatefulWidget {
   const ChatFilesUploadColumn(
       {super.key,
-      required this.chatFiles,
+      required this.secretKey,
       required this.status,
-      required this.messageId});
+      required this.message});
 
-  final List<ChatFile> chatFiles;
   final bool status;
-  final int messageId;
+  final String secretKey;
+  final Message message;
 
   @override
   State<ChatFilesUploadColumn> createState() => _ChatFilesUploadColumnState();
@@ -24,10 +24,10 @@ class _ChatFilesUploadColumnState extends State<ChatFilesUploadColumn> {
 
   @override
   Widget build(BuildContext context) {
-    List<ChatFile> images = [];
-    List<ChatFile> other = [];
+    List<MessageFile> images = [];
+    List<MessageFile> other = [];
 
-    for (var chatFile in widget.chatFiles) {
+    for (var chatFile in widget.message.messageFiles) {
       var typeFile = chatFile.fileName.split(".").last;
       if (reImg.hasMatch(typeFile) || reVideo.hasMatch(typeFile)) {
         images.add(chatFile);
@@ -42,8 +42,8 @@ class _ChatFilesUploadColumnState extends State<ChatFilesUploadColumn> {
       children: [
         if (images.isNotEmpty)
           GridImagesUpload(
-            messageId: widget.messageId,
-            images: images,
+            message: widget.message,
+            secretKey: widget.secretKey,
           ),
         Container(
           padding:

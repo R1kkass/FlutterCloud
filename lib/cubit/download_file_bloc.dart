@@ -1,5 +1,5 @@
 import 'package:TalkSpace/cubit/folder_cubit.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 

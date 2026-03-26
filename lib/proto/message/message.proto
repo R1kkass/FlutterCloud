@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/message;message";
+
+package message;
+
+import "google/protobuf/timestamp.proto";
+
+service MessageGreeter {
+  rpc UploadMessageFile(stream UploadFileMessageRequest) returns (UploadFileMessageResponse);
+  rpc DownloadMessageFile(DownloadFileMessageRequest) returns (stream DownloadFileMessageResponse);
+  rpc CreateFileMessage(CreateFileMessageRequest) returns (CreateFileMessageResponse);
+}
+
+message UploadFileMessageRequest {
+  bytes chunk = 1;
+  string fileName = 2;
+  uint32 messageId = 3;
+  uint32 chatId = 4;
+  string text = 5;
+}
+
+message UploadFileMessageResponse {
+  string text = 1;
+}
+
+message DownloadFileMessageRequest {
+  uint32 message_file_id = 1;
+  uint32 message_id = 2;
+  uint32 chat_id = 3;
+}
+
+message DownloadFileMessageResponse {
+  bytes chunk = 1;
+  float progress = 2;
+}
+
+message CreateFileMessageRequest {
+  string text = 1;
+  uint32 chat_id = 2;
+}
+
+message CreateFileMessageResponse {
+  uint32 message_id = 1;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 3;
+}

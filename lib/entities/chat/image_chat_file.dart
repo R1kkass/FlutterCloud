@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:TalkSpace/grpc/message_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/entities/chat/video_chat_file.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/pages/image_viewer.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 
@@ -17,13 +18,15 @@ class ImageChatFile extends StatefulWidget {
       required this.index,
       required this.images,
       required this.size,
+      required this.message,
       required this.fileName});
 
   final String secretKey;
-  final ChatFile image;
+  final MessageFile image;
   final int index;
   final double size;
-  final List<ChatFile> images;
+  final List<MessageFile> images;
+  final Message message;
   final String fileName;
 
   @override
@@ -47,7 +50,7 @@ class _ImageChatFileState extends State<ImageChatFile> {
         .chatFileUploaded
         .get("${widget.image.id}${jwtDecode().email}");
     if (boxPath == null) {
-      ChatGrpc().downloadChatFileFn(context, widget.image.id, widget.fileName,
+      MessageGrpc().downloadFileFn(context, widget.message, widget.image.id, widget.fileName,
           widget.secretKey, setStatus);
     } else {
       setStatus(boxPath);
@@ -74,8 +77,8 @@ class _ImageChatFileState extends State<ImageChatFile> {
                   arguments: ImageViewerArgs(
                       decrypt: true,
                       index: widget.index,
-                      images: widget.images,
-                      chatId: widget.image.chatId));
+                      message: widget.message,
+                      secretKey: widget.secretKey));
             },
             child: Visibility(
               maintainSize: true,

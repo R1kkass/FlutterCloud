@@ -7,10 +7,10 @@ import 'package:TalkSpace/features/file/actions/download_action.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 
 interface class OpenFileArgs {
-  final FileFind file;
+  final File file;
 
   OpenFileArgs({required this.file});
 }
@@ -44,7 +44,7 @@ class _OpenfileState extends State<Openfile> {
     args = ModalRoute.of(context)!.settings.arguments as OpenFileArgs?;
 
     setState(() {
-      title = args?.file.fileName ?? widget.title;
+      title = args?.file.media.fileName ?? widget.title;
     });
     await openFile();
   }
@@ -70,7 +70,7 @@ class _OpenfileState extends State<Openfile> {
 
     var downloadAction = DownloadAction(
         context: context,
-        fileName: args!.file.fileName,
+        fileName: args!.file.media.fileName,
         fileId: args!.file.id,
         downloadFile: downloadFile);
 
@@ -90,18 +90,18 @@ class _OpenfileState extends State<Openfile> {
 
     final appBar = AppBar(
       backgroundColor: const Color.fromARGB(125, 0, 0, 0),
-      title: Text(args?.file.fileName ?? widget.title,
+      title: Text(args?.file.media.fileName ?? widget.title,
           style: const TextStyle(color: Colors.white)),
       leading: Navigator.canPop(context) ||
-              ModalRoute.of(context)!.settings.name != AppRouter.HOME
+              ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.canPop(context)
                     ? Navigator.of(context).pop()
-                    : ModalRoute.of(context)!.settings.name != AppRouter.HOME
+                    : ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
                         ? Navigator.pushNamedAndRemoveUntil(
-                            context, AppRouter.HOME, (r) => false)
+                            context, AppRouter.CLOUD, (r) => false)
                         : null;
               })
           : null,
@@ -112,7 +112,7 @@ class _OpenfileState extends State<Openfile> {
         appBar: appBar,
         body: Center(
           child: Builder(builder: (BuildContext context) {
-            String? type = args?.file.fileName.split(".").last;
+            String? type = args?.file.media.fileName.split(".").last;
             var expText = RegExp("txt|js|ts|go|dart|proto|c|cpp|php|tsx|jsx|vue|css|html");
             var expImage = RegExp(
                 "mp4|3gp|ogg|wmv|webm|flv|avi*|wav|vob*|gif|jpe?g|tiff?|png|webp|bmp");

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "./folder";
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/folder;folder";
 
 package folder;
 
@@ -17,7 +17,7 @@ message CreateFolderRequest {
 }
 
 message CreateFolderResponse {
-    
+
 }
 
 message DeleteFolderRequest {
@@ -34,7 +34,7 @@ message RenameFolderRequest {
 }
 
 message RenameFolderResponse {
-    
+
 }
 
 message MoveFolderRequest {
@@ -43,5 +43,5 @@ message MoveFolderRequest {
 }
 
 message MoveFolderResponse {
-    
+
 }

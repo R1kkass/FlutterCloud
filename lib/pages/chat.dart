@@ -8,7 +8,7 @@ import 'package:TalkSpace/entities/chat/chat_float_button.dart';
 import 'package:TalkSpace/entities/chat/chat_input.dart';
 import 'package:TalkSpace/features/chat/upload_files.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
@@ -62,6 +62,7 @@ class _ChatPageState extends State<ChatPage> {
       _key.currentState?.insertAllItems(0, data.length,
           duration: const Duration(milliseconds: 0));
       if (response.countNotRead != 0) {
+        globalKey.currentState?.setCount(response.countNotRead);
         globalKey.currentState?.setShow(true);
       }
       setState(() {});
@@ -146,7 +147,7 @@ class _ChatPageState extends State<ChatPage> {
   _addMessage() {
     var hashText = EncryptMessage().encrypt(text.text, key);
     controller?.add(StreamGetMessagesRequest(
-        message: hashText.base64, type: TypeMessage.SEND_MESSAGE));
+        text: hashText.base64, type: TypeMessage.SEND_MESSAGE));
     text.text = "";
   }
 

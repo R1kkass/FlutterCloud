@@ -19,13 +19,14 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((e) async {
-      await AuthGrpc().checkAuth().catchError((e) {
-        Navigator.pushNamed(context, AppRouter.AUTH);
-        return e;
-      });
+      // if (context.read<TokenCubit>().state == "") {
+
+      // }
+
       try {
+        await AuthGrpc().refresh();
         await NotificationServices.initializeService();
-        Navigator.pushNamedAndRemoveUntil(context, AppRouter.HOME, (e) {
+        Navigator.pushNamedAndRemoveUntil(context, AppRouter.CHAT_LIST, (e) {
           return false;
         });
       } catch (e) {

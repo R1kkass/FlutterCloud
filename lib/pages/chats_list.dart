@@ -5,8 +5,8 @@ import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/features/chat/chat_accept.dart';
 import 'package:TalkSpace/features/chat/chat_list_general.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
-import 'package:TalkSpace/proto/chat/chat.pbgrpc.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pbgrpc.dart';
 import 'package:TalkSpace/widget/chat/chat_list_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +26,7 @@ Map<int, String> titleTab = {
 
 class _ChatListsState extends State<ChatLists>
     with SingleTickerProviderStateMixin {
-  List<ChatUser>? chats = [];
+  List<Chat>? chats = [];
   TabController? controller;
   String? title;
 
@@ -37,7 +37,7 @@ class _ChatListsState extends State<ChatLists>
     controller?.addListener(() {
       title = titleTab[controller?.index];
     });
-    context.read<CurrentPageBloc>().add(const ChangePage(1));
+    context.read<CurrentPageBloc>().add(const ChangePage(0));
   }
 
   @override
@@ -89,12 +89,12 @@ class _ChatListsState extends State<ChatLists>
     );
   }
 
-  setChats(List<ChatUser> chatsUser) {
+  setChats(List<Chat> chatsUser) {
     chats = chatsUser;
     setState(() {});
   }
 
-  Widget _paintChatAccept({required ChatUser chat}) {
+  Widget _paintChatAccept({required Chat chat}) {
     return ChatAccept(
       chat: chat,
       setChats: setChats,

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/user;user";
+
+package user;
+
+service UsersGreet{
+    rpc GetUsers(GetUserRequest) returns (GetUserResponse) {}
+}
+
+message GetUserRequest {
+    string uuid = 1;
+}
+
+message GetUserResponse {
+    User user = 1;
+}
+
+message User {
+    string uuid = 1;
+    string name = 2;
+    string email = 3;
+}

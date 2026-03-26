@@ -1,6 +1,6 @@
 import 'package:TalkSpace/features/chat/chat_accept.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 
@@ -51,9 +51,8 @@ class _ChatDissalowButtonState extends State<ChatDissalowButton> {
       isLoading = true;
     });
     var chat = widget.chat;
-    var chatsUser = (await ChatGrpc()
-            .dissalowChat(DissalowChatRequest(chatId: chat.chat.id)))
-        .chats;
-    widget.setChats(chatsUser);
+    var chatGrpc = ChatGrpc();
+    await chatGrpc.disallowChat(DisallowChatRequest(chatId: chat.id));
+    widget.setChats((await chatGrpc.getUnSuccessChats()).chats);
   }
 }

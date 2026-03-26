@@ -3,11 +3,11 @@ import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/shared/text_content.dart';
 import 'package:TalkSpace/widget/chat/model_bottom_file.dart';
 import 'package:TalkSpace/pages/open_file.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/services/file_size.dart';
 
 class FileComponent extends StatefulWidget {
-  final FileFind file;
+  final File file;
 
   const FileComponent({super.key, required this.file});
 
@@ -40,9 +40,9 @@ class _FileComponentState extends State<FileComponent>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextContent(text: widget.file.fileName),
+                    TextContent(text: widget.file.media.fileName),
                     Text(
-                      fileSize(widget.file.size.toInt()),
+                      fileSize(widget.file.media.size.toInt()),
                       style: const TextStyle(fontSize: 12),
                       textAlign: TextAlign.start,
                     ),

@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/file;file";
+
+import "google/protobuf/timestamp.proto";
+import "user/user.proto";
+
+package file;
+
+service FilesGreeter {
+    rpc UploadFile(stream FileUploadRequest) returns (FileUploadResponse);
+    rpc DownloadFile(FileDownloadRequest) returns (stream FileDownloadResponse);
+    rpc FindFile(FindFileRequest) returns (FindFileResponse);
+    rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+    rpc RenameFile(RenameFileRequest) returns (RenameFileResponse);
+    rpc MoveFile(MoveFileRequest) returns (MoveFileResponse);
+    rpc GetSpace(GetSpaceRequest) returns (GetSpaceResponse);
+}
+
+message DeleteFileRequest {
+    uint32 fileId = 1;
+}
+
+message DeleteFileResponse {
+
+}
+
+message FileUploadRequest {
+    bytes chunk = 1;
+    string fileName = 2;
+    uint32 folderId = 3;
+}
+
+message FileUploadResponse {
+    string message = 1;
+}
+
+message FileDownloadRequest {
+    uint32 fileId = 1;
+    uint32 folderId = 2;
+}
+
+message FileDownloadResponse {
+    bytes chunk = 1;
+    string fileName = 2;
+    float progress = 3;
+}
+
+message FindFileRequest {
+    string search = 1;
+    uint32 folderId = 2;
+    bool findEveryWhere = 3;
+    uint32 page = 4;
+}
+
+message FindFileResponse {
+    repeated File files = 1;
+    repeated Folder folders = 2;
+}
+
+message Folder {
+    uint32 id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    uint32 user_id = 4;
+    uint32 folder_id = 5;
+    string name_folder = 6;
+    repeated file.File files = 7;
+    Folder folder = 8;
+    user.User user = 9;
+}
+
+message File {
+    uint32 id = 1;
+    google.protobuf.Timestamp created_at = 2;
+    google.protobuf.Timestamp updated_at = 3;
+    uint32 user_id = 4;
+    uint32 folder_id = 5;
+    Media media = 6;
+    Folder folder = 7;
+    user.User user = 8;
+}
+
+message Media {
+    string uuid = 1;
+    string name = 2;
+    string collection_name = 3;
+    string mime_type = 4;
+    uint64 size = 5;
+    string file_name = 6;
+    string extension = 7;
+    string custom_properties = 8;
+    string model_type = 9;
+    uint32 model_id = 10;
+}
+
+message RenameFileRequest {
+    int32 folderId = 1;
+    int32 fileId = 2;
+    string name = 3;
+}
+
+message RenameFileResponse {
+
+}
+
+message MoveFileRequest {
+    int32 fileId = 1;
+    int32 folderToId = 2;
+}
+
+message MoveFileResponse {
+
+}
+
+message GetSpaceRequest {
+
+}
+
+message GetSpaceResponse {
+    int32 space = 1;
+}

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/proto/users/users.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 
 class FileDrag extends StatefulWidget {
   final File file;
@@ -20,7 +20,7 @@ class _FileDragState extends State<FileDrag> {
           children: [
             const Icon(Icons.insert_drive_file, size: 25),
             const SizedBox(width: 10),
-            Text(widget.file.fileName,
+            Text(widget.file.media.fileName,
                 style: const TextStyle(
                   fontSize: 14,
                 )),

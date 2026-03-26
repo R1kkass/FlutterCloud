@@ -3,11 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:TalkSpace/cubit/content_bloc.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/grpc/base_grpc.dart';
+import 'package:TalkSpace/grpc/interceptors/auth_interceptor.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/proto/files/files.pbgrpc.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart' as filepb;
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
@@ -15,7 +16,7 @@ import 'package:grpc/grpc.dart';
 class ArgsForStream {
   final String key;
   final String file;
-  final FileUploadRequest request;
+  final filepb.FileUploadRequest request;
 
   const ArgsForStream(
       {required this.file, required this.key, required this.request});
@@ -34,29 +35,26 @@ class ArrayStream {
       required this.fileName});
 }
 
-class FilesGrpc {
-  final _stub = FilesGreeterClient(channel);
+class FilesGrpc extends BaseGrpc {
+  late final _stub = filepb.FilesGreeterClient(channel, interceptors: [AuthInterceptor()]);
 
-  CallOptions get _options => CallOptions(metadata: {
-        "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
-      });
 
-  ResponseStream<FileDownloadResponse> downloadFile(
-      FileDownloadRequest request) {
-    return _stub.downloadFile(request, options: _options);
+  ResponseStream<filepb.FileDownloadResponse> downloadFile(
+      filepb.FileDownloadRequest request) {
+    return _stub.downloadFile(request, options: options);
   }
 
-  ResponseFuture<FileUploadResponse> uploadFile(List<ArrayStream> arrFUR) {
-    Stream<FileUploadRequest> generateRoute() async* {
+  ResponseFuture<filepb.FileUploadResponse> uploadFile(List<ArrayStream> arrFUR) {
+    Stream<filepb.FileUploadRequest> generateRoute() async* {
       for (final item in arrFUR) {
-        yield FileUploadRequest(
+        yield filepb.FileUploadRequest(
             chunk: item.chunk,
             fileName: item.fileName,
             folderId: item.folderId);
       }
     }
 
-    return _stub.uploadFile(generateRoute(), options: _options);
+    return _stub.uploadFile(generateRoute(), options: options);
   }
 
   List<ArrayStream> createStreamArg(ArgsForStream some) {
@@ -84,24 +82,24 @@ class FilesGrpc {
     return arrFUR;
   }
 
-  Future<FindFileResponse> findFile(FindFileRequest request) {
-    return _stub.findFile(request, options: _options);
+  Future<filepb.FindFileResponse> findFile(filepb.FindFileRequest request) {
+    return _stub.findFile(request, options: options);
   }
 
-  Future<DeleteFileResponse> deletefile(DeleteFileRequest request) {
-    return _stub.deleteFile(request, options: _options);
+  Future<filepb.DeleteFileResponse> deletefile(filepb.DeleteFileRequest request) {
+    return _stub.deleteFile(request, options: options);
   }
 
-  Future<RenameFileResponse> renameFile(RenameFileRequest request) {
-    return _stub.renameFile(request, options: _options);
+  Future<filepb.RenameFileResponse> renameFile(filepb.RenameFileRequest request) {
+    return _stub.renameFile(request, options: options);
   }
 
-  ResponseFuture<GetSpaceResponse> getSpace() {
-    return _stub.getSpace(GetSpaceRequest(), options: _options);
+  ResponseFuture<filepb.GetSpaceResponse> getSpace() {
+    return _stub.getSpace(filepb.GetSpaceRequest(), options: options);
   }
 
-  ResponseFuture<MoveFileResponse> grpcMoveFile(MoveFileRequest request) {
-    return _stub.moveFile(request, options: _options);
+  ResponseFuture<filepb.MoveFileResponse> grpcMoveFile(filepb.MoveFileRequest request) {
+    return _stub.moveFile(request, options: options);
   }
 
   moveFile(int fileId, int folderToId, int currentFolderId) async {
@@ -114,8 +112,8 @@ class FilesGrpc {
 
   _moveFile(int fileId, int folderToId, int currentFolderId) async {
     final context = NavigationService.navigatorKey.currentContext!;
-    await grpcMoveFile(MoveFileRequest(fileId: fileId, folderToId: folderToId));
-    var response = await findFile(FindFileRequest(
+    await grpcMoveFile(filepb.MoveFileRequest(fileId: fileId, folderToId: folderToId));
+    var response = await findFile(filepb.FindFileRequest(
         search: "", folderId: currentFolderId, findEveryWhere: false));
     context
         .read<ContentBloc>()

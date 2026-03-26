@@ -1,11 +1,11 @@
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 
 class DeleteFileButton extends StatefulWidget {
-  final FileFind file;
+  final File file;
 
   const DeleteFileButton({super.key, required this.file});
 

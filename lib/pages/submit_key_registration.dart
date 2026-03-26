@@ -10,7 +10,7 @@ import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
-import 'package:TalkSpace/proto/auth/auth.pb.dart';
+import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
 import 'package:TalkSpace/shared/toast.dart';
@@ -93,22 +93,18 @@ class _SubmitKeyregistrationState extends State<SubmitKeyRegistration> {
 
     var submitResponse = await AuthGrpc().submitEmail(SubmitEmailRequest(
         email: data.email, password: data.password, key: key));
-    var accessToken = decrypt(submitResponse.accessToken, secretKey);
 
     var box = HiveBoxes.token;
     var boxTokens = HiveBoxes.listToken;
 
-    await box.put('access_token', accessToken);
-    await boxTokens.put(data.email, accessToken);
+    await box.put('access_token', submitResponse.accessToken);
+    await boxTokens.put(data.email, Session(sessionId: submitResponse.sessionId, refreshToken: submitResponse.refreshToken));
 
     List<int> bytes = utf8.encode(data.password!);
     String hash = sha256.convert(bytes).toString();
     await box.put('password', hash.substring(0, 32));
-    context.read<TokenCubit>().updateToken(accessToken);
+    context.read<TokenCubit>().updateToken(submitResponse.accessToken);
     await KeysGrpc().getKeys();
-    await HiveBoxes.cryptToken
-        .put("${data.email!}cryptToken", submitResponse.cryptToken);
-    await HiveBoxes.cryptToken.put(data.email!, secretKey);
 
     Navigator.pop(context);
     Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);

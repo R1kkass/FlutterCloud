@@ -8,11 +8,11 @@ import 'package:TalkSpace/features/file/actions/download_action.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/services/get_download_path.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DownloadButton extends StatefulWidget {
-  final FileFind file;
+  final File file;
   const DownloadButton({super.key, required this.file});
 
   @override
@@ -47,7 +47,7 @@ class _DownloadButtonState extends State<DownloadButton> {
       }
       if (data?.status == FileDownloadStatus.suceess) {
         return OpenFileButton(
-            path: path, fileName: data?.fileName ?? widget.file.fileName);
+            path: path, fileName: data?.fileName ?? widget.file.media.fileName);
       }
       return TextButton(
         onPressed: downloadFile,
@@ -78,7 +78,7 @@ class _DownloadButtonState extends State<DownloadButton> {
   _downloadFile() async {
     Navigator.of(context).pop();
     var downloadPath = await getDownloadPath() ?? "";
-    path = "$downloadPath/${widget.file.fileName}";
+    path = "$downloadPath/${widget.file.media.fileName}";
 
     var downloadFile = FilesGrpc().downloadFile(
       FileDownloadRequest(
@@ -92,14 +92,14 @@ class _DownloadButtonState extends State<DownloadButton> {
             folderId: widget.file.folderId,
             path: path,
             callback: downloadFile,
-            fileName: widget.file.fileName,
+            fileName: widget.file.media.fileName,
             size: 0.0,
             status: FileDownloadStatus.downloading),
         id: widget.file.id));
 
     downloadAction = DownloadAction(
         context: mainContext,
-        fileName: widget.file.fileName,
+        fileName: widget.file.media.fileName,
         fileId: widget.file.id,
         downloadFile: downloadFile);
 

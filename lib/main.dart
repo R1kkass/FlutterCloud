@@ -10,19 +10,13 @@ import 'package:TalkSpace/cubit/count_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/observers/observer.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-ClientChannel channel = ClientChannel(
-  ipServer,
-  port: 50051,
-  options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
-);
 
 String? token;
 
@@ -72,7 +66,7 @@ class _MyAppState extends State<MyApp> {
       context.read<CountBloc>().add(SetCount(e.count));
     });
     WidgetsBinding.instance.addPostFrameCallback((e) async {
-      await FcmInit.init();
+      await FcmInit().init();
       var permissionStatus = await Permission.storage.status;
       if (!permissionStatus.isGranted) {
         await Permission.storage.request();

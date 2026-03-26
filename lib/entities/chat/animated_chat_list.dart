@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/upload_file_bloc.dart';
 import 'package:TalkSpace/features/chat/message.dart';
 import 'package:TalkSpace/features/chat/message_upload_file.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -42,14 +42,14 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
         int? newMessage;
 
         for (var item in data.reversed) {
-          var timeParse = DateTime.parse(item.createdAt).toLocal();
+          var timeParse = DateTime.fromMillisecondsSinceEpoch(item.createdAt.seconds.toInt()).toLocal();
           if ("${time?.day}${time?.month}${time?.year}" !=
               "${timeParse.day}${timeParse.month}${timeParse.year}") {
             time = timeParse;
             dataWithDate[item.id] = timeParse;
           }
           if (item.runtimeType == Message &&
-              item.unReadedMessage &&
+              // item.unReadedMessage &&
               newMessage == null &&
               item.user.email != jwtDecode().email) {
             newMessage = item.id;
@@ -69,7 +69,7 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                 return VisibilityDetector(
                   key: Key("$id"),
                   onVisibilityChanged: (visibilityInfo) {
-                    if (message.unReadedMessage &&
+                    if (message.statusRead &&
                         message.user.email != jwtDecode().email) {
                       widget.readCallback(id);
                     }
@@ -82,18 +82,11 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                       sizeFactor: animation,
                       child: MessageComponent(
                         secretKey: widget.keyChat,
-                        chatFiles: message.chatFiles,
+                        message: message,
                         newMessage: newMessage == id,
                         controller: widget.controller,
-                        statusRead: message.statusRead,
                         dateChange: dataWithDate[id],
-                        createdAt: message.createdAt,
-                        name: message.user.name,
                         status: jwtDecode().email == message.user.email,
-                        text: message.text != ""
-                            ? EncryptMessage()
-                                .decrypt(message.text, widget.keyChat)
-                            : "",
                       ),
                     ),
                   ),
@@ -108,16 +101,10 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                   key: UniqueKey(),
                   sizeFactor: animation,
                   child: MessageUploadFileComponent(
-                    messageId: message.id,
                     secretKey: widget.keyChat,
-                    chatFiles: message.chatFiles,
                     controller: widget.controller,
                     dateChange: dataWithDate[id],
-                    createdAt: message.createdAt,
-                    name: message.user.name,
-                    text: message.text != ""
-                        ? EncryptMessage().decrypt(message.text, widget.keyChat)
-                        : "",
+                    message: message as Message
                   ),
                 ),
               );

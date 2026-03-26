@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:TalkSpace/grpc/message_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/entities/chat/video_player.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
@@ -15,10 +16,12 @@ class ImageViewerUnit extends StatefulWidget {
       required this.image,
       required this.height,
       required this.decrypt,
+      required this.message,
       required this.secretKey});
 
-  final ChatFile image;
+  final MessageFile image;
   final String secretKey;
+  final Message message;
   final bool decrypt;
   final double height;
 
@@ -44,8 +47,9 @@ class _ImageViewerUnitState extends State<ImageViewerUnit> {
         .get("${widget.image.id}${jwtDecode().email}");
     if (widget.decrypt) {
       if (boxPath == null) {
-        ChatGrpc().downloadChatFileFn(
+        MessageGrpc().downloadFileFn(
             context,
+            widget.message,
             widget.image.id,
             EncryptMessage().decrypt(widget.image.fileName, widget.secretKey),
             widget.secretKey,

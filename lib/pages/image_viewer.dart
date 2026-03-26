@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/entities/chat/image_viewer_unit.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 
 class ImageViewer extends StatefulWidget {
   const ImageViewer({super.key, required this.title});
@@ -20,24 +18,22 @@ class _ImageViewerState extends State<ImageViewer> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ImageViewerArgs?;
     index = index ?? args!.index;
-    var secretKey =
-        HiveBoxes.chatsSecretKey.get(jwtDecode().email)?[args!.chatId.toString()] ?? "";
     PageController pageController = PageController(initialPage: args!.index);
 
     final appBar = AppBar(
       backgroundColor: const Color.fromARGB(125, 0, 0, 0),
-      title: Text("${index! + 1} из ${args.images.length}",
+      title: Text("${index! + 1} из ${args.message.messageFiles.length}",
           style: const TextStyle(color: Colors.white)),
       leading: Navigator.canPop(context) ||
-              ModalRoute.of(context)!.settings.name != AppRouter.HOME
+              ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.canPop(context)
                     ? Navigator.of(context).pop()
-                    : ModalRoute.of(context)!.settings.name != AppRouter.HOME
+                    : ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
                         ? Navigator.pushNamedAndRemoveUntil(
-                            context, AppRouter.HOME, (r) => false)
+                            context, AppRouter.CLOUD, (r) => false)
                         : null;
               })
           : null,
@@ -50,7 +46,7 @@ class _ImageViewerState extends State<ImageViewer> {
           onPanUpdate: (details) {
             // Swiping in right direction.
             if (details.delta.dx > 0 &&
-                pageViewIndex < args.images.length - 1) {
+                pageViewIndex < args.message.messageFiles.length - 1) {
               setState(() {
                 pageViewIndex = pageViewIndex + 1;
               });
@@ -75,12 +71,12 @@ class _ImageViewerState extends State<ImageViewer> {
             },
             controller: pageController,
             children: [
-              for (var image in args.images)
+              for (var image in args.message.messageFiles)
                 ImageViewerUnit(
                     decrypt: args.decrypt,
                     image: image,
                     height: appBar.preferredSize.height,
-                    secretKey: secretKey)
+                    secretKey: args.secretKey, message: args.message,)
             ],
           ),
         ));
@@ -89,13 +85,13 @@ class _ImageViewerState extends State<ImageViewer> {
 
 class ImageViewerArgs {
   const ImageViewerArgs(
-      {required this.images,
-      required this.chatId,
+      {required this.message,
       required this.index,
+      required this.secretKey,
       required this.decrypt});
 
-  final List<ChatFile> images;
-  final int chatId;
+  final String secretKey;
   final int index;
   final bool decrypt;
+  final Message message;
 }

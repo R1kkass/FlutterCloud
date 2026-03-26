@@ -5,7 +5,7 @@ import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/cubit/upload_file_bloc.dart';
 import 'package:TalkSpace/entities/chat/video_chat_file.dart';
 import 'package:TalkSpace/pages/image_viewer.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImageChatFileUpload extends StatefulWidget {
@@ -14,15 +14,17 @@ class ImageChatFileUpload extends StatefulWidget {
       required this.image,
       required this.index,
       required this.size,
-      required this.messageId,
+      required this.message,
+      required this.secretKey,
       required this.images,
       required this.filePath});
 
-  final ChatFile image;
+  final MessageFile image;
   final int index;
+  final String secretKey;
   final double size;
-  final int messageId;
-  final List<ChatFile> images;
+  final Message message;
+  final List<MessageFile> images;
   final String filePath;
 
   @override
@@ -51,8 +53,8 @@ class _ImageChatFileUploadState extends State<ImageChatFileUpload> {
                 arguments: ImageViewerArgs(
                     decrypt: false,
                     index: widget.index,
-                    images: widget.images,
-                    chatId: widget.image.chatId));
+                    message: widget.message,
+                    secretKey: widget.secretKey));
           },
           child: Padding(
             padding: const EdgeInsets.only(left: 1.3, bottom: 1.3),
@@ -71,7 +73,7 @@ class _ImageChatFileUploadState extends State<ImageChatFileUpload> {
                   reVideo.hasMatch(typeFile)
                       ? VideoChatFile(path: widget.filePath)
                       : FittedBox(fit: BoxFit.cover, child: Image.file(file)),
-                  state.chatUploadFiles[widget.messageId]
+                  state.chatUploadFiles[widget.message.id]
                               ?.successFiles[widget.filePath] !=
                           null
                       ? const SizedBox()

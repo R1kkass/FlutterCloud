@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/grpc/notification_grpc.dart';
-import 'package:TalkSpace/proto/notification/notification.pb.dart';
+import 'package:TalkSpace/gen/dart/notification/notification.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';

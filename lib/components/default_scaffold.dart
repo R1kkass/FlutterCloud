@@ -34,15 +34,15 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
       appBar: AppBar(
         bottom: widget.bottom,
         leading: Navigator.canPop(context) ||
-                ModalRoute.of(context)!.settings.name != AppRouter.HOME
+                ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.canPop(context)
                       ? Navigator.of(context).pop()
-                      : ModalRoute.of(context)!.settings.name != AppRouter.HOME
+                      : ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
                           ? Navigator.pushNamedAndRemoveUntil(
-                              context, AppRouter.HOME, (r) => false)
+                              context, AppRouter.CLOUD, (r) => false)
                           : null;
                 })
             : null,

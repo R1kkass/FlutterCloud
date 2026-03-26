@@ -1,9 +1,9 @@
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/grpc/files_grpc.dart';
 import 'package:TalkSpace/grpc/folder_grpc.dart';
-import 'package:TalkSpace/pages/home.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
-import 'package:TalkSpace/proto/folder/folder.pb.dart';
+import 'package:TalkSpace/pages/cloud.dart';
+import 'package:TalkSpace/gen/dart/file/file.pb.dart';
+import 'package:TalkSpace/gen/dart/folder/folder.pb.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +20,7 @@ class DeleteFolderButton extends StatefulWidget {
 class _DeleteFolderButtonState extends State<DeleteFolderButton> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
+    final args = ModalRoute.of(context)!.settings.arguments as CloudArgs?;
 
     deleteFolder() async {
       await FolderGrpc()

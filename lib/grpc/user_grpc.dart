@@ -1,26 +1,12 @@
-import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/proto/users/users.pbgrpc.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:grpc/grpc.dart';
+import 'package:TalkSpace/grpc/base_grpc.dart';
+import 'package:TalkSpace/gen/dart/user/user.pbgrpc.dart';
+import 'package:TalkSpace/grpc/interceptors/auth_interceptor.dart';
 
-class UserGrpc {
-  final _stub = UsersGreetClient(channel);
-  CallOptions get _options {
-    return CallOptions(metadata: {
-      "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
-    });
-  }
+class UserGrpc extends BaseGrpc {
+  late final _stub = UsersGreetClient(channel, interceptors: [AuthInterceptor()]);
 
-  Future<GetUsersResponse> getUsers(GetUsersRequest args) async {
-    GetUsersResponse response = await _stub.getUsers(args, options: _options);
-
-    return response;
-  }
-
-  Future<GetContentUserResponse> getContentUsers(
-      GetContentUserRequest args) async {
-    GetContentUserResponse response =
-        await _stub.getContentUser(args, options: _options);
+  Future<GetUserResponse> getUsers(GetUserRequest args) async {
+    GetUserResponse response = await _stub.getUsers(args, options: options);
 
     return response;
   }

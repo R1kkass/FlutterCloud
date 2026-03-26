@@ -15,8 +15,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     var objectNavigation = {
-      0: () => Navigator.of(context).popAndPushNamed(AppRouter.HOME),
-      1: () => Navigator.of(context).popAndPushNamed(AppRouter.CHAT_LIST)
+      0: () => Navigator.of(context).popAndPushNamed(AppRouter.CHAT_LIST),
+      1: () => Navigator.of(context).popAndPushNamed(AppRouter.CLOUD),
     };
     return BlocBuilder<CurrentPageBloc, CurrentPageState>(
         builder: (context, state) {
@@ -26,12 +26,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
         unselectedFontSize: 10,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.cloud),
-            label: 'Облако',
-          ),
-          BottomNavigationBarItem(
             icon: CountBadge(),
             label: 'Сообщения',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.cloud),
+            label: 'Облако',
           ),
         ],
         currentIndex: state.page,

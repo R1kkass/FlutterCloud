@@ -1,5 +1,5 @@
 import 'package:TalkSpace/features/file/get_space.dart';
-import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/widget/user/logout_button/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 
@@ -82,24 +82,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   ],
                 )),
             const Spacer(),
-            TextButton(
-                onPressed: () {
-                  AuthGrpc().tokenClear();
-                  Navigator.pushNamed(context, AppRouter.AUTH);
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.exit_to_app_outlined),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      "Выход",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ))
+            LogoutButton(),
           ],
         ),
       ),

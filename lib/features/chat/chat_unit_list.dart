@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/pages/chat.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:TalkSpace/services/message_date.dart';
 
 class ChatUnitList extends StatefulWidget {
-  final ChatUsersCount chat;
+  final ChatWithUnReadingMessagesCount chat;
 
   const ChatUnitList({super.key, required this.chat});
 
@@ -31,14 +31,14 @@ class _ChatUnitListState extends State<ChatUnitList> {
     return "а";
   }
 
-  void decryptMessageFn(ChatUsersCount chat) async {
+  void decryptMessageFn(ChatWithUnReadingMessagesCount chat) async {
     email = jwtDecode().email;
     var box = HiveBoxes.chatsSecretKey;
-    var hash = box.get(email)?[widget.chat.chatId.toString()] ?? "";
-    if (chat.chat.message.text != "") {
-      decryptMessage = EncryptMessage().decrypt(chat.chat.message.text, hash);
-    } else if (chat.chat.message.chatFiles.isNotEmpty) {
-      var countFiles = chat.chat.message.chatFiles.length;
+    var hash = box.get(email)?[widget.chat.id.toString()] ?? "";
+    if (chat.message.text != "") {
+      decryptMessage = EncryptMessage().decrypt(chat.message.text, hash);
+    } else if (chat.message.messageFiles.isNotEmpty) {
+      var countFiles = chat.message.messageFiles.length;
       decryptMessage = "📎 $countFiles файл${number(countFiles)}";
     }
 
@@ -47,7 +47,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
 
   @override
   Widget build(BuildContext context) {
-    ChatUsersCount chat = widget.chat;
+    ChatWithUnReadingMessagesCount chat = widget.chat;
     decryptMessageFn(chat);
     return SizedBox(
       height: 60,
@@ -62,7 +62,7 @@ class _ChatUnitListState extends State<ChatUnitList> {
               ))),
           onPressed: () {
             Navigator.pushNamed(context, AppRouter.CHAT,
-                arguments: ChatArgument(chatId: widget.chat.chatId));
+                arguments: ChatArgument(chatId: widget.chat.id));
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,11 +74,11 @@ class _ChatUnitListState extends State<ChatUnitList> {
                   SizedBox(
                     width: MediaQuery.sizeOf(context).width - 100,
                     child: Text(
-                      chat.chat.nameChat == ""
-                          ? email != chat.chat.chatUsers[0].user.email
-                              ? chat.chat.chatUsers[0].user.name
-                              : chat.chat.chatUsers[1].user.name
-                          : chat.chat.nameChat,
+                      chat.nameChat == ""
+                          ? email != chat.users[0].email
+                              ? chat.users[0].name
+                              : chat.users[1].name
+                          : chat.nameChat,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -105,8 +105,8 @@ class _ChatUnitListState extends State<ChatUnitList> {
                 children: [
                   Row(
                     children: [
-                      if (chat.chat.message.user.email == jwtDecode().email)
-                        chat.chat.message.statusRead
+                      if (chat.message.user.email == jwtDecode().email)
+                        chat.message.statusRead
                             ? const Icon(Icons.done_all,
                                 size: 16, color: Colors.blueAccent)
                             : const Icon(Icons.done,
@@ -115,18 +115,18 @@ class _ChatUnitListState extends State<ChatUnitList> {
                         width: 5,
                       ),
                       Text(
-                        MessageDate().date(widget.chat.chat.message.createdAt),
+                        MessageDate().date(widget.chat.message.createdAt),
                         style: const TextStyle(
                             fontSize: 13, color: Colors.black45),
                       ),
                     ],
                   ),
                   const Spacer(),
-                  chat.unReadedMessagesCount != 0
+                  chat.unReadingMessagesCount != 0
                       ? Badge(
-                          label: Text(chat.unReadedMessagesCount > 99
+                          label: Text(chat.unReadingMessagesCount > 99
                               ? "99+"
-                              : "${chat.unReadedMessagesCount}"),
+                              : "${chat.unReadingMessagesCount}"),
                           backgroundColor: Colors.blueAccent,
                         )
                       : const SizedBox()

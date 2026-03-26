@@ -1,11 +1,13 @@
 syntax = "proto3";
 
-option go_package = "./auth";
+option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/auth;auth";
 
 package auth;
 
 service AuthGreet {
     rpc Login(LoginRequest) returns (LoginResponse);
+    rpc Logout(LogoutRequest) returns (LogoutResponse);
+    rpc Refresh(RefreshRequest) returns (RefreshResponse);
     rpc Registration(RegistrationRequest) returns (RegistrationResponse);
     rpc DHConnect(DHConnectRequest) returns (DHConnectResponse);
     rpc DHSecondConnect(DHSecondConnectRequest) returns (DHSecondConnectResponse);
@@ -14,14 +16,27 @@ service AuthGreet {
     rpc SendNewMailKey(SendNewMailKeyRequest) returns (SendNewMailKeyResponse);
 };
 
+message RefreshRequest {
+    string refresh_token = 1;
+    string session_id = 2;
+}
+
+message RefreshResponse {
+    string access_token = 1;
+}
+
 message LoginRequest {
     string email = 1;
     string password = 2;
+    string notification_token = 3;
+    string name_device = 4;
+    string operation_system = 5;
 }
 
 message LoginResponse {
     string access_token = 1;
-    string crypt_token = 2;
+    string refresh_token = 2;
+    string session_id = 3;
 }
 
 message RegistrationRequest {
@@ -58,11 +73,15 @@ message SubmitEmailRequest {
     string email = 1;
     string password = 2;
     string key = 3;
+    string notification_token = 4;
+    string name_device = 5;
+    string operation_system = 6;
 }
 
 message SubmitEmailResponse {
     string access_token = 1;
-    string crypt_token = 2;
+    string refresh_token = 2;
+    string session_id = 3;
 }
 
 message SendNewMailKeyRequest {
@@ -70,6 +89,11 @@ message SendNewMailKeyRequest {
     string password = 2;
 }
 
-message SendNewMailKeyResponse {
+message SendNewMailKeyResponse {}
 
+message LogoutResponse {}
+
+message LogoutRequest {
+    string refresh_token = 1;
+    string session_id = 2;
 }

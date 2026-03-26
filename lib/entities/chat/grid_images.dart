@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/entities/chat/grid_images_general.dart';
 import 'package:TalkSpace/entities/chat/image_chat_file.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 class GridImages extends StatefulWidget {
-  const GridImages({super.key, required this.secretKey, required this.images});
+  const GridImages({super.key, required this.message, required this.secretKey, required this.images});
 
-  final List<ChatFile> images;
+  final List<MessageFile> images;
   final String secretKey;
+  final Message message;
 
   @override
   State<GridImages> createState() => _GridImagesState();
@@ -22,7 +23,7 @@ class _GridImagesState extends State<GridImages> {
     var currentAreas = gridImagesGeneral.getAreas(widget.images.length);
     return GeneralLayoutGrid(
         secretKey: widget.secretKey,
-        images: widget.images,
+        message: widget.message,
         areas: currentAreas!);
   }
 }
@@ -30,7 +31,7 @@ class _GridImagesState extends State<GridImages> {
 class GeneralLayoutGrid extends GridImagesGeneralProps {
   const GeneralLayoutGrid({
     super.key,
-    required super.images,
+    required super.message,
     required super.areas,
     required this.secretKey,
   });
@@ -50,13 +51,14 @@ class _GeneralLayoutGridState extends State<GeneralLayoutGrid> {
       columnSizes: widget.areas.columnSizes,
       rowSizes: widget.areas.rowsSizesTrackSize,
       children: [
-        for (var (key, image) in widget.images.indexed)
+        for (var (key, image) in widget.message.messageFiles.indexed)
           ImageChatFile(
             index: key,
             secretKey: widget.secretKey,
             image: image,
             size: widget.areas.size[key],
-            images: widget.images,
+            images: widget.message.messageFiles,
+            message: widget.message,
             fileName:
                 EncryptMessage().decrypt(image.fileName, widget.secretKey),
           ).inGridArea("img$key"),

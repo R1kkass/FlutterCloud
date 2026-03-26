@@ -1,9 +1,10 @@
+import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
+import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/components/default_scaffold.dart';
 import 'package:TalkSpace/shared/my_input.dart';
-import 'package:TalkSpace/components/users_list.dart';
-import 'package:TalkSpace/grpc/user_grpc.dart';
-import 'package:TalkSpace/proto/users/users.pb.dart';
+import 'package:TalkSpace/gen/dart/user/user.pb.dart';
 
 class SearchUsers extends StatefulWidget {
   final String title;
@@ -15,14 +16,21 @@ class SearchUsers extends StatefulWidget {
 }
 
 class _SearchUsersState extends State<SearchUsers> {
-  List<Users> users = [];
+  List<User> users = [];
   TextEditingController controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  getUserFetch(text) async {
-    var response = await UserGrpc().getUsers(GetUsersRequest(userName: text));
-    users = response.data;
+  _getUserFetch(text) async {
+    await ChatGrpc().createChat(CreateRequestChat(companionUuid: text));
     setState(() {});
+  }
+
+  getUserFetch(text) async {
+    try {
+      await _getUserFetch(text);
+    } catch (e) {
+      showUnsuccessToast("Не удалось отправить зайявку");
+    }
   }
 
   @override
@@ -36,19 +44,12 @@ class _SearchUsersState extends State<SearchUsers> {
             child: Column(
               children: [
                 MyInput(
-                    fieldSubmit: (e) {
-                      getUserFetch(e);
-                    },
+                    fieldSubmit: getUserFetch,
                     controller: controller,
-                    title: "Поиск по E-mail или имени",
+                    title: "Введите идентификатор пользователя",
                     icon: Icons.search,
                     error: "Пожалуйста заполните поле"),
               ],
-            ),
-          ),
-          Expanded(
-            child: UsersList(
-              users: users,
             ),
           ),
         ],

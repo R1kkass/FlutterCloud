@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:TalkSpace/features/chat/chat_unit_list.dart';
 import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'package:TalkSpace/grpc/keys_grpc.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/dh_algoritm.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
@@ -21,7 +21,7 @@ class ChatListMessages extends StatefulWidget {
 
 class _ChatListMessagesGeneralState extends State<ChatListMessages> {
   ResponseStream<StreamGetResponseChat>? stream;
-  List<ChatUsersCount> chats = [];
+  List<ChatWithUnReadingMessagesCount> chats = [];
   var secretBox = HiveBoxes.chatsSecretKey;
   var pubKeyBox = HiveBoxes.pubKey;
   var tokenBox = HiveBoxes.token;
@@ -58,9 +58,9 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
     ]);
   }
 
-  Future _checkPubKey(List<ChatUsersCount>? chats) async {
+  Future _checkPubKey(List<ChatWithUnReadingMessagesCount> chats) async {
     try {
-      for (var chat in chats as List<ChatUsersCount>) {
+      for (var chat in chats) {
         await _readDownloadKeys(chat);
         await _createSecondaryKey(chat);
         await _createSecretKey(chat);
@@ -71,9 +71,9 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
     }
   }
 
-  Future _readDownloadKeys(ChatUsersCount chat) async {
+  Future _readDownloadKeys(ChatWithUnReadingMessagesCount chat) async {
     try {
-      var key = chat.chatId.toString() + email;
+      var key = chat.id.toString() + email;
 
       if (secretBox.get(key) == null && !keyGeted) {
         var userKeys = await KeysGrpc().downloadKeys;
@@ -90,22 +90,22 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
     } catch (e) {}
   }
 
-  Future _createSecondaryKey(ChatUsersCount chat) async {
+  Future _createSecondaryKey(ChatWithUnReadingMessagesCount chat) async {
     try {
-      var key = chat.chatId.toString() + email;
+      var key = chat.toString() + email;
       if (pubKeyBox.get(key) == null && secretBox.get(key) == null) {
         GetPublicKeyResponse keys = await chatGrpc
-            .getPublicKey(GetPublicKeyRequest(chatId: chat.chat.id));
-        var key = await DHAlgorithm.generatePubKey(keys.p, keys.g.toInt(), chat.chat.id);
+            .getPublicKey(GetPublicKeyRequest(chatId: chat.id));
+        var key = await DHAlgorithm.generatePubKey(keys.p, keys.g.toInt(), chat.id);
         await chatGrpc.createSecondaryKey(CreateSecondaryKeyRequest(
-            chatId: chat.chat.id, key: key.toString()));
+            chatId: chat.id, key: key.toString()));
       }
     } catch (e) {}
   }
 
-  Future _createSecretKey(ChatUsersCount chat) async {
+  Future _createSecretKey(ChatWithUnReadingMessagesCount chat) async {
     try {
-      var chatId = chat.chatId.toString();
+      var chatId = chat.id.toString();
       
       if (secretBox.get(email) == null) {
         secretBox.put(email, {});
@@ -114,9 +114,9 @@ class _ChatListMessagesGeneralState extends State<ChatListMessages> {
         keyChanged = true;
 
         await chatGrpc
-            .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.chat.id))
+            .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.id))
             .then((keys) async {
-          await DHAlgorithm.generateSecretKey(keys.key, keys.p, chat.chat.id);
+          await DHAlgorithm.generateSecretKey(keys.key, keys.p, chat.id);
         });
       }
     } catch (e) {}

@@ -29,7 +29,7 @@ class _ChangeUserState extends State<ChangeUser> {
             if (tokens[index] != token) {
               return TextButton(
                 onPressed: () {
-                    changeToken(context, tokens[index], tokenKeys[index]);
+                    changeToken(context, tokens[index].refreshToken, tokenKeys[index]);
                   },
                   child: Text(tokenKeys[index]));
             }

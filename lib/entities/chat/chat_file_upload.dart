@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/file_size.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
@@ -13,7 +13,7 @@ class ChatFileUploadComponent extends StatefulWidget {
       required this.color});
 
   final String filePath;
-  final ChatFile chatFile;
+  final MessageFile chatFile;
   final Color? color;
 
   @override

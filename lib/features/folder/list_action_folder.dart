@@ -1,14 +1,14 @@
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/features/folder/delete_folder_button.dart';
 import 'package:TalkSpace/features/folder/rename_folder_button.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListActionFolder extends StatefulWidget {
   const ListActionFolder({super.key, required this.folder});
 
-  final FolderFind folder;
+  final Folder folder;
 
   @override
   State<ListActionFolder> createState() => _ListActionFolderState();

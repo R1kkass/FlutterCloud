@@ -1,11 +1,13 @@
 import 'dart:io';
+import 'package:TalkSpace/gen/dart/message/message.pb.dart';
+import 'package:TalkSpace/gen/dart/user/user.pb.dart';
+import 'package:TalkSpace/grpc/message_grpc.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/upload_file_bloc.dart';
 import 'package:TalkSpace/features/chat/file_gallery.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
 import 'dart:isolate';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:TalkSpace/shared/toast.dart';
@@ -28,30 +30,33 @@ class MessageUploadFile extends StatefulWidget {
 class _MessageUploadFileState extends State<MessageUploadFile> {
   final TextEditingController _messageController = TextEditingController();
   List<Future<Empty>> filesNeedUploading = [];
+  MessageGrpc messageGrpc = MessageGrpc();
+
   int countFiles = 0;
   _isolate(
       {required selectFile,
       required key,
-      required CreateFileMessageResponse message,
+      required UploadFileMessageRequest message,
       required hashText,
       required selectedFilesLength}) async {
     try {
       var fileName = selectFile.split("/").last;
       var filePath = selectFile;
       var hashFileName = EncryptMessage().encrypt(fileName, key);
-      var argsStream = await Isolate.run(() => ChatGrpc().createStreamArg(
+      var argsStream = await Isolate.run(() => MessageGrpc().createStreamArg(
           ArgsForStream(
               filePath: filePath,
               secretKey: key.substring(0, 32),
-              request: UploadFileChatRequest(
+              request: UploadFileMessageRequest(
                   fileName: hashFileName.base64,
+                  chatId: message.chatId,
                   messageId: message.messageId,
                   text: hashText))));
 
-      await ChatGrpc().uploadFile(argsStream);
+      await messageGrpc.uploadFile(argsStream);
       countFiles++;
       if (countFiles == selectedFilesLength) {
-        widget.addUploadFile(message.messageId);
+        widget.addUploadFile(message.chatId);
       }
       context
           .read<UploadFileBloc>()
@@ -72,26 +77,26 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
     Navigator.pop(context);
     _messageController.text = "";
 
-    var message = await ChatGrpc().createFileMessage(
+    var message = await messageGrpc.createFileMessage(
         CreateFileMessageRequest(text: hashText, chatId: chatId));
 
-    List<ChatFile> chatFiles = [];
+    List<MessageFile> chatFiles = [];
 
     for (var selectFile in selectedFiles.keys) {
       var file = File(selectFile);
-      chatFiles.add(ChatFile(
+      chatFiles.add(MessageFile(
           id: 0,
-          chatId: chatId,
           fileName: selectFile,
-          userId: 0,
-          messageId: message.messageId,
           size: Int64(file.statSync().size)));
       _isolate(
           selectedFilesLength: selectedFiles.keys.length,
           key: key,
           selectFile: selectFile,
           hashText: hashText,
-          message: message);
+          message: UploadFileMessageRequest(
+            chatId: chatId,
+            messageId: message.messageId,
+          ));
     }
 
     context.read<UploadFileBloc>().add(AddUploadFile(
@@ -104,7 +109,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
         user: User(
           email: jwtDecode().email,
           name: "",
-          id: 0,
+          uuid: "",
         )));
   }
 

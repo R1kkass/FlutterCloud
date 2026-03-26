@@ -5,8 +5,8 @@ import 'package:TalkSpace/features/file/file.dart';
 import 'package:TalkSpace/features/file/upload_file.dart';
 import 'package:TalkSpace/widget/folder/folder.dart';
 import 'package:TalkSpace/features/file/move_to_main.dart';
-import 'package:TalkSpace/pages/home.dart';
-import 'package:TalkSpace/proto/files/files.pb.dart';
+import 'package:TalkSpace/pages/cloud.dart';
+import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FolderBuilder extends StatefulWidget {
@@ -51,7 +51,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
+    final args = ModalRoute.of(context)!.settings.arguments as CloudArgs?;
 
     return BlocBuilder<ContentBloc, ContentState>(
       builder: (context, state) {
@@ -116,7 +116,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
         return RefreshIndicator(
             onRefresh: () async {
               ContentBloc.defaultRequestFile(
-                  (args.runtimeType == HomeArgs) ? (args as HomeArgs).id : 0,
+                  (args.runtimeType == CloudArgs) ? (args as CloudArgs).id : 0,
                   context);
             },
             child: ListView(
@@ -147,10 +147,10 @@ class _FolderBuilderState extends State<FolderBuilder> {
     List<Widget> children = [];
     var folderId = widget.folderId ?? 0;
     for (final (index, item) in contents.indexed) {
-      if (item.runtimeType == FolderFind) {
+      if (item.runtimeType == Folder) {
         children.add(LongPressDraggable<DragFields>(
             data: DragFields(
-                id: (item as FolderFind).id, type: "folder"),
+                id: (item as Folder).id, type: "folder"),
             feedback: FolderComponent(folder: item),
             key: Key(index.toString()),
             onDragStarted: () {
@@ -164,7 +164,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
             )));
         continue;
       }
-      if (item.runtimeType == FileFind) {
+      if (item.runtimeType == File) {
         children.add(LongPressDraggable<DragFields>(
           onDragStarted: () {
             callback(true);
@@ -172,7 +172,7 @@ class _FolderBuilderState extends State<FolderBuilder> {
           onDragEnd: (e) {
             callback(false);
           },
-          data: DragFields(id: (item as FileFind).id, type: "file"),
+          data: DragFields(id: (item as File).id, type: "file"),
           dragAnchorStrategy: pointerDragAnchorStrategy,
           key: Key(index.toString()),
           feedback: FileComponent(file: item),

@@ -1,53 +1,19 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/proto/chat/chat.pbgrpc.dart';
+import 'package:TalkSpace/grpc/base_grpc.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pbgrpc.dart';
 import 'package:TalkSpace/services/dh_algoritm.dart';
-import 'package:TalkSpace/services/encode_file.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:TalkSpace/services/get_download_path.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:TalkSpace/shared/toast.dart';
 import 'package:grpc/grpc.dart';
 
-class ArrayStream {
-  final List<int> chunk;
-  final int messageId;
-  final double size;
-  final String fileName;
-  final String text;
+import 'interceptors/auth_interceptor.dart';
 
-  const ArrayStream(
-      {required this.chunk,
-      required this.text,
-      required this.messageId,
-      required this.size,
-      required this.fileName});
-}
-
-class ArgsForStream {
-  final String secretKey;
-  final String filePath;
-  final UploadFileChatRequest request;
-
-  const ArgsForStream(
-      {required this.filePath, required this.secretKey, required this.request});
-}
-
-class ChatGrpc {
-  final _stub = ChatGreeterClient(channel);
-
-  CallOptions get _options => CallOptions(metadata: {
-        "authorization": "Bearer ${HiveBoxes.token.get('access_token')}",
-      });
+class ChatGrpc extends BaseGrpc {
+  late final _stub = ChatGreeterClient(channel, interceptors: [AuthInterceptor()]);
 
   Future<CreateResponseChat> createChat(CreateRequestChat request) async {
     CreateResponseChat response =
-        await _stub.createChat(request, options: _options);
+        await _stub.createChat(request, options: options);
     var p = response.keys.p;
     var g = response.keys.g;
     var chatId = response.chatId;
@@ -61,53 +27,54 @@ class ChatGrpc {
   }
 
   ResponseStream<StreamGetResponseChat> streamGetChat() {
-    return _stub.streamGetChat(Empty(), options: _options);
+    return _stub.streamGetChat(Empty(), options: options);
   }
 
   Future<GetUnSuccessChatsResponse> getUnSuccessChats() async {
-    return await _stub.getUnSuccessChats(Empty(), options: _options);
+    var response = await _stub.getUnSuccessChats(Empty(), options: options);
+    return response;
   }
 
   Future<CreateSecondaryKeyResponse> createSecondaryKey(
       CreateSecondaryKeyRequest request) async {
     CreateSecondaryKeyResponse response =
-        await _stub.createSecondaryKey(request, options: _options);
+        await _stub.createSecondaryKey(request, options: options);
     return response;
   }
 
   Future<GetPublicKeyResponse> getPublicKey(GetPublicKeyRequest request) async {
     GetPublicKeyResponse response =
-        await _stub.getPublicKey(request, options: _options);
+        await _stub.getPublicKey(request, options: options);
     return response;
   }
 
   Future<GetSecondaryKeyResponse> getSecondaryKey(
       GetSecondaryKeyRequest request) async {
     GetSecondaryKeyResponse response =
-        await _stub.getSecondaryKey(request, options: _options);
+        await _stub.getSecondaryKey(request, options: options);
     return response;
   }
 
   Future<AcceptChatResponse> acceptChat(AcceptChatRequest request) async {
     AcceptChatResponse response =
-        await _stub.acceptChat(request, options: _options);
+        await _stub.acceptChat(request, options: options);
     return response;
   }
 
-  Future<DissalowChatResponse> dissalowChat(DissalowChatRequest request) async {
-    DissalowChatResponse response =
-        await _stub.dissalowChat(request, options: _options);
+  Future<DisallowChatResponse> disallowChat(DisallowChatRequest request) async {
+    DisallowChatResponse response =
+        await _stub.disallowChat(request, options: options);
     return response;
   }
 
   Future<GetMessagesResponse> getMessages(GetMessagesRequest request) async {
     GetMessagesResponse response =
-        await _stub.getMessages(request, options: _options);
+        await _stub.getMessages(request, options: options);
     return response;
   }
 
   ResponseStream<StreamGetMessagesGeneralResponse> streamGetMessagesGeneral() {
-    return _stub.streamGetMessagesGeneral(Empty(), options: _options);
+    return _stub.streamGetMessagesGeneral(Empty(), options: options);
   }
 
   Future<ResponseStream<StreamGetMessagesResponse>> streamGetMessages(
@@ -119,90 +86,5 @@ class ChatGrpc {
         }));
   }
 
-  ResponseFuture<UploadFileChatResponse> uploadFile(List<ArrayStream> arrFUR) {
-    Stream<UploadFileChatRequest> generateRoute() async* {
-      for (final item in arrFUR) {
-        yield UploadFileChatRequest(
-            chunk: item.chunk,
-            fileName: item.fileName,
-            messageId: item.messageId,
-            text: item.text);
-      }
-    }
 
-    return _stub.uploadChatFile(generateRoute(), options: _options);
-  }
-
-  List<ArrayStream> createStreamArg(ArgsForStream some) {
-    var key = some.secretKey;
-
-    var file = File(some.filePath);
-    var request = some.request;
-
-    List<ArrayStream> arrFUR = [];
-    var bufferSize = 5 * 1024 * 1024;
-    var curItem = 0;
-    RandomAccessFile raf = file.openSync(mode: FileMode.read);
-    var bytesLength = raf.lengthSync();
-    for (int i = 0; i < bytesLength / bufferSize; i++) {
-      raf.setPositionSync(curItem);
-      Uint8List bytes = raf.readSync(bufferSize);
-      curItem += bufferSize;
-      arrFUR.add(ArrayStream(
-          chunk: crypt(true, bytes, key),
-          messageId: request.messageId,
-          size: curItem / bytesLength * 100,
-          text: request.text,
-          fileName: request.fileName));
-    }
-
-    return arrFUR;
-  }
-
-  ResponseStream<DownloadFileChatResponse> downloadChatFile(
-      DownloadFileChatRequest request) {
-    return _stub.downloadChatFile(request, options: _options);
-  }
-
-  Future<CreateFileMessageResponse> createFileMessage(
-      CreateFileMessageRequest request) {
-    return _stub.createFileMessage(request, options: _options);
-  }
-
-  downloadChatFileFn(BuildContext context, int chatFileId, String fileName,
-      String secretKey, Function(String) fn) {
-    List<int> chunks = [];
-    try {
-      var downloadFile = downloadChatFile(
-        DownloadFileChatRequest(
-          chatFileId: chatFileId,
-        ),
-      );
-      downloadFile.listen((e) async {
-        try {
-          chunks = [...chunks, ...e.chunk];
-
-          if (e.progress >= 100) {
-            var downloadPath = await getDownloadPath() ?? "";
-            var path = "$downloadPath/$fileName";
-            var file = EncodeFile.decryptByteCreateFile(
-                Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
-
-            await HiveBoxes.chatFileUploaded.put(
-              "$chatFileId${jwtDecode().email}",
-              file.path,
-            );
-
-            await fn(
-              path,
-            );
-          }
-        } catch (_) {
-          showUnsuccessToast('Не удалось скачать файл: $fileName');
-        }
-      });
-    } catch (e) {
-      showUnsuccessToast('Не удалось скачать файл: $fileName');
-    }
-  }
 }

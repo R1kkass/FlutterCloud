@@ -2,12 +2,12 @@
 import 'package:TalkSpace/entities/chat/chat_accept_button.dart';
 import 'package:TalkSpace/entities/chat/chat_dissalow_button.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 
 abstract class ChatAcceptImpl extends StatefulWidget{
-  final ChatUser chat;
-  final Function(List<ChatUser>) setChats;
+  final Chat chat;
+  final Function(List<Chat>) setChats;
 
   const ChatAcceptImpl({super.key, required this.chat, required this.setChats});
 }
@@ -45,11 +45,11 @@ class _ChatAcceptState extends State<ChatAccept> {
         child: Row(
           children: [
             Text(
-              chat.chat.nameChat == ""
-                  ? jwt?.email != chat.chat.chatUsers[0].user.email
-                      ? chat.chat.chatUsers[0].user.name
-                      : chat.chat.chatUsers[1].user.name
-                  : chat.chat.nameChat,
+              chat.nameChat == ""
+                  ? jwt?.email != chat.users[0].email
+                      ? chat.users[0].name
+                      : chat.users[1].name
+                  : chat.nameChat,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             const Spacer(),

@@ -3,7 +3,7 @@ import 'package:TalkSpace/shared/my_input.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/grpc/auth_grpc.dart';
-import 'package:TalkSpace/proto/auth/auth.pb.dart';
+import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
 import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';

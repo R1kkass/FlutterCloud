@@ -4,7 +4,7 @@ import 'package:TalkSpace/pages/change_user.dart';
 import 'package:TalkSpace/pages/chat.dart';
 import 'package:TalkSpace/pages/chats_list.dart';
 import 'package:TalkSpace/pages/downloadings.dart';
-import 'package:TalkSpace/pages/home.dart';
+import 'package:TalkSpace/pages/cloud.dart';
 import 'package:TalkSpace/pages/image_viewer.dart';
 import 'package:TalkSpace/pages/open_file.dart';
 import 'package:TalkSpace/pages/registration.dart';
@@ -14,7 +14,7 @@ import 'package:TalkSpace/pages/submit_key_registration.dart';
 
 class AppRouter {
   static const SEARCH_USERS = "/searchusers";
-  static const HOME = "/home";
+  static const CLOUD = "/cloud";
   static const FILE = "/file";
   static const REGISTRATION = "/registration";
   static const AUTH = "/auth";
@@ -29,7 +29,7 @@ class AppRouter {
     "/": (context) => const Splash(title: "Загрузка"),
     AUTH: (context) => const Authorization(title: "Авторизация"),
     REGISTRATION: (context) => const Registration(title: "Регистрация"),
-    HOME: (context) => const Home(title: "Облако"),
+    CLOUD: (context) => const Cloud(title: "Облако"),
     FILE: (context) => const Openfile(title: "Файл"),
     SEARCH_USERS: (context) => const SearchUsers(title: "Поиск пользователей"),
     CHAT: (context) => ChatPage(

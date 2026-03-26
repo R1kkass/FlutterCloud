@@ -1,7 +1,7 @@
 import 'package:TalkSpace/entities/folder/dialog_create_folder.dart';
 import 'package:TalkSpace/grpc/folder_grpc.dart';
-import 'package:TalkSpace/pages/home.dart';
-import 'package:TalkSpace/proto/folder/folder.pbgrpc.dart';
+import 'package:TalkSpace/pages/cloud.dart';
+import 'package:TalkSpace/gen/dart/folder/folder.pbgrpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class RenameFolderButton extends StatefulWidget {
 class _RenameFolderButtonState extends State<RenameFolderButton> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as HomeArgs?;
+    final args = ModalRoute.of(context)!.settings.arguments as CloudArgs?;
     renameFolder(String name) async {
       await FolderGrpc().renameFolder(
           RenameFolderRequest(folderId: widget.folderId, name: name));

@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:TalkSpace/gen/dart/google/protobuf/timestamp.pb.dart';
+import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/consts/month.dart';
 import 'package:TalkSpace/entities/chat/message_badge.dart';
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/widget/chat/chat_files_column.dart';
 
 class MessageComponent extends StatefulWidget {
@@ -12,24 +14,16 @@ class MessageComponent extends StatefulWidget {
       required this.status,
       required this.newMessage,
       required this.secretKey,
-      required this.text,
-      required this.createdAt,
-      required this.name,
       required this.controller,
-      required this.statusRead,
-      required this.chatFiles,
+      required this.message,
       required this.dateChange});
 
   final bool status;
   final bool newMessage;
   final DateTime? dateChange;
-  final List<ChatFile> chatFiles;
-  final String text;
+  final Message message;
   final ScrollController controller;
-  final String createdAt;
   final String secretKey;
-  final String name;
-  final bool statusRead;
 
   @override
   State<MessageComponent> createState() => _MessageComponentState();
@@ -39,7 +33,12 @@ class _MessageComponentState extends State<MessageComponent> {
   @override
   Widget build(BuildContext context) {
     DateTime? dateChange = widget.dateChange;
-    DateTime time = DateTime.parse(widget.createdAt).toLocal();
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.message.createdAt.seconds.toInt()).toLocal();
+    String text = (widget.message.text != ""
+        ? EncryptMessage()
+        .decrypt(widget.message.text, widget.secretKey)
+        : "");
+
     return Column(
       children: [
         if (widget.newMessage) const MessageBadge(text: "Новые сообщение"),
@@ -75,7 +74,7 @@ class _MessageComponentState extends State<MessageComponent> {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    widget.name,
+                                    widget.message.user.name,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         color: Colors.white,
@@ -89,15 +88,15 @@ class _MessageComponentState extends State<MessageComponent> {
                         height: 5,
                       ),
                       ChatFilesColumn(
-                          chatFiles: widget.chatFiles,
+                          message: widget.message,
                           secretKey: widget.secretKey,
                           status: widget.status),
-                      if (widget.text != "")
+                      if (text != "")
                         Container(
                           padding: const EdgeInsets.only(left: 15, right: 15),
                           alignment: Alignment.topLeft,
                           child: Text(
-                            widget.text,
+                            text,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -122,7 +121,7 @@ class _MessageComponentState extends State<MessageComponent> {
                               width: 5,
                             ),
                             widget.status
-                                ? widget.statusRead
+                                ? widget.message.statusRead
                                     ? const Icon(
                                         Icons.done_all,
                                         size: 14,

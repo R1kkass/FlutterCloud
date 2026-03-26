@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:TalkSpace/services/encrypt_auth.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:crypto/crypto.dart';
@@ -10,16 +11,12 @@ class DHAlgorithm {
 
   BigInt key = BigInt.parse(p);
 
-  var pp = 18;
-  BigInt max = BigInt.two.pow(pp) - BigInt.one;
-  BigInt min = BigInt.two.pow(pp - 1) - BigInt.one;
-  Random random = Random();
-
-  BigInt a = BigInt.from(random.nextInt((max - min + key - min).toInt()));
+  var pp = 256;
+  BigInt a = generateRandomBigInt(pp);
   await box.put(chatId.toString() + jwtDecode().email, a);
 
   BigInt A = BigInt.from(g);
-  A = A.pow(a.toInt()) % key;
+  A = A.modPow(a, key);
 
   return A;
 }
@@ -28,9 +25,9 @@ static Future<BigInt> generateSecretKey(String B, String p, int chatId) async {
   var box = HiveBoxes.pubKey;
   var email = jwtDecode().email;
 
-  int a = box.get(chatId.toString() + email)!.toInt();
+  BigInt a = BigInt.parse(box.get(chatId.toString() + email).toString());
   BigInt secretKey = BigInt.parse(B);
-  secretKey = secretKey.pow(a) % BigInt.parse(p);
+  secretKey = secretKey.modPow(a, secretKey);
 
   List<int> bytes = utf8.encode(secretKey.toString());
   String hash = sha256.convert(bytes).toString();

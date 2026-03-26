@@ -1,4 +1,6 @@
-import 'package:TalkSpace/proto/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
+import 'package:TalkSpace/gen/dart/google/protobuf/timestamp.pb.dart';
+import 'package:TalkSpace/gen/dart/user/user.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlocEvent {
@@ -40,12 +42,12 @@ class UploadFileBloc extends Bloc<BlocEvent, UploadFileState> {
 
 class AddUploadFile extends BlocEvent {
   final int id;
-  final String createdAt;
-  final String updatedAt;
+  final Timestamp createdAt;
+  final Timestamp updatedAt;
   final String text;
   final User user;
   final Map<String, bool> successFiles;
-  final List<ChatFile> chatFiles;
+  final List<MessageFile> chatFiles;
 
   AddUploadFile(
       {required this.id,
