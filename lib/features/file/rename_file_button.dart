@@ -1,5 +1,5 @@
-import 'package:TalkSpace/entities/folder/dialog_create_folder.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/presentation/widgets/folder/dialog_create_folder.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';

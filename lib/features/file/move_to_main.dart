@@ -1,8 +1,8 @@
-import 'package:TalkSpace/grpc/folder_grpc.dart';
+import 'package:TalkSpace/data/repository/folder_grpc.dart';
+import 'package:TalkSpace/presentation/views/cloud.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/widget/folder/folder_builder.dart';
-import 'package:TalkSpace/pages/cloud.dart';
 
 class MoveToMain extends StatefulWidget {
   const MoveToMain({super.key});

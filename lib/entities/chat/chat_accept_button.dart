@@ -1,8 +1,8 @@
 import 'package:TalkSpace/features/chat/chat_accept.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/grpc/keys_grpc.dart';
+import 'package:TalkSpace/data/repository/chat_grpc.dart';
+import 'package:TalkSpace/data/repository/keys_grpc.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/dh_algoritm.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
@@ -18,6 +18,8 @@ class ChatAcceptButton extends ChatAcceptImpl {
 
 class _ChatAcceptButtonState extends State<ChatAcceptButton> {
   var isLoading = false;
+  final _chatGrpc = ChatGrpc();
+  
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -65,15 +67,15 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
     var box = HiveBoxes.pubKey;
 
     var key = chat.id.toString() + email;
-    if (box.get(key) == null) {
-      GetPublicKeyResponse keys = await ChatGrpc()
-          .getPublicKey(GetPublicKeyRequest(chatId: chat.id));
-      var key = await DHAlgorithm.generatePubKey(keys.p, keys.g.toInt(), chat.id);
-      await ChatGrpc().createSecondaryKey(
-          CreateSecondaryKeyRequest(chatId: chat.id, key: key.toString()));
-    }
     if (secretBox.get(key) == null) {
-      var keys = await ChatGrpc()
+      if (box.get(key) == null) {
+        GetPublicKeyResponse keys = await _chatGrpc
+            .getPublicKey(GetPublicKeyRequest(chatId: chat.id));
+        var key = await DHAlgorithm.generatePubKey(keys.p, keys.g.toInt(), chat.id);
+        await _chatGrpc.createSecondaryKey(
+            CreateSecondaryKeyRequest(chatId: chat.id, key: key.toString()));
+      }
+      var keys = await _chatGrpc
           .getSecondaryKey(GetSecondaryKeyRequest(chatId: chat.id));
       await DHAlgorithm.generateSecretKey(keys.key, keys.p, chat.id);
     }
@@ -81,8 +83,7 @@ class _ChatAcceptButtonState extends State<ChatAcceptButton> {
 
   Future _uploadNewChatKeys(Chat chat) async {
     await KeysGrpc().uploadNewKeys();
-    var chatGrpc = ChatGrpc();
-    await chatGrpc.acceptChat(AcceptChatRequest(chatId: chat.id));
-    widget.setChats((await chatGrpc.getUnSuccessChats()).chats);
+    await _chatGrpc.acceptChat(AcceptChatRequest(chatId: chat.id));
+    widget.setChats((await _chatGrpc.getUnSuccessChats()).chats);
   }
 }

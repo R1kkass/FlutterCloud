@@ -8,7 +8,11 @@ class JwtPayload {
 }
 
 JwtPayload jwtDecode() {
-  var token = HiveBoxes.token.get('access_token')!;
+  var token = HiveBoxes.token.get('access_token');
+  if (token == null) {
+    throw Exception("Access token not found");
+  }
+
   var jwtDecode = Jwt.parseJwt(token);
 
   return JwtPayload(email: jwtDecode["email"]);

@@ -1,6 +1,6 @@
+import 'package:TalkSpace/presentation/views/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/pages/chat.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';

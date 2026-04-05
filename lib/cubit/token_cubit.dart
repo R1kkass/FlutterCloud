@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 
 class TokenCubit extends Cubit<dynamic> {
   /// {@macro counter_cubit}
-  TokenCubit() : super(HiveBoxes.token.get('access_token'));
+  TokenCubit() : super(null);
 
   void updateToken(dynamic data) => emit(data);
 }

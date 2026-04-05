@@ -1,9 +1,9 @@
 import 'package:TalkSpace/cubit/content_bloc.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/grpc/folder_grpc.dart';
-import 'package:TalkSpace/pages/cloud.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
+import 'package:TalkSpace/data/repository/folder_grpc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:TalkSpace/gen/dart/folder/folder.pb.dart';
+import 'package:TalkSpace/presentation/views/cloud.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

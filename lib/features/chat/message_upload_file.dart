@@ -29,7 +29,7 @@ class MessageUploadFileState extends State<MessageUploadFileComponent> {
   @override
   Widget build(BuildContext context) {
     DateTime? dateChange = widget.dateChange;
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.message.createdAt.seconds.toInt()).toLocal();
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.message.createdAt.seconds.toInt() * 1000).toLocal();
     String text = (widget.message.text != ""
         ? EncryptMessage()
         .decrypt(widget.message.text, widget.secretKey)

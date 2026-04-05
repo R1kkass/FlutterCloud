@@ -34,7 +34,7 @@ class _DefaultScaffoldState extends State<DefaultScaffold> {
       appBar: AppBar(
         bottom: widget.bottom,
         leading: Navigator.canPop(context) ||
-                ModalRoute.of(context)!.settings.name != AppRouter.CLOUD
+                [AppRouter.CHAT_LIST, AppRouter.SPLASH, AppRouter.CLOUD].firstWhere((v) => v == ModalRoute.of(context)!.settings.name, orElse: () => "") == ""
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {

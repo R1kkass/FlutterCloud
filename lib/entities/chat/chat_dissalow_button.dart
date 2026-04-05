@@ -1,5 +1,5 @@
 import 'package:TalkSpace/features/chat/chat_accept.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/data/repository/chat_grpc.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';

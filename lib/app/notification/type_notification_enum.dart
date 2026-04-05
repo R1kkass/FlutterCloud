@@ -1,0 +1,3 @@
+enum TypeNotificationEnum {
+  newMessage, createChat;
+}

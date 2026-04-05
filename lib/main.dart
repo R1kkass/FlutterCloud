@@ -1,19 +1,20 @@
-import 'dart:typed_data';
+import 'dart:async';
 
-import 'package:TalkSpace/app/block_providers.dart';
-import 'package:TalkSpace/app/fcm_init.dart';
+import 'package:TalkSpace/app/bloc_providers.dart';
+import 'package:TalkSpace/app/notification/fcm_init.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/consts/domen.dart';
 import 'package:TalkSpace/cubit/count_bloc.dart';
 import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/data/repository/chat_grpc.dart';
 import 'package:TalkSpace/observers/observer.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grpc/grpc.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:grpc/grpc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,15 +23,10 @@ String? token;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // channel = await chan();
-
   await HiveBoxes.initHiveBoxes();
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(FcmInit().firebaseMessagingBackgroundHandler);
   Bloc.observer = const MyBlocObserver();
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   runApp(MultiBlocProvider(providers: BlockProviders.blockProviders, child: const MyApp()));
 }
@@ -57,16 +53,15 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  ResponseStream<StreamGetMessagesGeneralResponse>? stream;
+  StreamSubscription<StreamGetMessagesGeneralResponse>? stream;
   @override
   void initState() {
     super.initState();
-    stream = ChatGrpc().streamGetMessagesGeneral();
-    stream?.listen((e) {
-      context.read<CountBloc>().add(SetCount(e.count));
-    });
+
     WidgetsBinding.instance.addPostFrameCallback((e) async {
-      await FcmInit().init();
+      stream = await ChatGrpc().streamGetMessagesGeneral((e) {
+        context.read<CountBloc>().add(SetCount(e.count));
+      });
       var permissionStatus = await Permission.storage.status;
       if (!permissionStatus.isGranted) {
         await Permission.storage.request();
@@ -135,12 +130,8 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Future<ByteData> loadAsset(String path) async {
-  return await rootBundle.load(path);
-}
-
 Future<ClientChannel> chan() async {
-  final trustedRoots = await loadAsset("assets/cert/ca.crt");
+  final trustedRoots = await rootBundle.load("assets/cert/ca.crt");
   final trustedRootsbuffer = trustedRoots.buffer;
 
   return ClientChannel(

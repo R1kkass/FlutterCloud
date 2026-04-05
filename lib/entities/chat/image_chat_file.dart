@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:TalkSpace/grpc/message_grpc.dart';
+import 'package:TalkSpace/data/repository/message_grpc.dart';
+import 'package:TalkSpace/presentation/views/image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/entities/chat/video_chat_file.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
-import 'package:TalkSpace/pages/image_viewer.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';

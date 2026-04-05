@@ -1,3 +1,4 @@
+import 'package:TalkSpace/presentation/views/cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
@@ -5,7 +6,6 @@ import 'package:TalkSpace/features/file/file.dart';
 import 'package:TalkSpace/features/file/upload_file.dart';
 import 'package:TalkSpace/widget/folder/folder.dart';
 import 'package:TalkSpace/features/file/move_to_main.dart';
-import 'package:TalkSpace/pages/cloud.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

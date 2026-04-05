@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:grpc/grpc.dart';
@@ -38,7 +40,7 @@ class FileDownload {
   final int folderId;
   final String path;
   double size;
-  ResponseStream<FileDownloadResponse>? callback;
+  StreamSubscription<FileDownloadResponse>? callback;
 
   FileDownload(
       {required this.fileName,

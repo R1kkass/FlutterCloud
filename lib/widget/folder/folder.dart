@@ -1,10 +1,10 @@
 import 'package:TalkSpace/features/folder/list_action_folder.dart';
 import 'package:TalkSpace/features/folder/move_folder.dart';
+import 'package:TalkSpace/presentation/views/cloud.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/shared/text_content.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
-import 'package:TalkSpace/pages/cloud.dart';
 
 class FolderComponent extends StatefulWidget {
   final Folder folder;

@@ -1,4 +1,4 @@
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/services/file_size.dart';
 import 'package:flutter/material.dart';
 

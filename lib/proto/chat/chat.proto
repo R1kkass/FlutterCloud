@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/chat;chat";
+option go_package = "github.com/R1kkass/GoClouddata/repository/gen/go/chat;chat";
 
 package chat;
 

@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:TalkSpace/gen/dart/message/message.pb.dart';
-import 'package:TalkSpace/grpc/message_grpc.dart';
+import 'package:TalkSpace/data/repository/message_grpc.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/data/repository/chat_grpc.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encode_file.dart';
 import 'package:TalkSpace/services/file_size.dart';
@@ -50,30 +50,30 @@ class _ChatFileComponentState extends State<ChatFileComponent> {
       List<int> chunks = [];
 
       try {
-        var downloadFile = MessageGrpc().downloadFile(
+        MessageGrpc().downloadFile(
           DownloadFileMessageRequest(
             messageFileId: widget.messageFile.id,
           ),
-        );
-        downloadFile.listen((e) async {
-          try {
-            chunks = [...chunks, ...e.chunk];
+          (e) async {
+            try {
+              chunks = [...chunks, ...e.chunk];
 
-            if (e.progress >= 100) {
-              var downloadPath = await getDownloadPath() ?? "";
-              var path = "$downloadPath/${widget.fileName}";
-              var file = EncodeFile.decryptByteCreateFile(Uint8List.fromList(chunks),
-                  path, widget.secretKey.substring(0, 32));
-              HiveBoxes
-                  .chatFileUploaded
-                  .put("${widget.messageFile.id}${jwtDecode().email}", file.path);
-              downloaded = true;
-              setState(() {});
+              if (e.progress >= 100) {
+                var downloadPath = await getDownloadPath() ?? "";
+                var path = "$downloadPath/${widget.fileName}";
+                var file = EncodeFile.decryptByteCreateFile(Uint8List.fromList(chunks),
+                    path, widget.secretKey.substring(0, 32));
+                HiveBoxes
+                    .chatFileUploaded
+                    .put("${widget.messageFile.id}${jwtDecode().email}", file.path);
+                downloaded = true;
+                setState(() {});
+              }
+            } catch (_) {
+              showUnsuccessToast('Не удалось скачать файл: ${widget.fileName}');
             }
-          } catch (_) {
-            showUnsuccessToast('Не удалось скачать файл: ${widget.fileName}');
           }
-        });
+        );
       } catch (e) {
         showUnsuccessToast('Не удалось скачать файл: ${widget.fileName}');
       }

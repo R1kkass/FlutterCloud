@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/pages/auth.dart';
-import 'package:TalkSpace/pages/change_user.dart';
-import 'package:TalkSpace/pages/chat.dart';
-import 'package:TalkSpace/pages/chats_list.dart';
-import 'package:TalkSpace/pages/downloadings.dart';
-import 'package:TalkSpace/pages/cloud.dart';
-import 'package:TalkSpace/pages/image_viewer.dart';
-import 'package:TalkSpace/pages/open_file.dart';
-import 'package:TalkSpace/pages/registration.dart';
-import 'package:TalkSpace/pages/search_users.dart';
-import 'package:TalkSpace/pages/splash.dart';
-import 'package:TalkSpace/pages/submit_key_registration.dart';
+import 'package:TalkSpace/presentation/views/splash.dart';
+import 'package:TalkSpace/presentation/views/auth.dart';
+import 'package:TalkSpace/presentation/views/change_user.dart';
+import 'package:TalkSpace/presentation/views/chat.dart';
+import 'package:TalkSpace/presentation/views/chats_list.dart';
+import 'package:TalkSpace/presentation/views/downloadings.dart';
+import 'package:TalkSpace/presentation/views/cloud.dart';
+import 'package:TalkSpace/presentation/views/image_viewer.dart';
+import 'package:TalkSpace/presentation/views/open_file.dart';
+import 'package:TalkSpace/presentation/views/registration.dart';
+import 'package:TalkSpace/presentation/views/search_users.dart';
+import 'package:TalkSpace/presentation/views/submit_key_registration.dart';
 
 class AppRouter {
   static const SEARCH_USERS = "/searchusers";
@@ -21,12 +21,13 @@ class AppRouter {
   static const CHAT = "/chat";
   static const CHAT_LIST = "/chatlist";
   static const CHANGE_ACCOUNT = "/changeaccount";
+  static const SPLASH = "/";
   static const DOWNLOAD = "/download";
   static const IMAGE_VIEWER = "/imageviewer";
   static const SUBMIT_KEY_REGISTRATION = "/submitkey";
 
   static var routes = {
-    "/": (context) => const Splash(title: "Загрузка"),
+    SPLASH: (context) => const Splash(title: "Загрузка"),
     AUTH: (context) => const Authorization(title: "Авторизация"),
     REGISTRATION: (context) => const Registration(title: "Регистрация"),
     CLOUD: (context) => const Cloud(title: "Облако"),

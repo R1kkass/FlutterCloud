@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/R1kkass/GoCloudGRPC/gen/go/user;user";
+option go_package = "github.com/R1kkass/GoClouddata/repository/gen/go/user;user";
 
 package user;
 

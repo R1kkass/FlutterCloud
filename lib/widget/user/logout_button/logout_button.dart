@@ -3,7 +3,7 @@ import 'package:TalkSpace/cubit/token_cubit.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
 import 'package:TalkSpace/services/jwt_decode.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/data/repository/auth_grpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LogoutButton extends StatefulWidget {
@@ -20,9 +20,8 @@ class _LogoutButtonState extends State<LogoutButton> {
         onPressed: () async {
           var session = HiveBoxes.listToken.get(jwtDecode().email);
           if (session != null) {
-            await AuthGrpc().logout(jwtDecode().email, session);
-            context.read<TokenCubit>().updateToken("");
-            HiveBoxes.token.clear();
+            await AuthGrpc().logoutFromCurrent(session);
+            return;
           }
           Navigator.pushNamed(context, AppRouter.AUTH);
         },

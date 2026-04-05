@@ -2,10 +2,10 @@ import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/download_file_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
-import 'package:TalkSpace/entities/file/downloading_button.dart';
-import 'package:TalkSpace/entities/file/open_file.dart';
+import 'package:TalkSpace/presentation/widgets/file/downloading_button.dart';
+import 'package:TalkSpace/presentation/widgets/file/open_file.dart';
 import 'package:TalkSpace/features/file/actions/download_action.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/services/get_download_path.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
@@ -80,30 +80,23 @@ class _DownloadButtonState extends State<DownloadButton> {
     var downloadPath = await getDownloadPath() ?? "";
     path = "$downloadPath/${widget.file.media.fileName}";
 
-    var downloadFile = FilesGrpc().downloadFile(
-      FileDownloadRequest(
-        fileId: widget.file.id,
-        folderId: widget.file.folderId,
-      ),
+    downloadAction = DownloadAction(
+      context: mainContext,
+      fileName: widget.file.media.fileName,
+      fileId: widget.file.id,
+      folderId: widget.file.folderId,
     );
+    await downloadAction!.listenDownloadFile();
 
     mainContext.read<DownloadFileBloc>().add(FolderDownloadFile(
         downloadFile: FileDownload(
             folderId: widget.file.folderId,
             path: path,
-            callback: downloadFile,
+            callback: downloadAction?.downloadFile,
             fileName: widget.file.media.fileName,
             size: 0.0,
             status: FileDownloadStatus.downloading),
         id: widget.file.id));
-
-    downloadAction = DownloadAction(
-        context: mainContext,
-        fileName: widget.file.media.fileName,
-        fileId: widget.file.id,
-        downloadFile: downloadFile);
-
-    await downloadAction!.listenDownloadFile();
   }
 
   cancelDownload() async {

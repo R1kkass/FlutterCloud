@@ -3,7 +3,7 @@ import 'package:TalkSpace/gen/dart/google/protobuf/timestamp.pb.dart';
 class MessageDate {
   String date(Timestamp time) {
     try {
-      DateTime timeParse = DateTime.fromMillisecondsSinceEpoch(time.seconds.toInt()).toLocal();
+      DateTime timeParse = DateTime.fromMillisecondsSinceEpoch(time.seconds.toInt() * 1000).toLocal();
       var difference = DateTime.now().toLocal().difference(timeParse);
 
       if (difference.inDays ~/ 365 > 0) {

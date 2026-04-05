@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:TalkSpace/grpc/message_grpc.dart';
+import 'package:TalkSpace/data/repository/message_grpc.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/entities/chat/video_player.dart';
-import 'package:TalkSpace/grpc/chat_grpc.dart';
+import 'package:TalkSpace/data/repository/chat_grpc.dart';
 import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
 import 'package:TalkSpace/services/encrypt_message.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';

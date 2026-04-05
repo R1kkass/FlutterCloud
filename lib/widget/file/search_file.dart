@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/features/file/search_input_file.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

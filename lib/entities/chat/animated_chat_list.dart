@@ -42,7 +42,7 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
         int? newMessage;
 
         for (var item in data.reversed) {
-          var timeParse = DateTime.fromMillisecondsSinceEpoch(item.createdAt.seconds.toInt()).toLocal();
+          var timeParse = DateTime.fromMillisecondsSinceEpoch(item.createdAt.seconds.toInt() * 1000).toLocal();
           if ("${time?.day}${time?.month}${time?.year}" !=
               "${timeParse.day}${timeParse.month}${timeParse.year}") {
             time = timeParse;
@@ -104,7 +104,17 @@ class _AnimatedChatListState extends State<AnimatedChatList> {
                     secretKey: widget.keyChat,
                     controller: widget.controller,
                     dateChange: dataWithDate[id],
-                    message: message as Message
+                    message: Message(
+                      chatId: 0,
+                      createdAt: message.createdAt,
+                      updatedAt: message.updatedAt,
+                      id: message.id,
+                      messageFiles: message.messageFiles,
+                      statusRead: false,
+                      text: message.text,
+                      user: message.user,
+                      userId: 0
+                    )
                   ),
                 ),
               );

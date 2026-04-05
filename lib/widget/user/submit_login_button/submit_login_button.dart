@@ -1,6 +1,7 @@
+import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
-import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/data/repository/auth_grpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +56,8 @@ class _SubmitLoginButtonState extends State<SubmitLoginButton> {
       password: password
     ));
     Navigator.pop(context);
-    Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, AppRouter.CHAT_LIST, (e) {
+      return false;
+    });
   }
 }

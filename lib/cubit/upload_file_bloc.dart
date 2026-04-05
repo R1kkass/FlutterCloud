@@ -47,16 +47,15 @@ class AddUploadFile extends BlocEvent {
   final String text;
   final User user;
   final Map<String, bool> successFiles;
-  final List<MessageFile> chatFiles;
+  final List<MessageFile> messageFiles;
 
   AddUploadFile(
       {required this.id,
       required this.createdAt,
       required this.updatedAt,
       required this.user,
-      required this.chatFiles,
       required this.successFiles,
-      required this.text});
+      required this.text, required this.messageFiles});
 }
 
 class RemoveUploadFile extends BlocEvent {

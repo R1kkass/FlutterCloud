@@ -1,5 +1,5 @@
 import 'package:TalkSpace/cubit/content_bloc.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +43,7 @@ class _DeleteFileButtonState extends State<DeleteFileButton> {
     setState(() {
       disabled = true;
     });
-    await FilesGrpc().deletefile(DeleteFileRequest(fileId: widget.file.id));
+    await FilesGrpc().deleteFile(DeleteFileRequest(fileId: widget.file.id));
     ContentBloc.defaultRequestFile(widget.file.folderId, context);
   }
 }

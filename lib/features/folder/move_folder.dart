@@ -1,7 +1,7 @@
-import 'package:TalkSpace/grpc/files_grpc.dart';
-import 'package:TalkSpace/grpc/folder_grpc.dart';
-import 'package:TalkSpace/pages/cloud.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
+import 'package:TalkSpace/data/repository/folder_grpc.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
+import 'package:TalkSpace/presentation/views/cloud.dart';
 import 'package:TalkSpace/widget/folder/folder_builder.dart';
 import 'package:flutter/material.dart';
 

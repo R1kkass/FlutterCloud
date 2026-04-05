@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/cubit/folder_cubit.dart';
-import 'package:TalkSpace/grpc/files_grpc.dart';
+import 'package:TalkSpace/data/repository/files_grpc.dart';
 import 'package:TalkSpace/main.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart';
 import 'package:TalkSpace/services/hive_boxes.dart';
@@ -101,11 +101,10 @@ class _UploadFileButtonState extends State<UploadFileButton> {
         .uploadFile[folderId]?[idFileUpload];
 
     if (fileUploadAdded != null) {
-      var callback = FilesGrpc().uploadFile(argsStream);
+      var callback = await FilesGrpc().uploadFile(argsStream);
 
       mainContext.read<ContentBloc>().add(UploadSetCallback(
           id: idFileUpload, folderId: folderId, callback: callback));
-      await callback;
       mainContext
           .read<ContentBloc>()
           .add(UploadFileRemove(folderId: folderId, id: idFileUpload));

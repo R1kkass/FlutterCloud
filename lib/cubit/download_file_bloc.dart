@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:TalkSpace/cubit/folder_cubit.dart';
 import 'package:TalkSpace/gen/dart/file/file.pb.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grpc/grpc.dart';
 
 class BlocEvent {
   const BlocEvent();
@@ -91,7 +92,7 @@ class FolderSetStatus extends BlocEvent {
 
 class FolderSetCallback extends BlocEvent {
   final int id;
-  final ResponseStream<FileDownloadResponse> callback;
+  final StreamSubscription<FileDownloadResponse> callback;
 
   FolderSetCallback({required this.id, required this.callback});
 }

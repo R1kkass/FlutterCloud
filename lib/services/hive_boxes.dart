@@ -46,7 +46,9 @@ class HiveBoxes {
 
   static initHiveBoxes() async {
     List<int> key = await getEncryptionKey();
-    Hive.registerAdapter(SessionAdapter());
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(SessionAdapter());
+    }
     await Hive.initFlutter();
     await Hive.openBox<String>('token', encryptionCipher: HiveAesCipher(key));
     await Hive.openBox<Session>('listToken', encryptionCipher: HiveAesCipher(key));

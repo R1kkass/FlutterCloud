@@ -1,9 +1,9 @@
+import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/components/dialog_loading.dart';
 import 'package:TalkSpace/cubit/registration_bloc.dart';
-import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
+import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
+import 'package:TalkSpace/data/repository/auth_grpc.dart';
 import 'package:TalkSpace/shared/toast.dart';
-import 'package:TalkSpace/widget/user/submit_registration_mail_button/model/submit_mail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,15 +55,11 @@ class _SubmitRegistrationMailButtonState extends State<SubmitRegistrationMailBut
     if (data.password.runtimeType != String || data.email.runtimeType != String || data.runtimeType != String) {
       throw Exception("State RegistrationBloc is empty");
     }
-
-    var secretKey = data.secretKey!;
-
-    String key = encrypt(widget.sigUpController["key"]!.text, secretKey);
-
-    String accessToken = await SubmitMail().submit(data.email!, data.password!, key, secretKey);
-    context.read<TokenCubit>().updateToken(accessToken);
+    String key = widget.sigUpController["key"]!.text;
+    await AuthGrpc().submitEmail(SubmitEmailRequest(
+        email: data.email, password: data.password, key: key));
 
     Navigator.pop(context);
-    Navigator.pushNamedAndRemoveUntil(context, '/', (r) => false);
+    Navigator.pushNamedAndRemoveUntil(context, AppRouter.SPLASH, (r) => false);
   }
 }

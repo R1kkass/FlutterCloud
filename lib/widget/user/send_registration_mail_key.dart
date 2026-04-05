@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:TalkSpace/cubit/registration_bloc.dart';
-import 'package:TalkSpace/grpc/auth_grpc.dart';
+import 'package:TalkSpace/data/repository/auth_grpc.dart';
 import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
 import 'package:TalkSpace/services/add_zero.dart';
 import 'package:TalkSpace/shared/toast.dart';

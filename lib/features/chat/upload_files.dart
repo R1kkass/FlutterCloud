@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:TalkSpace/gen/dart/message/message.pb.dart';
 import 'package:TalkSpace/gen/dart/user/user.pb.dart';
-import 'package:TalkSpace/grpc/message_grpc.dart';
+import 'package:TalkSpace/data/repository/message_grpc.dart';
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/cubit/upload_file_bloc.dart';
@@ -56,7 +56,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
       await messageGrpc.uploadFile(argsStream);
       countFiles++;
       if (countFiles == selectedFilesLength) {
-        widget.addUploadFile(message.chatId);
+        widget.addUploadFile(message.messageId);
       }
       context
           .read<UploadFileBloc>()
@@ -80,11 +80,11 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
     var message = await messageGrpc.createFileMessage(
         CreateFileMessageRequest(text: hashText, chatId: chatId));
 
-    List<MessageFile> chatFiles = [];
+    List<MessageFile> messageFiles = [];
 
     for (var selectFile in selectedFiles.keys) {
       var file = File(selectFile);
-      chatFiles.add(MessageFile(
+      messageFiles.add(MessageFile(
           id: 0,
           fileName: selectFile,
           size: Int64(file.statSync().size)));
@@ -102,7 +102,7 @@ class _MessageUploadFileState extends State<MessageUploadFile> {
     context.read<UploadFileBloc>().add(AddUploadFile(
         id: message.messageId,
         text: hashText,
-        chatFiles: chatFiles,
+        messageFiles: messageFiles,
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,
         successFiles: {},

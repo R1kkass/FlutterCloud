@@ -8,12 +8,12 @@ class RegistrationState {
   RegistrationState({
     required this.email,
     required this.password,
-    required this.secretKey,
+    // required this.secretKey,
   });
 
   String? password;
   String? email;
-  String? secretKey;
+  // String? secretKey;
 }
 
 class RegistrationBloc extends Bloc<BlocEvent, RegistrationState> {
@@ -21,7 +21,8 @@ class RegistrationBloc extends Bloc<BlocEvent, RegistrationState> {
       : super(RegistrationState(
             email: state.email,
             password: state.password,
-            secretKey: state.secretKey)) {
+            // secretKey: state.secretKey
+  )) {
     on<AddFields>(_addFields);
   }
 
@@ -29,7 +30,8 @@ class RegistrationBloc extends Bloc<BlocEvent, RegistrationState> {
     emit(RegistrationState(
         email: event.email,
         password: event.password,
-        secretKey: event.secretKey));
+        // secretKey: event.secretKey
+    ));
   }
 }
 
@@ -37,10 +39,10 @@ class AddFields extends BlocEvent {
   AddFields({
     required this.email,
     required this.password,
-    required this.secretKey,
+    // required this.secretKey,
   });
 
   String? password;
   String? email;
-  String? secretKey;
+  // String? secretKey;
 }
