@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/consts/domen.dart';
 import 'package:TalkSpace/data/repository/auth_grpc.dart';
+import 'package:TalkSpace/data/sources/local/session_local_data_source.dart';
+import 'package:TalkSpace/domain/exceptions/refresh_token_exception.dart';
 import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:grpc/grpc.dart';
+import 'package:rxdart/rxdart.dart';
 
 class BaseGrpc {
   @protected
@@ -17,27 +19,25 @@ class BaseGrpc {
     options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
   );
 
-  final _authGrpc = AuthGrpc();
+  final _authGrpc = AuthGrpc(
+    sessionLocalDataSource: SessionLocalDataSource()
+  );
 
   @protected
-  Future<StreamSubscription<T>> listen<T>(ResponseStream<T>? stream, void Function(T)? onData) async {
-    if (stream == null) {
-      throw Exception("stream null");
-    }
-
-    try {
-      var s = stream.listen(onData);
-      return s;
-    } on GrpcError catch(e) {
-      if (e.code == StatusCode.unauthenticated && HiveBoxes.listToken.get(jwtDecode().email) != null) {
-        await _authGrpc.refresh();
-        return stream.listen(onData);
+  Future<StreamSubscription<T>> listen<T>(ResponseStream<T> stream, void Function(T)? onData) async {
+    StreamSubscription<T> retryStream = RetryStream(
+      () => stream,
+      2
+    ).listen((data) {
+      onData!(data);
+    }, onError: (e, s) async {
+        if (e.code == StatusCode.unauthenticated && HiveBoxes.listToken.get(jwtDecode().email) != null) {
+          await _authGrpc.refresh();
+        }
       }
-      rethrow;
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
+    );
+
+    return retryStream;
   }
 
   @protected
@@ -53,19 +53,15 @@ class BaseGrpc {
           return result;
         }
         rethrow;
-      } on GrpcError catch (e) {
-        if (e.code == StatusCode.unauthenticated) {
-          var context = NavigationService.navigatorKey.currentContext!;
-          Navigator.pushNamedAndRemoveUntil(context, AppRouter.AUTH, (e) => true);
-        }
+      } on RefreshTokenException catch (e) {
+        var context = NavigationService.navigatorKey.currentContext!;
+        Navigator.pushNamedAndRemoveUntil(context, AppRouter.AUTH, (e) => true);
         rethrow;
       }
     }
 
     return result;
   }
-
-
 }
 
 Future<UseFetch> useFetch<T>(Future<T> Function() fn) async {

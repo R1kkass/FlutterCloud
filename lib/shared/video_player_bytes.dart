@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:TalkSpace/entities/chat/video_player.dart';
+import 'package:TalkSpace/presentation/widgets/messenger/message/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 

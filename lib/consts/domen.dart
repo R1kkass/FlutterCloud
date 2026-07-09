@@ -1,1 +1,1 @@
-const ipServer = "192.168.50.65";
+const ipServer = "10.66.233.64";

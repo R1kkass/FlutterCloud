@@ -1,7 +1,8 @@
+import 'package:TalkSpace/domain/model/entities/message.dart';
+import 'package:TalkSpace/presentation/widgets/messenger/message/message_file_default_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/entities/chat/image_viewer_unit.dart';
-import 'package:TalkSpace/gen/dart/chat/chat.pb.dart';
+import 'package:TalkSpace/presentation/widgets/messenger/message/gallery/image_viewer_unit.dart';
 
 class ImageViewer extends StatefulWidget {
   const ImageViewer({super.key, required this.title});
@@ -40,58 +41,58 @@ class _ImageViewerState extends State<ImageViewer> {
     );
     int pageViewIndex = 0;
     return Scaffold(
-        backgroundColor: Colors.black,
-        appBar: appBar,
-        body: GestureDetector(
-          onPanUpdate: (details) {
-            // Swiping in right direction.
-            if (details.delta.dx > 0 &&
-                pageViewIndex < args.message.messageFiles.length - 1) {
-              setState(() {
-                pageViewIndex = pageViewIndex + 1;
-              });
-              pageController.animateToPage(pageViewIndex,
-                  curve: Curves.bounceIn,
-                  duration: const Duration(microseconds: 200));
-            }
-            // Swiping in left direction.
-            if (details.delta.dx < 0 && pageViewIndex > 0) {
-              setState(() {
-                pageViewIndex = pageViewIndex - 1;
-              });
-              pageController.animateToPage(pageViewIndex,
-                  curve: Curves.bounceIn,
-                  duration: const Duration(microseconds: 200));
-            }
+      backgroundColor: Colors.black,
+      appBar: appBar,
+      body: GestureDetector(
+        onPanUpdate: (details) {
+          // Swiping in right direction.
+          if (details.delta.dx > 0 &&
+              pageViewIndex < args.message.messageFiles.length - 1) {
+            setState(() {
+              pageViewIndex = pageViewIndex + 1;
+            });
+            pageController.animateToPage(pageViewIndex,
+                curve: Curves.bounceIn,
+                duration: const Duration(microseconds: 200));
+          }
+          // Swiping in left direction.
+          if (details.delta.dx < 0 && pageViewIndex > 0) {
+            setState(() {
+              pageViewIndex = pageViewIndex - 1;
+            });
+            pageController.animateToPage(pageViewIndex,
+                curve: Curves.bounceIn,
+                duration: const Duration(microseconds: 200));
+          }
+        },
+        child: PageView(
+          onPageChanged: (page) {
+            index = page;
+            setState(() {});
           },
-          child: PageView(
-            onPageChanged: (page) {
-              index = page;
-              setState(() {});
-            },
-            controller: pageController,
-            children: [
-              for (var image in args.message.messageFiles)
-                ImageViewerUnit(
-                    decrypt: args.decrypt,
-                    image: image,
-                    height: appBar.preferredSize.height,
-                    secretKey: args.secretKey, message: args.message,)
-            ],
-          ),
-        ));
+          controller: pageController,
+          children: [
+            for (var image in args.message.messageFiles)
+              MessageFileDefaultProvider(
+                messageFile: image,
+                child: ImageViewerUnit(
+                  height: appBar.preferredSize.height,
+                  message: args.message,
+                )
+            )
+          ],
+        ),
+      )
+    );
   }
 }
 
 class ImageViewerArgs {
-  const ImageViewerArgs(
-      {required this.message,
-      required this.index,
-      required this.secretKey,
-      required this.decrypt});
+  const ImageViewerArgs({
+    required this.message,
+    required this.index,
+  });
 
-  final String secretKey;
   final int index;
-  final bool decrypt;
   final Message message;
 }

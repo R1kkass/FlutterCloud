@@ -1,24 +1,21 @@
-import 'package:TalkSpace/gen/dart/google/protobuf/timestamp.pb.dart';
-
 class MessageDate {
-  String date(Timestamp time) {
+  String date(DateTime time) {
     try {
-      DateTime timeParse = DateTime.fromMillisecondsSinceEpoch(time.seconds.toInt() * 1000).toLocal();
-      var difference = DateTime.now().toLocal().difference(timeParse);
+      var difference = DateTime.now().toLocal().difference(time);
 
       if (difference.inDays ~/ 365 > 0) {
-        return "${addZero(timeParse.day)}.${addZero(timeParse.month)}.${timeParse.year.toString().substring(2)}";
+        return "${addZero(time.day)}.${addZero(time.month)}.${time.year.toString().substring(2)}";
       }
 
       if (difference.inDays ~/ 7 > 0) {
-        return "${timeParse.day} ${month[timeParse.month]}";
+        return "${time.day} ${month[time.month]}";
       }
 
       if (difference.inDays > 0) {
-        return "${weekDay[timeParse.weekday]}";
+        return "${weekDay[time.weekday]}";
       }
 
-      return "${addZero(timeParse.hour)}:${addZero(timeParse.minute)}";
+      return "${addZero(time.hour)}:${addZero(time.minute)}";
     } catch (e) {
       return "";
     }

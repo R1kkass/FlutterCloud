@@ -8,6 +8,7 @@ class MyInput extends StatefulWidget {
     required this.title,
     required this.icon,
     required this.error,
+    this.validator,
     this.fieldSubmit,
     this.elevation,
     this.suffixIcon,
@@ -22,6 +23,7 @@ class MyInput extends StatefulWidget {
   bool? elevation;
   IconButton? suffixIcon;
   final String error;
+  String? Function(String?)? validator;
   bool obscureText;
   void Function(String)? fieldSubmit;
 
@@ -52,7 +54,7 @@ class _MyInputState extends State<MyInput> {
                 borderRadius: BorderRadius.all(Radius.circular(500.0)),
                 borderSide: BorderSide(color: Colors.white, width: 3.0)),
             hintText: widget.title),
-        validator: (String? value) {
+        validator: widget.validator ?? (String? value) {
           if (value == null || value.isEmpty) {
             return widget.error;
           }

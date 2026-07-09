@@ -1,0 +1,6 @@
+enum TypeMessage {
+  SEND_MESSAGE,
+  READ_MESSAGE,
+  UPLOAD_MESSAGE,
+  READ_MESSAGE_ALL,
+}

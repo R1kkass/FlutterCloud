@@ -15,24 +15,20 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'message.pb.dart' as $0;
+import 'message.pb.dart' as $2;
 
 export 'message.pb.dart';
 
 @$pb.GrpcServiceName('message.MessageGreeter')
 class MessageGreeterClient extends $grpc.Client {
-  static final _$uploadMessageFile = $grpc.ClientMethod<$0.UploadFileMessageRequest, $0.UploadFileMessageResponse>(
+  static final _$uploadMessageFile = $grpc.ClientMethod<$2.UploadFileMessageRequest, $2.UploadFileMessageResponse>(
       '/message.MessageGreeter/UploadMessageFile',
-      ($0.UploadFileMessageRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.UploadFileMessageResponse.fromBuffer(value));
-  static final _$downloadMessageFile = $grpc.ClientMethod<$0.DownloadFileMessageRequest, $0.DownloadFileMessageResponse>(
+      ($2.UploadFileMessageRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.UploadFileMessageResponse.fromBuffer(value));
+  static final _$downloadMessageFile = $grpc.ClientMethod<$2.DownloadFileMessageRequest, $2.DownloadFileMessageResponse>(
       '/message.MessageGreeter/DownloadMessageFile',
-      ($0.DownloadFileMessageRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.DownloadFileMessageResponse.fromBuffer(value));
-  static final _$createFileMessage = $grpc.ClientMethod<$0.CreateFileMessageRequest, $0.CreateFileMessageResponse>(
-      '/message.MessageGreeter/CreateFileMessage',
-      ($0.CreateFileMessageRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.CreateFileMessageResponse.fromBuffer(value));
+      ($2.DownloadFileMessageRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $2.DownloadFileMessageResponse.fromBuffer(value));
 
   MessageGreeterClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -40,16 +36,12 @@ class MessageGreeterClient extends $grpc.Client {
       : super(channel, options: options,
         interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.UploadFileMessageResponse> uploadMessageFile($async.Stream<$0.UploadFileMessageRequest> request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$2.UploadFileMessageResponse> uploadMessageFile($async.Stream<$2.UploadFileMessageRequest> request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$uploadMessageFile, request, options: options).single;
   }
 
-  $grpc.ResponseStream<$0.DownloadFileMessageResponse> downloadMessageFile($0.DownloadFileMessageRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseStream<$2.DownloadFileMessageResponse> downloadMessageFile($2.DownloadFileMessageRequest request, {$grpc.CallOptions? options}) {
     return $createStreamingCall(_$downloadMessageFile, $async.Stream.fromIterable([request]), options: options);
-  }
-
-  $grpc.ResponseFuture<$0.CreateFileMessageResponse> createFileMessage($0.CreateFileMessageRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$createFileMessage, request, options: options);
   }
 }
 
@@ -58,38 +50,26 @@ abstract class MessageGreeterServiceBase extends $grpc.Service {
   $core.String get $name => 'message.MessageGreeter';
 
   MessageGreeterServiceBase() {
-    $addMethod($grpc.ServiceMethod<$0.UploadFileMessageRequest, $0.UploadFileMessageResponse>(
+    $addMethod($grpc.ServiceMethod<$2.UploadFileMessageRequest, $2.UploadFileMessageResponse>(
         'UploadMessageFile',
         uploadMessageFile,
         true,
         false,
-        ($core.List<$core.int> value) => $0.UploadFileMessageRequest.fromBuffer(value),
-        ($0.UploadFileMessageResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DownloadFileMessageRequest, $0.DownloadFileMessageResponse>(
+        ($core.List<$core.int> value) => $2.UploadFileMessageRequest.fromBuffer(value),
+        ($2.UploadFileMessageResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$2.DownloadFileMessageRequest, $2.DownloadFileMessageResponse>(
         'DownloadMessageFile',
         downloadMessageFile_Pre,
         false,
         true,
-        ($core.List<$core.int> value) => $0.DownloadFileMessageRequest.fromBuffer(value),
-        ($0.DownloadFileMessageResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.CreateFileMessageRequest, $0.CreateFileMessageResponse>(
-        'CreateFileMessage',
-        createFileMessage_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.CreateFileMessageRequest.fromBuffer(value),
-        ($0.CreateFileMessageResponse value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $2.DownloadFileMessageRequest.fromBuffer(value),
+        ($2.DownloadFileMessageResponse value) => value.writeToBuffer()));
   }
 
-  $async.Stream<$0.DownloadFileMessageResponse> downloadMessageFile_Pre($grpc.ServiceCall call, $async.Future<$0.DownloadFileMessageRequest> request) async* {
+  $async.Stream<$2.DownloadFileMessageResponse> downloadMessageFile_Pre($grpc.ServiceCall call, $async.Future<$2.DownloadFileMessageRequest> request) async* {
     yield* downloadMessageFile(call, await request);
   }
 
-  $async.Future<$0.CreateFileMessageResponse> createFileMessage_Pre($grpc.ServiceCall call, $async.Future<$0.CreateFileMessageRequest> request) async {
-    return createFileMessage(call, await request);
-  }
-
-  $async.Future<$0.UploadFileMessageResponse> uploadMessageFile($grpc.ServiceCall call, $async.Stream<$0.UploadFileMessageRequest> request);
-  $async.Stream<$0.DownloadFileMessageResponse> downloadMessageFile($grpc.ServiceCall call, $0.DownloadFileMessageRequest request);
-  $async.Future<$0.CreateFileMessageResponse> createFileMessage($grpc.ServiceCall call, $0.CreateFileMessageRequest request);
+  $async.Future<$2.UploadFileMessageResponse> uploadMessageFile($grpc.ServiceCall call, $async.Stream<$2.UploadFileMessageRequest> request);
+  $async.Stream<$2.DownloadFileMessageResponse> downloadMessageFile($grpc.ServiceCall call, $2.DownloadFileMessageRequest request);
 }

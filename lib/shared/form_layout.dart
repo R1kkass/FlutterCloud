@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/presentation/widgets/scaffold/default_scaffold.dart';
 
 class FormLayout extends StatefulWidget {
   const FormLayout({super.key, required this.child, required this.title});

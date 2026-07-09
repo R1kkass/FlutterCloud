@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:grpc/grpc.dart';
 
 class AuthInterceptor implements ClientInterceptor {

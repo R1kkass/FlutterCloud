@@ -1,18 +1,13 @@
-import 'package:TalkSpace/services/encrypt_message.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FcmNotificationService {
   NotificationDTO newMessage(RemoteMessage message) {
-     Map<String, dynamic> data = message.data;
-
-    var notify = remoteMessageDataToDataNotification(data);
-
-    var secretKey = HiveBoxes.chatsSecretKey.get(jwtDecode().email)?[notify.customProperties] ?? "";
-    var body = EncryptMessage().decrypt(notify.body, secretKey);
-
-    return NotificationDTO(body: body, title: notify.title);
+    Map<String, dynamic> data = message.data;
+    var secretKey = HiveBoxes.chatsSecretKey.get(jwtDecode().email)?[data["custom_properties"]] ?? "";
+    data['body'] = EncryptMessage().decrypt(data['body'], secretKey);
+    var notify = _remoteMessageDataToDataNotification(data);
+    return NotificationDTO(body: notify.body, title: notify.title);
   }
 
   NotificationDTO createChat(RemoteMessage message) {
@@ -22,7 +17,7 @@ class FcmNotificationService {
     return NotificationDTO(body: body, title: title);
   }
 
-  DataNotification remoteMessageDataToDataNotification(Map<String, dynamic> data) {
+  DataNotification _remoteMessageDataToDataNotification(Map<String, dynamic> data) {
     return DataNotification(
       body: data["body"],
       title: data["title"],

@@ -1,4 +1,5 @@
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/domain/exceptions/refresh_token_exception.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 
 class JwtPayload {
@@ -10,7 +11,7 @@ class JwtPayload {
 JwtPayload jwtDecode() {
   var token = HiveBoxes.token.get('access_token');
   if (token == null) {
-    throw Exception("Access token not found");
+    throw RefreshTokenException(code: 1, message: "Access token not found");
   }
 
   var jwtDecode = Jwt.parseJwt(token);

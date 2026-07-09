@@ -3,136 +3,129 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:TalkSpace/gen/dart/chat/chat.pbgrpc.dart';
-import 'package:TalkSpace/gen/dart/message/message.pbgrpc.dart';
 import 'package:TalkSpace/data/repository/base_grpc.dart';
 import 'package:TalkSpace/data/repository/interceptors/auth_interceptor.dart';
-import 'package:TalkSpace/services/encode_file.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:TalkSpace/services/get_download_path.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
-import 'package:TalkSpace/shared/toast.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:TalkSpace/data/sources/local/chat_secret_keys_local_data_source.dart';
+import 'package:TalkSpace/domain/dto/stream_dto.dart';
+import 'package:TalkSpace/domain/model/entities/message.dart' as message;
+import 'package:TalkSpace/domain/model/entities/message_file.dart';
+import 'package:TalkSpace/domain/model/response/message/download_file_message_response.dart' as download_file_message_response;
+import 'package:TalkSpace/domain/repository/message_repository.dart';
+import 'package:TalkSpace/gen/dart/message/message.pbgrpc.dart';
+import 'package:TalkSpace/services/index.dart';
 
-class ArrayStream {
-  final List<int> chunk;
-  final int messageId;
-  final double size;
-  final String fileName;
-  final int chatId;
-  final String text;
-
-  const ArrayStream(
-      {required this.chunk,
-        required this.text,
-        required this.messageId,
-        required this.size,
-        required this.chatId,
-        required this.fileName});
-}
-
-class ArgsForStream {
-  final String secretKey;
-  final String filePath;
-  final UploadFileMessageRequest request;
-
-  const ArgsForStream(
-      {required this.filePath, required this.secretKey, required this.request});
-}
-
-class MessageGrpc extends BaseGrpc {
+class MessageGrpc extends BaseGrpc implements MessageRepository {
   late final _stub = MessageGreeterClient(channel, interceptors: [AuthInterceptor()]);
 
-  Future<UploadFileMessageResponse> uploadFile(List<ArrayStream> arrFUR) {
+  ChatSecretKeysLocalDataSource chatSecretKeysLocalDataSource;
+
+  MessageGrpc({
+    required this.chatSecretKeysLocalDataSource,
+  });
+
+  @override
+  Future<message.Message> uploadFile(UploadFileMessageStreamRequest args) async {
     Stream<UploadFileMessageRequest> generateRoute() async* {
-      for (final item in arrFUR) {
+      List<UploadFileMessageStreamResponse> result = createStreamArg(args);
+
+      for (final item in result) {
         yield UploadFileMessageRequest(
-            chunk: item.chunk,
-            fileName: item.fileName,
-            messageId: item.messageId,
-            chatId: item.chatId,
-            text: item.text);
+          chunk: item.chunk,
+          fileName: item.fileName,
+          chatId: item.chatId,
+          fileUploaded: item.fileUploaded,
+          text: item.text,
+          messageId: args.messageId
+        );
+        args.callbackChunkUploaded(item.messageFile, item.size);
       }
     }
 
-    return retry(() => _stub.uploadMessageFile(generateRoute()));
+    var resp = await retry(() => _stub.uploadMessageFile(generateRoute()));
+    return message.Message.fromGRPC(resp.message);
   }
 
-  Future<StreamSubscription<DownloadFileMessageResponse>> downloadFile(
-      DownloadFileMessageRequest request, Function(DownloadFileMessageResponse) onData) async {
-    return await listen(_stub.downloadMessageFile(request), onData);
+  Future<StreamSubscription<DownloadFileMessageResponse>> _downloadFile(
+      {required int chatId,
+        required int messageId,
+        required int fileId,
+        required Function(download_file_message_response.DownloadFileMessageResponse) onData}) async {
+    return await listen<DownloadFileMessageResponse>(_stub.downloadMessageFile(DownloadFileMessageRequest(
+      messageId: messageId,
+      chatId: chatId,
+      messageFileId: fileId
+    ), ), (data) {
+      onData(download_file_message_response.DownloadFileMessageResponse(chunk: data.chunk, progress: data.progress));
+    });
   }
 
-  Future<CreateFileMessageResponse> createFileMessage(
-      CreateFileMessageRequest request) {
-    return retry(() => _stub.createFileMessage(request));
-  }
 
-
-  downloadFileFn(BuildContext context, Message message, int messageFileId, String fileName,
-      String secretKey, Function(String) fn) {
+  @override
+  void downloadFile({
+    required message.Message message,
+    required MessageFile messageFile,
+    required StreamDTO<double, List<int>, dynamic> streamDTO,
+  }) async {
+    var secretKey = chatSecretKeysLocalDataSource.getSecretKey(message.chatId) ?? "";
     List<int> chunks = [];
-    try {
-      downloadFile(
-        DownloadFileMessageRequest(
-          messageId: message.id,
-          messageFileId: messageFileId,
-          chatId: message.chatId
-        ),
-        (e) async {
-          try {
-            chunks = [...chunks, ...e.chunk];
 
-            if (e.progress >= 100) {
-              var downloadPath = await getDownloadPath() ?? "";
-              var path = "$downloadPath/$fileName";
-              var file = EncodeFile.decryptByteCreateFile(
-                  Uint8List.fromList(chunks), path, secretKey.substring(0, 32));
-
-              await HiveBoxes.chatFileUploaded.put(
-                "$messageFileId${jwtDecode().email}",
-                file.path,
-              );
-
-              await fn(
-                path,
-              );
-            }
-          } catch (_) {
-            showUnsuccessToast('Не удалось скачать файл: $fileName');
-          }
+    var stream = await _downloadFile(
+      messageId: message.id,
+      fileId: messageFile.id,
+      chatId: message.chatId,
+      onData: (e) async {
+        Uint8List list = Uint8List.fromList(e.chunk);
+        chunks = [...chunks, ...crypt(false, list, secretKey.substring(0, 32))];
+        streamDTO.onListen?.call(e.progress);
+        if (e.progress >= 100) {
+          return;
         }
-      );
-    } catch (e) {
-      showUnsuccessToast('Не удалось скачать файл: $fileName');
-    }
+      }
+    );
+    stream.onDone(() {
+      streamDTO.onDone?.call(chunks);
+    });
+
+    stream.onError((e) {
+      streamDTO.onError?.call(e);
+    });
   }
 
 
-  List<ArrayStream> createStreamArg(ArgsForStream some) {
-    var key = some.secretKey;
+  List<UploadFileMessageStreamResponse> createStreamArg(UploadFileMessageStreamRequest uploadFileMessageStream) {
+    var secretKey = chatSecretKeysLocalDataSource.getSecretKey(uploadFileMessageStream.chatId)?.substring(0, 32) ?? "";
 
-    var file = File(some.filePath);
-    var request = some.request;
-
-    List<ArrayStream> arrFUR = [];
-    var bufferSize = 5 * 1024 * 1024;
+    var encryptMessage = EncryptMessage();
+    var bufferSize = 256 * 1024;
     var curItem = 0;
-    RandomAccessFile raf = file.openSync(mode: FileMode.read);
-    var bytesLength = raf.lengthSync();
-    for (int i = 0; i < bytesLength / bufferSize; i++) {
-      raf.setPositionSync(curItem);
-      Uint8List bytes = raf.readSync(bufferSize);
-      curItem += bufferSize;
-      arrFUR.add(ArrayStream(
-          chunk: crypt(true, bytes, key),
-          messageId: request.messageId,
-          size: curItem / bytesLength * 100,
-          text: request.text,
-          chatId: request.chatId,
-          fileName: request.fileName));
+    Map<MessageFile, List<UploadFileMessageStreamResponse>> result = {};
+
+    String encryptText = "";
+    if (uploadFileMessageStream.text != "") {
+      encryptText = encryptMessage.encrypt(uploadFileMessageStream.text, secretKey).base64;
     }
+
+      File file = uploadFileMessageStream.messageFile.uploadFileMessage!.file;
+      RandomAccessFile raf = file.openSync(mode: FileMode.read);
+      var bytesLength = raf.lengthSync();
+      List<UploadFileMessageStreamResponse> arrFUR = [];
+      String fileName = getFileName(file);
+      String encryptFileName = encryptMessage.encrypt(fileName, secretKey).base64;
+
+      for (int i = 0; i < bytesLength / bufferSize; i++) {
+        raf.setPositionSync(curItem);
+        Uint8List bytes = raf.readSync(bufferSize);
+        curItem += bufferSize;
+        arrFUR.add(UploadFileMessageStreamResponse(
+          chunk: crypt(true, bytes, secretKey),
+          size: curItem / bytesLength * 100,
+          text: encryptText,
+          chatId: uploadFileMessageStream.chatId,
+          fileName: encryptFileName,
+          fileUploaded: i+1 >= bytesLength / bufferSize,
+          messageFile: uploadFileMessageStream.messageFile,
+        ));
+      }
 
     return arrFUR;
   }

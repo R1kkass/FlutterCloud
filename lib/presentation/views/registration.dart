@@ -1,14 +1,8 @@
+import 'package:TalkSpace/domain/model/request/auth/index.dart';
+import 'package:TalkSpace/presentation/widgets/user/submit_registration_button.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/shared/my_input.dart';
-import 'package:TalkSpace/shared/toast.dart';
-import 'package:TalkSpace/components/dialog_loading.dart';
-import 'package:TalkSpace/data/repository/auth_grpc.dart';
-import 'package:TalkSpace/gen/dart/auth/auth.pb.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/cubit/registration_bloc.dart';
 import 'package:TalkSpace/shared/form_layout.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Registration extends StatefulWidget {
   final String title;
@@ -20,7 +14,6 @@ class Registration extends StatefulWidget {
 
 class _RegistrationState extends State<Registration> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _authGrpc = AuthGrpc();
 
   final Map<String, TextEditingController> sigUpController = {
     'email': TextEditingController(),
@@ -64,59 +57,32 @@ class _RegistrationState extends State<Registration> {
                 height: 10,
               ),
               MyInput(
-                  icon: Icons.key,
-                  obscureText: true,
-                  controller: sigUpController["repeat_password"],
-                  title: "Повторите пароль",
-                  error: "Пожалуйста, заполните поле пароль"),
+                icon: Icons.key,
+                obscureText: true,
+                controller: sigUpController["repeat_password"],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Пожалуйста, заполните поле пароль";
+                  }
+                  if (sigUpController["password"]!.text != value) {
+                    return "Пароли не совпадают";
+                  }
+                  return null;
+                },
+                title: "Повторите пароль",
+                error: "Пожалуйста, заполните поле пароль"
+              ),
               const SizedBox(
                 height: 25,
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      elevation: WidgetStateProperty.all(5.0),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.0),
-                      ))),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await _registration();
-                    }
-                  },
-                  child: const Text('Подтвердить'),
-                ),
+                child: SubmitRegistrationButton(formKey: _formKey,
+                  formController: sigUpController
+                )
               ),
             ],
           ),
         ));
-  }
-
-  Future _registration() async {
-    try {
-      await _registrationForm();
-    } catch (e) {
-      showUnsuccessToast("Пользователь с такой почтой уже зарегистрирован");
-      Navigator.pop(context);
-    }
-    return null;
-  }
-
-  Future _registrationForm() async {
-    showLoaderDialog(context);
-
-    var email = sigUpController["email"]!.text;
-    var password = sigUpController["password"]!.text;
-    var name = sigUpController["name"]!.text;
-
-    await _authGrpc.registration(
-        RegistrationRequest(email: email, password: password, name: name));
-    context
-        .read<RegistrationBloc>()
-        .add(AddFields(email: email, password: password));
-    Navigator.pop(context);
-    Navigator.pushNamed(context, AppRouter.SUBMIT_KEY_REGISTRATION);
   }
 }

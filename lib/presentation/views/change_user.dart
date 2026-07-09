@@ -1,10 +1,11 @@
 import 'package:TalkSpace/app/app_router.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/domain/model/entities/session.dart';
+import 'package:TalkSpace/presentation/viewmodels/user/change_user_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:TalkSpace/components/default_scaffold.dart';
+import 'package:TalkSpace/presentation/widgets/scaffold/default_scaffold.dart';
 import 'package:TalkSpace/shared/toast.dart';
-import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:provider/provider.dart';
 
 class ChangeUser extends StatefulWidget {
   final String title;
@@ -17,30 +18,30 @@ class ChangeUser extends StatefulWidget {
 class _ChangeUserState extends State<ChangeUser> {
   @override
   Widget build(BuildContext context) {
-    var tokenKeys = HiveBoxes.listToken.keys.toList();
-    var tokens = HiveBoxes.listToken.values.toList();
-    return DefaultScaffold(
-      title: widget.title,
-      body: ListView.builder(
-          itemCount: tokenKeys.length,
-          itemBuilder: (context, index) {
-            var token = context.read<TokenCubit>().state;
-            if (tokens[index] != token) {
-              return TextButton(
-                onPressed: () {
-                    changeToken(context, tokens[index].refreshToken, tokenKeys[index]);
-                  },
-                  child: Text(tokenKeys[index]));
-            }
-            return const SizedBox(height: 0);
-          }),
-    );
-  }
-}
+    return Consumer<ChangeUserViewModel>(builder: (context, viewModel, child) {
+      viewModel.getSessions();
+      void changeToken(Session session) {
+        viewModel.changeUser(session);
+        Navigator.pushNamedAndRemoveUntil(context, AppRouter.SPLASH, (r) => false);
+        showToast('Аккаунт сменен на: ${session.email}');
+      }
 
-void changeToken(BuildContext context, String token, String name) {
-  HiveBoxes.token.put('access_token', token);
-  context.read<TokenCubit>().updateToken(token);
-  Navigator.pushNamedAndRemoveUntil(context, AppRouter.SPLASH, (r) => false);
-  showToast('Аккаунт сменен на: $name');
+      return DefaultScaffold(
+        title: widget.title,
+        body: ListView.builder(
+          itemCount: viewModel.sessions.length,
+          itemBuilder: (context, index) {
+            if (viewModel.commonToken.accessToken != null && viewModel.sessions[index].email != Jwt.parseJwt(viewModel.commonToken.accessToken!)['email']) {
+              return TextButton(
+                  onPressed: () {
+                    changeToken(viewModel.sessions[index]);
+                  },
+                  child: Text(viewModel.sessions[index].email)
+              );
+            }
+            return null;
+          }),
+      );
+    });
+  }
 }

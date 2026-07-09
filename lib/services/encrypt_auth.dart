@@ -85,17 +85,15 @@ String decrypt(String data, String secretKey) {
 }
 
 BigInt generateRandomBigInt(int bitLength) {
-  final random = Random.secure(); // Use Random.secure() for cryptographic purposes
+  final random = Random.secure();
   BigInt result = BigInt.zero;
   int remainingBits = bitLength;
 
   while (remainingBits > 0) {
-    // Generate an int (up to 32 bits on most platforms)
     int nextBits = remainingBits >= 32 ? 32 : remainingBits;
     int mask = (1 << nextBits) - 1;
-    int randomPart = random.nextInt(1 << nextBits); // nextInt takes exclusive max value
+    int randomPart = random.nextInt(1 << nextBits);
 
-    // Combine the random part into the result
     result = (result << nextBits) | BigInt.from(randomPart);
     remainingBits -= nextBits;
   }

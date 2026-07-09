@@ -1,0 +1,100 @@
+import 'package:TalkSpace/presentation/viewmodels/user/common_token.dart';
+import 'package:flutter/material.dart';
+import 'package:TalkSpace/app/app_router.dart';
+import 'package:TalkSpace/components/drawer.dart';
+import 'package:TalkSpace/presentation/widgets/scaffold/bottom_navigation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+class DefaultScaffold extends StatefulWidget {
+  final String title;
+  final Widget body;
+  final Null Function()? searchAction;
+  final Widget? floatButton;
+  final bool? showBottomNavigation;
+  final PreferredSizeWidget? bottom;
+
+  const DefaultScaffold(
+      {super.key,
+      this.floatButton,
+      this.showBottomNavigation,
+      required this.title,
+      required this.body,
+      this.searchAction,
+      this.bottom});
+
+  @override
+  State<DefaultScaffold> createState() => _DefaultScaffoldState();
+}
+
+class _DefaultScaffoldState extends State<DefaultScaffold> {
+  var currentState = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CommonToken>(builder: (context, viewModel, child) {
+      Widget? showDrawer(Widget widget) {
+        if (viewModel.accessToken != null) {
+          return widget;
+        }
+        return null;
+      }
+
+      return Scaffold(
+        appBar: AppBar(
+          bottom: widget.bottom,
+          leading: Navigator.canPop(context)
+              ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.canPop(context)
+                    ? Navigator.of(context).pop(context)
+                    : null;
+              })
+              : null,
+          iconTheme: IconThemeData(
+            color:
+            Theme.of(context).colorScheme.onPrimary, //change your color here
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.deepOrange.shade400,
+          titleTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary, fontSize: 24),
+          title: Text(
+            widget.title,
+          ),
+          foregroundColor: Colors.deepOrange.shade400,
+          actionsIconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            Builder(builder: (context) {
+              return Row(
+                children: [
+                  widget.searchAction != null
+                      ? IconButton(
+                    onPressed: widget.searchAction,
+                    iconSize: 35,
+                    icon: const Icon(Icons.search),
+                    tooltip: 'Поиск',
+                  )
+                      : const SizedBox(),
+
+                  showDrawer(IconButton(
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                    iconSize: 30,
+                    icon: const Icon(CupertinoIcons.bars),
+                  )) ?? SizedBox()
+                ],
+              );
+            })
+          ],
+        ),
+        endDrawer: showDrawer(MyDrawer()),
+        bottomNavigationBar: widget.showBottomNavigation != null
+            ? const BottomNavigation()
+            : const SizedBox(),
+        body: widget.body,
+        floatingActionButton: widget.floatButton,
+      );
+    });
+  }
+}

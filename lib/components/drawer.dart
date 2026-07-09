@@ -1,5 +1,5 @@
-import 'package:TalkSpace/features/file/get_space.dart';
-import 'package:TalkSpace/widget/user/logout_button/logout_button.dart';
+import 'package:TalkSpace/presentation/widgets/cloud/get_space.dart';
+import 'package:TalkSpace/presentation/widgets/user/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:TalkSpace/app/app_router.dart';
 

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:TalkSpace/domain/model/entities/session.dart' as session;
 
 part 'hive_boxes.g.dart';
 
@@ -12,11 +13,21 @@ class Session extends HiveObject {
   String sessionId;
   @HiveField(1)
   String refreshToken;
+  @HiveField(2)
+  String email;
+  @HiveField(3)
+  String passwordHash;
 
   Session({
     required this.sessionId,
     required this.refreshToken,
+    required this.email,
+    required this.passwordHash,
   });
+
+  session.Session get toEntity {
+    return session.Session(email: email, refreshToken: refreshToken, sessionId: sessionId, passwordHash: passwordHash);
+  }
 }
 
 class HiveBoxes {
@@ -32,16 +43,12 @@ class HiveBoxes {
     return Hive.box<Map<dynamic, dynamic>>("chatsSecretKey");
   }
 
-  static Box<String> get cryptToken {
-    return Hive.box<String>("cryptToken");
-  }
-
   static Box<Session> get listToken {
     return Hive.box<Session>("listToken");
   }
 
-  static Box<BigInt> get pubKey {
-    return Hive.box<BigInt>("pubKey");
+  static Box<Map<dynamic, dynamic>> get chatPubKey {
+    return Hive.box<Map<dynamic, dynamic>>("chatPubKey");
   }
 
   static initHiveBoxes() async {
@@ -52,10 +59,9 @@ class HiveBoxes {
     await Hive.initFlutter();
     await Hive.openBox<String>('token', encryptionCipher: HiveAesCipher(key));
     await Hive.openBox<Session>('listToken', encryptionCipher: HiveAesCipher(key));
-    await Hive.openBox<BigInt>('pubKey', encryptionCipher: HiveAesCipher(key));
+    await Hive.openBox<Map<dynamic, dynamic>>('chatPubKey', encryptionCipher: HiveAesCipher(key));
     await Hive.openBox<Map<dynamic, dynamic>>('chatsSecretKey', encryptionCipher: HiveAesCipher(key));
     await Hive.openBox<String>('chatFileUploaded', encryptionCipher: HiveAesCipher(key));
-    await Hive.openBox<String>('cryptToken', encryptionCipher: HiveAesCipher(key));
   }
 
   static Future<List<int>> getEncryptionKey() async {

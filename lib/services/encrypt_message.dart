@@ -16,6 +16,10 @@ class EncryptMessage {
 
   String decrypt(String hashText, String secretKey) {
     try {
+      if (hashText == "") {
+        return "";
+      }
+
       final key = Key.fromUtf8(secretKey);
 
       final b64key = Key.fromUtf8(base64Url.encode(key.bytes).substring(0, 32));

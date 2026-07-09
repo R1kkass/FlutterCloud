@@ -2,47 +2,42 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:TalkSpace/cubit/content_bloc.dart';
 import 'package:TalkSpace/data/repository/base_grpc.dart';
 import 'package:TalkSpace/data/repository/interceptors/auth_interceptor.dart';
-import 'package:TalkSpace/shared/toast.dart';
-import 'package:flutter/foundation.dart';
-import 'package:TalkSpace/main.dart';
+import 'package:TalkSpace/domain/model/entities/file.dart' as file;
+import 'package:TalkSpace/domain/model/entities/folder.dart';
+import 'package:TalkSpace/domain/model/request/file/index.dart';
+import 'package:TalkSpace/domain/model/response/common/with__status_message.dart';
+import 'package:TalkSpace/domain/model/response/file/index.dart';
+import 'package:TalkSpace/domain/repository/file_repository.dart';
 import 'package:TalkSpace/gen/dart/file/file.pbgrpc.dart' as filepb;
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:TalkSpace/services/index.dart';
+import 'package:flutter/foundation.dart';
 
-class ArgsForStream {
-  final String key;
-  final String file;
-  final filepb.FileUploadRequest request;
-
-  const ArgsForStream(
-      {required this.file, required this.key, required this.request});
-}
-
-class ArrayStream {
-  final List<int> chunk;
-  final int folderId;
-  final double size;
-  final String fileName;
-
-  const ArrayStream(
-      {required this.chunk,
-      required this.folderId,
-      required this.size,
-      required this.fileName});
-}
-
-class FilesGrpc extends BaseGrpc {
+class FilesGrpc extends BaseGrpc implements FileRepository {
   late final _stub = filepb.FilesGreeterClient(channel, interceptors: [AuthInterceptor()]);
 
-  Future<StreamSubscription<filepb.FileDownloadResponse>> downloadFile(
-      filepb.FileDownloadRequest request, void Function(filepb.FileDownloadResponse) onData) async {
-    return await listen(_stub.downloadFile(request), onData);
+  @override
+  Future<StreamSubscription<filepb.FileDownloadResponse>> downloadFile(file.File file, void Function(FileDownloadResponse, DecodedBytes) onData) async {
+    List<int> fileBytes = [];
+    var decodedData = DecodedBytes();
+    return await listen(_stub.downloadFile(filepb.FileDownloadRequest(
+      fileId: file.id,
+      folderId: file.folderId,
+    )), (data) async {
+      String key = HiveBoxes.token.get("password")!;
+      fileBytes = [...fileBytes, ...crypt(false, Uint8List.fromList(data.chunk), key.substring(0, 32))];
+      
+      if (data.progress >= 100) {
+        decodedData.bytes = fileBytes;
+        decodedData.isDecoded = true;
+      }
+      onData(FileDownloadResponse(fileName: data.fileName, chunk: data.chunk, progress: data.progress), decodedData);
+    });
   }
 
-  Future<filepb.FileUploadResponse> uploadFile(List<ArrayStream> arrFUR) {
+  @override
+  Future<WithStatusMessage> uploadFile(List<ArrayStream> arrFUR) async {
     Stream<filepb.FileUploadRequest> generateRoute() async* {
       for (final item in arrFUR) {
         yield filepb.FileUploadRequest(
@@ -52,14 +47,15 @@ class FilesGrpc extends BaseGrpc {
       }
     }
 
-    return retry(() => _stub.uploadFile(generateRoute()));
+    var response = await retry(() => _stub.uploadFile(generateRoute()));
+    return WithStatusMessage(message: response.message);
   }
 
+  @override
   List<ArrayStream> createStreamArg(ArgsForStream some) {
-    var key = some.key;
+    var key = HiveBoxes.token.get("password")!;
 
-    var file = File(some.file);
-    var request = some.request;
+    var file = File(some.file.path!);
 
     List<ArrayStream> arrFUR = [];
     var bufferSize = 5 * 1024 * 1024;
@@ -72,50 +68,57 @@ class FilesGrpc extends BaseGrpc {
       curItem += bufferSize;
       arrFUR.add(ArrayStream(
           chunk: crypt(true, bytes, key),
-          folderId: request.folderId,
+          folderId: some.folderId,
           size: curItem / bytesLength * 100,
-          fileName: request.fileName));
+          fileName: some.file.name));
     }
 
     return arrFUR;
   }
 
-  Future<filepb.FindFileResponse> findFile(filepb.FindFileRequest request) {
-    return retry(() => _stub.findFile(request));
+  @override
+  Future<FindCloudResponse> findFile(FindFileRequest request) async {
+    var response = await retry(() => _stub.findFile(filepb.FindFileRequest(
+      folderId: request.folderId,
+      page: request.page,
+      findEveryWhere: request.findEveryWhere,
+      search: request.search,
+    )));
+    var files = file.File.listFromGrpc(response.files);
+    var folders = Folder.listFromGrpc(response.folders);
+    return FindCloudResponse(files: files, folders: folders);
   }
 
-  Future<filepb.DeleteFileResponse> deleteFile(filepb.DeleteFileRequest request) {
-    return retry(() => _stub.deleteFile(request));
+  @override
+  Future<void> deleteFile(int fileId) async {
+    await retry(() => _stub.deleteFile(filepb.DeleteFileRequest(
+      fileId: fileId
+    )));
   }
 
-  Future<filepb.RenameFileResponse> renameFile(filepb.RenameFileRequest request) {
-    return retry(() => _stub.renameFile(request));
+  @override
+  Future<void> renameFile(RenameFileRequest request) async {
+    await retry(() => _stub.renameFile(filepb.RenameFileRequest(
+     name: request.name,
+     fileId: request.fileId,
+     folderId: request.folderId
+    )));
   }
 
-  Future<filepb.GetSpaceResponse> getSpace() {
-    return retry(() => _stub.getSpace(filepb.GetSpaceRequest()));
+  @override
+  Future<int> getSpace() async {
+    var response = await retry(() => _stub.getSpace(filepb.GetSpaceRequest()));
+    return response.space.toInt();
   }
 
-  Future<filepb.MoveFileResponse> grpcMoveFile(filepb.MoveFileRequest request) {
-    return retry(() => _stub.moveFile(request));
-  }
-
-  moveFile(int fileId, int folderToId, int currentFolderId) async {
-    try {
-      await _moveFile(fileId, folderToId, currentFolderId);
-    } catch (e) {
-      showUnsuccessToast("Не удалось переместить файл");
-    }
-  }
-
-  _moveFile(int fileId, int folderToId, int currentFolderId) async {
-    final context = NavigationService.navigatorKey.currentContext!;
-    await grpcMoveFile(filepb.MoveFileRequest(fileId: fileId, folderToId: folderToId));
-    var response = await findFile(filepb.FindFileRequest(
-        search: "", folderId: currentFolderId, findEveryWhere: false));
-    context
-        .read<ContentBloc>()
-        .add(ContentInit(files: response.files, folders: response.folders));
-    showSuccessToast("Файл перемещен");
+  @override
+  Future<void> moveFile({
+    required int fileId,
+    required int? folderToId,
+  }) async {
+    return retry(() => _stub.moveFile(filepb.MoveFileRequest(
+      fileId: fileId,
+      folderToId: folderToId,
+    )));
   }
 }

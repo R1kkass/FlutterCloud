@@ -13,15 +13,16 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../google/protobuf/timestamp.pb.dart' as $1;
+import '../chat/chat.pb.dart' as $1;
 
 class UploadFileMessageRequest extends $pb.GeneratedMessage {
   factory UploadFileMessageRequest({
     $core.List<$core.int>? chunk,
     $core.String? fileName,
-    $core.int? messageId,
     $core.int? chatId,
     $core.String? text,
+    $core.bool? fileUploaded,
+    $core.int? messageId,
   }) {
     final $result = create();
     if (chunk != null) {
@@ -30,14 +31,17 @@ class UploadFileMessageRequest extends $pb.GeneratedMessage {
     if (fileName != null) {
       $result.fileName = fileName;
     }
-    if (messageId != null) {
-      $result.messageId = messageId;
-    }
     if (chatId != null) {
       $result.chatId = chatId;
     }
     if (text != null) {
       $result.text = text;
+    }
+    if (fileUploaded != null) {
+      $result.fileUploaded = fileUploaded;
+    }
+    if (messageId != null) {
+      $result.messageId = messageId;
     }
     return $result;
   }
@@ -48,9 +52,10 @@ class UploadFileMessageRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UploadFileMessageRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'message'), createEmptyInstance: create)
     ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'chunk', $pb.PbFieldType.OY)
     ..aOS(2, _omitFieldNames ? '' : 'fileName', protoName: 'fileName')
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'messageId', $pb.PbFieldType.OU3, protoName: 'messageId')
-    ..a<$core.int>(4, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3, protoName: 'chatId')
-    ..aOS(5, _omitFieldNames ? '' : 'text')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3, protoName: 'chatId')
+    ..aOS(4, _omitFieldNames ? '' : 'text')
+    ..aOB(5, _omitFieldNames ? '' : 'fileUploaded', protoName: 'fileUploaded')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'messageId', $pb.PbFieldType.OU3, protoName: 'messageId')
     ..hasRequiredFields = false
   ;
 
@@ -94,40 +99,49 @@ class UploadFileMessageRequest extends $pb.GeneratedMessage {
   void clearFileName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.int get messageId => $_getIZ(2);
+  $core.int get chatId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set messageId($core.int v) { $_setUnsignedInt32(2, v); }
+  set chatId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasMessageId() => $_has(2);
+  $core.bool hasChatId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearMessageId() => clearField(3);
+  void clearChatId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.int get chatId => $_getIZ(3);
+  $core.String get text => $_getSZ(3);
   @$pb.TagNumber(4)
-  set chatId($core.int v) { $_setUnsignedInt32(3, v); }
+  set text($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasChatId() => $_has(3);
+  $core.bool hasText() => $_has(3);
   @$pb.TagNumber(4)
-  void clearChatId() => clearField(4);
+  void clearText() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get text => $_getSZ(4);
+  $core.bool get fileUploaded => $_getBF(4);
   @$pb.TagNumber(5)
-  set text($core.String v) { $_setString(4, v); }
+  set fileUploaded($core.bool v) { $_setBool(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasText() => $_has(4);
+  $core.bool hasFileUploaded() => $_has(4);
   @$pb.TagNumber(5)
-  void clearText() => clearField(5);
+  void clearFileUploaded() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get messageId => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set messageId($core.int v) { $_setUnsignedInt32(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasMessageId() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearMessageId() => clearField(6);
 }
 
 class UploadFileMessageResponse extends $pb.GeneratedMessage {
   factory UploadFileMessageResponse({
-    $core.String? text,
+    $1.Message? message,
   }) {
     final $result = create();
-    if (text != null) {
-      $result.text = text;
+    if (message != null) {
+      $result.message = message;
     }
     return $result;
   }
@@ -136,7 +150,7 @@ class UploadFileMessageResponse extends $pb.GeneratedMessage {
   factory UploadFileMessageResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UploadFileMessageResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'message'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'text')
+    ..aOM<$1.Message>(1, _omitFieldNames ? '' : 'message', subBuilder: $1.Message.create)
     ..hasRequiredFields = false
   ;
 
@@ -162,13 +176,15 @@ class UploadFileMessageResponse extends $pb.GeneratedMessage {
   static UploadFileMessageResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get text => $_getSZ(0);
+  $1.Message get message => $_getN(0);
   @$pb.TagNumber(1)
-  set text($core.String v) { $_setString(0, v); }
+  set message($1.Message v) { setField(1, v); }
   @$pb.TagNumber(1)
-  $core.bool hasText() => $_has(0);
+  $core.bool hasMessage() => $_has(0);
   @$pb.TagNumber(1)
-  void clearText() => clearField(1);
+  void clearMessage() => clearField(1);
+  @$pb.TagNumber(1)
+  $1.Message ensureMessage() => $_ensure(0);
 }
 
 class DownloadFileMessageRequest extends $pb.GeneratedMessage {
@@ -311,152 +327,6 @@ class DownloadFileMessageResponse extends $pb.GeneratedMessage {
   $core.bool hasProgress() => $_has(1);
   @$pb.TagNumber(2)
   void clearProgress() => clearField(2);
-}
-
-class CreateFileMessageRequest extends $pb.GeneratedMessage {
-  factory CreateFileMessageRequest({
-    $core.String? text,
-    $core.int? chatId,
-  }) {
-    final $result = create();
-    if (text != null) {
-      $result.text = text;
-    }
-    if (chatId != null) {
-      $result.chatId = chatId;
-    }
-    return $result;
-  }
-  CreateFileMessageRequest._() : super();
-  factory CreateFileMessageRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateFileMessageRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateFileMessageRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'message'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'text')
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'chatId', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CreateFileMessageRequest clone() => CreateFileMessageRequest()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CreateFileMessageRequest copyWith(void Function(CreateFileMessageRequest) updates) => super.copyWith((message) => updates(message as CreateFileMessageRequest)) as CreateFileMessageRequest;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CreateFileMessageRequest create() => CreateFileMessageRequest._();
-  CreateFileMessageRequest createEmptyInstance() => create();
-  static $pb.PbList<CreateFileMessageRequest> createRepeated() => $pb.PbList<CreateFileMessageRequest>();
-  @$core.pragma('dart2js:noInline')
-  static CreateFileMessageRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateFileMessageRequest>(create);
-  static CreateFileMessageRequest? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.String get text => $_getSZ(0);
-  @$pb.TagNumber(1)
-  set text($core.String v) { $_setString(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasText() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearText() => clearField(1);
-
-  @$pb.TagNumber(2)
-  $core.int get chatId => $_getIZ(1);
-  @$pb.TagNumber(2)
-  set chatId($core.int v) { $_setUnsignedInt32(1, v); }
-  @$pb.TagNumber(2)
-  $core.bool hasChatId() => $_has(1);
-  @$pb.TagNumber(2)
-  void clearChatId() => clearField(2);
-}
-
-class CreateFileMessageResponse extends $pb.GeneratedMessage {
-  factory CreateFileMessageResponse({
-    $core.int? messageId,
-    $1.Timestamp? updatedAt,
-    $1.Timestamp? createdAt,
-  }) {
-    final $result = create();
-    if (messageId != null) {
-      $result.messageId = messageId;
-    }
-    if (updatedAt != null) {
-      $result.updatedAt = updatedAt;
-    }
-    if (createdAt != null) {
-      $result.createdAt = createdAt;
-    }
-    return $result;
-  }
-  CreateFileMessageResponse._() : super();
-  factory CreateFileMessageResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory CreateFileMessageResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateFileMessageResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'message'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'messageId', $pb.PbFieldType.OU3)
-    ..aOM<$1.Timestamp>(3, _omitFieldNames ? '' : 'updatedAt', subBuilder: $1.Timestamp.create)
-    ..aOM<$1.Timestamp>(5, _omitFieldNames ? '' : 'createdAt', subBuilder: $1.Timestamp.create)
-    ..hasRequiredFields = false
-  ;
-
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
-  CreateFileMessageResponse clone() => CreateFileMessageResponse()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  CreateFileMessageResponse copyWith(void Function(CreateFileMessageResponse) updates) => super.copyWith((message) => updates(message as CreateFileMessageResponse)) as CreateFileMessageResponse;
-
-  $pb.BuilderInfo get info_ => _i;
-
-  @$core.pragma('dart2js:noInline')
-  static CreateFileMessageResponse create() => CreateFileMessageResponse._();
-  CreateFileMessageResponse createEmptyInstance() => create();
-  static $pb.PbList<CreateFileMessageResponse> createRepeated() => $pb.PbList<CreateFileMessageResponse>();
-  @$core.pragma('dart2js:noInline')
-  static CreateFileMessageResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CreateFileMessageResponse>(create);
-  static CreateFileMessageResponse? _defaultInstance;
-
-  @$pb.TagNumber(1)
-  $core.int get messageId => $_getIZ(0);
-  @$pb.TagNumber(1)
-  set messageId($core.int v) { $_setUnsignedInt32(0, v); }
-  @$pb.TagNumber(1)
-  $core.bool hasMessageId() => $_has(0);
-  @$pb.TagNumber(1)
-  void clearMessageId() => clearField(1);
-
-  @$pb.TagNumber(3)
-  $1.Timestamp get updatedAt => $_getN(1);
-  @$pb.TagNumber(3)
-  set updatedAt($1.Timestamp v) { setField(3, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasUpdatedAt() => $_has(1);
-  @$pb.TagNumber(3)
-  void clearUpdatedAt() => clearField(3);
-  @$pb.TagNumber(3)
-  $1.Timestamp ensureUpdatedAt() => $_ensure(1);
-
-  @$pb.TagNumber(5)
-  $1.Timestamp get createdAt => $_getN(2);
-  @$pb.TagNumber(5)
-  set createdAt($1.Timestamp v) { setField(5, v); }
-  @$pb.TagNumber(5)
-  $core.bool hasCreatedAt() => $_has(2);
-  @$pb.TagNumber(5)
-  void clearCreatedAt() => clearField(5);
-  @$pb.TagNumber(5)
-  $1.Timestamp ensureCreatedAt() => $_ensure(2);
 }
 
 

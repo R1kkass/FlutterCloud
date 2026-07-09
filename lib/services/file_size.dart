@@ -1,12 +1,15 @@
+import 'dart:math';
+
 String fileSize(int size) {
-  if (size < 900) {
+  if (size < 1024) {
     return "$size б";
   }
-  if (size < 100000) {
-    return "${(size / 1000).toStringAsFixed(2)} Кб";
+  if (size < 1024 * 10) {
+    return "${(size / 1024).toStringAsFixed(2)} Кб";
   }
-  if (size < 100000000) {
-    return "${(size / 1000000).toStringAsFixed(2)} Мб";
+  var mb = 1024 * (pow(10, 5));
+  if (size < mb) {
+    return "${(size / mb).toStringAsFixed(2)} Мб";
   }
-  return "${(size / 1000000000).toStringAsFixed(2)} Гб";
+  return "${(size / mb).toStringAsFixed(2)} Гб";
 }

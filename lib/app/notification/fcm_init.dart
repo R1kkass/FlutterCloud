@@ -1,7 +1,8 @@
 import 'package:TalkSpace/app/notification/fcm_notification_service.dart';
 import 'package:TalkSpace/app/notification/type_notification_enum.dart';
+import 'package:TalkSpace/domain/model/enums/notification_action.enum.dart';
 import 'package:TalkSpace/firebase_options.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,15 +12,6 @@ class FcmInit {
   final _notificationService = FcmNotificationService();
   late AndroidNotificationChannel androidChannel;
   bool isFlutterLocalNotificationsInitialized = false;
-
-  @pragma('vm:entry-point')
-  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    await HiveBoxes.initHiveBoxes();
-
-    await setupFlutterNotifications();
-    showFlutterNotification(message);
-  }
 
   Future<void> setupFlutterNotifications() async {
     if (isFlutterLocalNotificationsInitialized) {
@@ -32,6 +24,7 @@ class FcmInit {
       'This channel is used for important notifications.', // description
       importance: Importance.high,
     );
+
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()
@@ -48,15 +41,15 @@ class FcmInit {
   void showFlutterNotification(RemoteMessage message) {
     final data = message.data;
     final NotificationDTO notify;
-    switch (data["type"]) {
-      case TypeNotificationEnum.newMessage:
+    final notificationAction = NotificationAction.toEnum(data["type"]);
+    switch (notificationAction) {
+      case NotificationAction.newMessage:
         notify = _notificationService.newMessage(message);
-      case TypeNotificationEnum.createChat:
+      case NotificationAction.newChat:
         notify = _notificationService.createChat(message);
       default:
         return;
     }
-
     _flutterLocalNotificationsPlugin.show(
       data.hashCode,
       notify.title,

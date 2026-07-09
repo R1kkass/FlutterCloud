@@ -12,6 +12,7 @@ void showToast(String text) {
         label: 'Oк',
         onPressed: scaffold.hideCurrentSnackBar,
       ),
+      duration: Duration(seconds: 1),
     ),
   );
 }
@@ -27,6 +28,7 @@ void showUnsuccessToast(String text) {
         label: 'Oк',
         onPressed: scaffold.hideCurrentSnackBar,
       ),
+      duration: Duration(seconds: 1),
     ),
   );
 }
@@ -42,6 +44,7 @@ void showSuccessToast(String text) {
         label: 'Oк',
         onPressed: scaffold.hideCurrentSnackBar,
       ),
+      duration: Duration(seconds: 1),
     ),
   );
 }

@@ -4,18 +4,21 @@ import 'dart:io';
 
 import 'package:TalkSpace/app/app_router.dart';
 import 'package:TalkSpace/consts/domen.dart';
-import 'package:TalkSpace/cubit/token_cubit.dart';
-import 'package:TalkSpace/gen/dart/auth/auth.pbgrpc.dart';
 import 'package:TalkSpace/data/repository/keys_grpc.dart';
+import 'package:TalkSpace/data/sources/local/chat_secret_keys_local_data_source.dart';
+import 'package:TalkSpace/data/sources/local/session_local_data_source.dart';
+import 'package:TalkSpace/domain/exceptions/many_attempts_submit_mail.dart';
+import 'package:TalkSpace/domain/exceptions/refresh_token_exception.dart';
+import 'package:TalkSpace/domain/model/response/common/with__status_message.dart';
+import 'package:TalkSpace/domain/repository/auth_repository.dart';
+import 'package:TalkSpace/domain/model/entities/session.dart' as session;
+import 'package:TalkSpace/domain/model/request/auth/index.dart' as authRequest;
+import 'package:TalkSpace/domain/model/response/auth/index.dart' as authResponse;
+import 'package:TalkSpace/gen/dart/auth/auth.pbgrpc.dart';
 import 'package:TalkSpace/main.dart';
-import 'package:TalkSpace/services/device_name_manager.dart';
-import 'package:TalkSpace/services/encrypt_auth.dart';
-import 'package:TalkSpace/services/firebase_manager.dart';
-import 'package:TalkSpace/services/hive_boxes.dart';
-import 'package:TalkSpace/services/jwt_decode.dart';
+import 'package:TalkSpace/services/index.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 
 class AfterLoginDTO {
@@ -36,7 +39,7 @@ class AfterLoginDTO {
   });
 }
 
-class AuthGrpc {
+class AuthGrpc implements AuthRepository {
   ClientChannel channel = ClientChannel(
     ipServer,
     port: 50051,
@@ -45,38 +48,51 @@ class AuthGrpc {
   late final _stub = AuthGreetClient(channel);
   final _deviceManager = DeviceNameManager();
 
-  Future<RegistrationResponse> registration(RegistrationRequest request) async {
+  SessionLocalDataSource sessionLocalDataSource;
+
+  AuthGrpc({
+    required this.sessionLocalDataSource,
+  });
+
+  @override
+  Future<void> registration(authRequest.RegistrationRequest request) async {
     var secretKey = await _getSecretKeys();
-    request.password = encrypt(request.password, secretKey);
-    request.email = encrypt(request.email, secretKey);
-    request.name = encrypt(request.name, secretKey);
-    return _stub.registration(request);
+    var password = encrypt(request.password, secretKey);
+    var email = encrypt(request.email, secretKey);
+    var name = encrypt(request.name, secretKey);
+    await _stub.registration(RegistrationRequest(
+      email: email,
+      password: password,
+      name: name,
+    ));
+    return;
   }
 
   Future<String> _getSecretKeys() async {
-    DHConnectResponse keys = await dHConnect(DHConnectRequest());
+    var keys = await dHConnect();
 
     var A = await generatePubKeyAuth(keys.p, keys.g.toInt());
     var secretKey = await generateSecretKeyAuth(keys.b, keys.p, A.a);
-    await dHSecondConnect(DHSecondConnectRequest(a: A.A.toString()));
+    await dHSecondConnect(A.A.toString());
     secretKey = secretKey.substring(0, 32);
 
     return secretKey;
   }
 
-  Future<LoginResponse> login(LoginRequest request) async {
+  @override
+  Future<authResponse.LoginResponse> login(authRequest.LoginRequest request) async {
     var operationSystem = Platform.operatingSystem;
     var secretKey = await _getSecretKeys();
     final firebaseManager = FirebaseManager();
+    String? notificationToken = await firebaseManager.notificationToken;
 
     var passwordHash = encrypt(request.password, secretKey);
     var emailHash = encrypt(request.email, secretKey);
     operationSystem = encrypt(operationSystem, secretKey);
     var nameDevice = encrypt(await _deviceManager.getDeviceName(), secretKey);
-    var notificationToken = encrypt(await firebaseManager.notificationToken ?? "", secretKey);
+    notificationToken = encrypt(notificationToken ?? "", secretKey);
 
-    var loginResp = await _stub
-        .login(LoginRequest(
+    var loginResp = await _stub.login(LoginRequest(
       email: emailHash,
       password: passwordHash,
       nameDevice: nameDevice,
@@ -84,7 +100,7 @@ class AuthGrpc {
       notificationToken: notificationToken
     ));
 
-    await afterLogin(
+    await _afterLogin(
       AfterLoginDTO(
           password: request.password,
           email: request.email,
@@ -95,111 +111,142 @@ class AuthGrpc {
       )
     );
 
-    return loginResp;
+    return authResponse.LoginResponse(
+      accessToken: loginResp.accessToken,
+      refreshToken: loginResp.refreshToken,
+      sessionId: loginResp.sessionId
+    );
   }
 
-  afterLogin(AfterLoginDTO afterLoginDTO) async {
+  _afterLogin(AfterLoginDTO afterLoginDTO) async {
     var secretKey = afterLoginDTO.secretKey;
     var accessToken = decrypt(afterLoginDTO.accessToken, secretKey);
     var refreshToken = decrypt(afterLoginDTO.refreshToken, secretKey);
     var sessionId = decrypt(afterLoginDTO.sessionId, secretKey);
 
     await HiveBoxes.token.put('access_token', accessToken);
-    await HiveBoxes.listToken.put(afterLoginDTO.email, Session(sessionId: sessionId, refreshToken: refreshToken));
 
     List<int> bytes = utf8.encode(afterLoginDTO.password);
     String hash = sha256.convert(bytes).toString();
+    await sessionLocalDataSource.addSession(afterLoginDTO.email, session.Session(sessionId: sessionId, refreshToken: refreshToken, email: afterLoginDTO.email, passwordHash: hash.substring(0, 32)));
     await HiveBoxes.token.put('password', hash.substring(0, 32));
-    await KeysGrpc().getKeys();
-    var context = NavigationService.navigatorKey.currentContext!;
-    context.read<TokenCubit>().updateToken(accessToken);
+    await KeysGrpc(chatSecretKeysLocalDataSource: ChatSecretKeysLocalDataSource()).getKeys();
   }
 
-  Future<DHConnectResponse> dHConnect(DHConnectRequest request) {
-    return retry(() => _stub.dHConnect(request));
+  @override
+  Future<authResponse.DHConnectResponse> dHConnect() async {
+    var response = await retry(() => _stub.dHConnect(DHConnectRequest()));
+
+    return authResponse.DHConnectResponse(
+      b: response.b,
+      g: response.g.toInt(),
+      p: response.p
+    );
   }
 
-  Future<DHSecondConnectResponse> dHSecondConnect(
-      DHSecondConnectRequest request) {
-    return retry(() => _stub.dHSecondConnect(request));
+  @override
+  Future<WithStatusMessage> dHSecondConnect(String a) async {
+    var resp = await retry(() => _stub.dHSecondConnect(DHSecondConnectRequest(
+        a: a
+    )));
+    return WithStatusMessage(message: resp.message);
   }
 
-  Future<Empty> checkAuth() {
-    return _stub.checkAuth(Empty());
+  @override
+  Future<void> checkAuth() async {
+    await _stub.checkAuth(Empty());
   }
 
-  Future<SubmitEmailResponse> submitEmail(SubmitEmailRequest request) async {
+  @override
+  Future<authResponse.LoginResponse> submitEmail(authRequest.SubmitEmailRequest request) async {
+    try {
+      var secretKey = await _getSecretKeys();
+      var operationSystem = Platform.operatingSystem;
+      final firebaseManager = FirebaseManager();
+
+      var passwordHash = encrypt(request.password, secretKey);
+      var emailHash = encrypt(request.email, secretKey);
+      var key = encrypt(request.key, secretKey);
+      operationSystem = encrypt(operationSystem, secretKey);
+      var nameDevice = encrypt(await _deviceManager.getDeviceName(), secretKey);
+      var notificationToken = encrypt(await firebaseManager.notificationToken ?? "", secretKey);
+      var response = await _stub.submitEmail(SubmitEmailRequest(
+        notificationToken: notificationToken,
+        password: passwordHash,
+        email: emailHash,
+        nameDevice: nameDevice,
+        operationSystem: operationSystem,
+        key: key,
+      ));
+
+      await _afterLogin(
+          AfterLoginDTO(
+              password: request.password,
+              email: request.email,
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              sessionId: response.sessionId,
+              secretKey: secretKey
+          )
+      );
+
+      return authResponse.LoginResponse(
+        sessionId: decrypt(response.sessionId, secretKey),
+        refreshToken: decrypt(response.refreshToken, secretKey),
+        accessToken: decrypt(response.accessToken, secretKey),
+      );
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.cancelled) {
+        throw ManyAttemptsSubmitMail(message: "Many attempts");
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> sendNewMailKeyResponse(String email, String password) async {
     var secretKey = await _getSecretKeys();
-    var operationSystem = Platform.operatingSystem;
-    final firebaseManager = FirebaseManager();
+    var passwordHash = encrypt(password, secretKey);
+    var emailHash = encrypt(email, secretKey);
 
-    var passwordHash = encrypt(request.password, secretKey);
-    var emailHash = encrypt(request.email, secretKey);
-    var key = encrypt(request.key, secretKey);
-    operationSystem = encrypt(operationSystem, secretKey);
-    var nameDevice = encrypt(await _deviceManager.getDeviceName(), secretKey);
-    var notificationToken = encrypt(await firebaseManager.notificationToken ?? "", secretKey);
-
-    var response = await _stub.submitEmail(SubmitEmailRequest(
-      notificationToken: notificationToken,
+    await retry(() => _stub.sendNewMailKey(SendNewMailKeyRequest(
       password: passwordHash,
-      email: emailHash,
-      nameDevice: nameDevice,
-      operationSystem: operationSystem,
-      key: key,
-    ));
-
-    await afterLogin(
-        AfterLoginDTO(
-            password: request.password,
-            email: request.email,
-            accessToken: response.accessToken,
-            refreshToken: response.refreshToken,
-            sessionId: response.sessionId,
-            secretKey: secretKey
-        )
-    );
-
-    return SubmitEmailResponse(
-      sessionId: decrypt(response.sessionId, secretKey),
-      refreshToken: decrypt(response.refreshToken, secretKey),
-      accessToken: decrypt(response.accessToken, secretKey),
-    );
+      email: emailHash
+    )));
   }
 
-  Future<SendNewMailKeyResponse> sendNewMailKeyResponse(
-      SendNewMailKeyRequest request) {
-    return retry(() => _stub.sendNewMailKey(request));
-  }
-
-  Future<LogoutResponse> logout(String email, Session session) async {
+  @override
+  Future<void> logout(String email, session.Session session) async {
     try {
       var secretKey = await _getSecretKeys();
 
       var refreshToken = encrypt(session.refreshToken, secretKey);
       var sessionId = encrypt(session.sessionId, secretKey);
 
-      var response = await retry(() => _stub.logout(LogoutRequest(
+      await retry(() => _stub.logout(LogoutRequest(
         refreshToken: refreshToken,
         sessionId: sessionId,
       )));
 
       await HiveBoxes.listToken.delete(email);
-      return response;
+      return;
     } on GrpcError catch(e) {
       if (e.code == StatusCode.notFound) {
         await HiveBoxes.listToken.delete(email);
+        return;
       }
       rethrow;
     }
   }
 
-  Future<RefreshResponse?> refresh() async {
-    final context = NavigationService.navigatorKey.currentContext!;
+  @override
+  Future<String?> refresh({
+    session.Session? session,
+  }) async {
     var secretKey = await _getSecretKeys();
-    final session = HiveBoxes.listToken.get(jwtDecode().email);
+    session = session ?? sessionLocalDataSource.getCurrentSession();
     if (session == null) {
-      throw Exception("Session not found");
+      throw RefreshTokenException(code: 1, message:"Session not found");
     }
     try {
       var refreshToken = encrypt(session.refreshToken, secretKey);
@@ -209,30 +256,22 @@ class AuthGrpc {
       var accessToken = decrypt(response.accessToken, secretKey);
 
       await HiveBoxes.token.put('access_token', accessToken);
-      context.read<TokenCubit>().updateToken(accessToken);
-      return response;
+      await HiveBoxes.token.put('password', session.passwordHash);
+      return response.accessToken;
     } on GrpcError catch (e) {
       if (e.code == StatusCode.unauthenticated) {
-        await logoutFromCurrent(session);
-        return null;
+        await logoutFromCurrent();
+        throw RefreshTokenException(code: e.code, message: e.message);
       }
       rethrow;
     }
   }
 
-  logoutFromCurrent(Session session) async {
-    final context = NavigationService.navigatorKey.currentContext!;
-    try {
-      await logout(jwtDecode().email, session);
-      context.read<TokenCubit>().updateToken(null);
-      Navigator.pushNamedAndRemoveUntil(context, AppRouter.AUTH, (_) => false);
-    } on GrpcError catch(e) {
-      if (e.code == StatusCode.notFound) {
-        context.read<TokenCubit>().updateToken(null);
-        Navigator.pushNamedAndRemoveUntil(context, AppRouter.AUTH, (_) => false);
-      }
-      rethrow;
-    }
+  @override
+  logoutFromCurrent() async {
+    var session = sessionLocalDataSource.getCurrentSession();
+
+    await logout(jwtDecode().email, session!);
   }
 
   Future<StreamSubscription<T>> listen<T>(ResponseStream<T>? stream, void Function(T)? onData) async {
@@ -244,7 +283,7 @@ class AuthGrpc {
       var s = stream.listen(onData);
       return s;
     } on GrpcError catch(e) {
-      if (e.code == StatusCode.unauthenticated && HiveBoxes.listToken.get(jwtDecode().email) != null) {
+      if (e.code == StatusCode.unauthenticated && sessionLocalDataSource.getCurrentSession() != null) {
         await refresh();
         return stream.listen(onData);
       }
@@ -264,7 +303,7 @@ class AuthGrpc {
           result = await fn();
         }
         rethrow;
-      } on GrpcError catch (e) {
+      } on RefreshTokenException catch (e) {
         if (e.code == StatusCode.unauthenticated) {
           var context = NavigationService.navigatorKey.currentContext!;
           Navigator.pushNamedAndRemoveUntil(context, AppRouter.AUTH, (e) => true);
@@ -274,5 +313,15 @@ class AuthGrpc {
     }
 
     return result;
+  }
+
+  @override
+  List<session.Session> getSavedSessions() {
+    return sessionLocalDataSource.getSavedSessions();
+  }
+
+  @override
+  Future<String?> changeUser(session.Session session) async {
+    return await refresh(session: session);
   }
 }
